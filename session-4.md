@@ -26,11 +26,11 @@ exercises: 40
 
 
 
-## The decision that used to leave no record
+## Record the decision as well as the IRI
 
-By the end of Session 3 your package was reproducible almost everywhere. `raw_data/` holds unchanged inputs, `scripts/build_sdp.R` turns them into a package, and rerunning the script rebuilds the same bytes.
+By the end of Session 3, `raw_data/` holds unchanged inputs and `scripts/build_sdp.R` records the transformations that turn them into a package. Preserve the source files and the candidate evidence you reviewed. A fresh live seeding search can return different candidates as vocabularies change, so rerunning the whole build is not a promise of identical bytes.
 
-Almost everywhere. Until now, the documented way to accept a semantic link was to open `metadata/column_dictionary.csv` in a spreadsheet, read `semantic_suggestions.csv` beside it, and copy an IRI across by hand. That worked. But the only record it left was the changed cell. Six months later the cell says *what* was decided and nothing at all about *why*, *by whom*, or *what else was on the shortlist*. It was the one unreproducible link in a chain that is otherwise byte-for-byte reproducible.
+The decisions also need a record. Until now, the documented way to accept a semantic link was to open `metadata/column_dictionary.csv` in a spreadsheet, read `semantic_suggestions.csv` beside it, and copy an IRI across by hand. That worked, but the changed cell alone says *what* was decided and nothing about *why*, *by whom*, or *what else was on the shortlist*. A replayable review needs recorded decisions together with the saved source and candidate evidence.
 
 This chapter replaces that step. `review_semantics()` prints a shortlist and, under every candidate, the exact line of R that accepts it:
 
@@ -38,9 +38,9 @@ This chapter replaces that step. `review_semantics()` prints a shortlist and, un
        review <- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "variable", rank = 1)
 ```
 
-You paste that line into `scripts/build_sdp.R`. **The paste is the audit trail.** There is no prompt, no menu, and no interactive review screen, and that is a design decision rather than an omission: anything you answer at a prompt vanishes when the session ends, which would leave the decision exactly as unreproducible as the spreadsheet it replaces.
+You paste that line into `scripts/build_sdp.R`. **The recorded call, its reason, and the saved evidence form the audit trail.** The function prints calls rather than collecting answers in an interactive prompt, so you can keep the action itself in the script and replay it against the saved review evidence.
 
-A learner who understands why the spreadsheet was abandoned will not drift back to it. The spreadsheet lane still exists below, because a mixed workshop needs it — but it is now the lane that costs you the record, and this chapter says so plainly.
+The spreadsheet lane also preserves a review record when you maintain the written log introduced in Session 3. The metadata cell records the selected IRI; the log records the reasoning, reviewer, and evidence. Reapplying those logged decisions is a manual step, while recorded R calls can replay the edits.
 
 Be precise about the size of the claim. **This chapter's flow decides semantic IRIs, and it is not the whole package.** Free-text fields — descriptions, contacts, licences — are outside it, and a slot that retrieval found nothing for never reaches this queue at all. Neither of those is a spreadsheet job any more: `review_metadata()` and the `set_sdp_*()` setters, which shipped in the same release, close both, and the section [What this review cannot decide](#what-this-review-cannot-decide) is where they are named. That section is not a disclaimer at the end; it is half the lesson. A learner who leaves believing *this queue* finishes the package will be corrected by the validator, and will trust the tool less than it deserves.
 
@@ -61,7 +61,7 @@ An earlier metasalmon loads without complaint and then has none of the functions
 
 ## Keep the workshop semantic review bounded
 
-We will not try to map every column. Everyone will use the NuSEDS Fraser Coho escapement package from Session 2, even if you are also building a package from your own data. That gives the room one case to discuss and keeps the decisions small enough to finish.
+Continue with the same **30-row NuSEDS Fraser Coho sample** you packaged in Session 2 and described in Session 3: `output/fraser-coho-example-sdp`, dataset `fraser-coho-example`, table `escapement`. We will not try to map every column. Keep the shared case through Session 6; the optional bring-your-own-dataset activity follows in Session 7.
 
 We will decide exactly these linked slots:
 
@@ -78,7 +78,7 @@ Administrative IDs, file names, local notes, and the other categorical code list
 
 ## Your package must already carry suggestions
 
-`review_semantics()` **never searches and never contacts a network or an LLM.** It reads the suggestions your package already has. That is why Session 3 turned `seed_semantics = TRUE` on: without it there is nothing to review, and the function says so rather than quietly returning an empty queue.
+`review_semantics()` **never searches and never contacts a network or an LLM.** It reads the suggestions your package already has. That is why Session 3 generates candidates in R and restores supplied same-sample candidates in Python: without it there is nothing to review, and the function says so rather than quietly returning an empty queue.
 
 ```output
 Error in review_semantics(pkg_path) : No semantic suggestions to review.
@@ -86,7 +86,7 @@ Error in review_semantics(pkg_path) : No semantic suggestions to review.
   first.
 ```
 
-If the Session 2 package was built with `seed_semantics = FALSE`, rebuild it once with seeding on before continuing. Expect the search itself to take a few minutes; that cost is paid once, at build time, and never again during review.
+If your current package still has no suggestions, return to the Session 3 build step and generate them for this same sample. Preserve any manual metadata edits before rebuilding. Expect the search itself to take a few minutes; that cost is paid at build time and never during review.
 
 ## Build the review queue
 
@@ -117,7 +117,7 @@ review <- review_semantics(pkg_path, columns = "NATURAL_SPAWNERS_TOTAL")
 
 **There is no Python equivalent.** Not a partial one, not a differently-spelled one: `metasalmonpy` has no review queue, no accessor for the suggestions attribute, and no function that reads `semantic_suggestions.csv` back. The R-native review flow lands in `metasalmon` first, and the port has not been written. This is a gap, not a deliberate parity difference, so do not go looking for it in the [parity guide][metasalmonpy-parity].
 
-This is also why the Setup page pins the two lanes to different releases: metasalmon `v0.5.0` is the release this chapter teaches, and metasalmonpy's newest is `v0.4.0`. Pinning both makes the lesson reproducible; only the port will make it equivalent.
+This is also why the Setup page pins the two lanes to different releases: metasalmon `v0.5.0` is the release this chapter teaches, and metasalmonpy's newest is `v0.4.0`. Pinning both fixes the package versions used by the lesson; live vocabulary results can still change, and only the port will make the two review flows equivalent.
 
 What a Python user can do today is read the same evidence the R queue is built from, with pandas rather than with `metasalmonpy`. `semantic_suggestions.csv` sits at the package root and is written by both implementations:
 
@@ -152,13 +152,13 @@ Decide from that table, then edit the target field in the canonical metadata CSV
 
 Open `semantic_suggestions.csv` at the package root beside `metadata/column_dictionary.csv`. Filter to `NATURAL_SPAWNERS_TOTAL` and to the `tables.csv` row whose `target_sdp_field` is `observation_unit_iri`. Compare each `label`, `iri`, and `definition` with the source documentation and the data holder's explanation, then write the accepted IRI into the target field named by `target_sdp_file` and `target_sdp_field`.
 
-Be clear about the cost. This lane records the *outcome* and not the *reasoning*: nothing in the saved file says which other candidates you saw, or why you preferred this one. Keep a written review log beside the package so the next reader is not guessing. Opening the CSV does not accept a suggestion and is not evidence that a link is correct.
+The metadata cells alone record the *outcome*. Keep the Session 3 review log beside the package and add the reason, reviewer, supporting source, and alternatives considered for each decision. That log preserves the reasoning and evidence; applying it to a rebuilt package remains manual. Opening the CSV does not accept a suggestion and is not evidence that a link is correct.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Read one slot
 
-Each queue entry is one block. This is the `NATURAL_SPAWNERS_TOTAL` variable slot — the first block you see after filtering with `columns =` — printed exactly as it appears:
+Each queue entry is one block. The output below illustrates the `NATURAL_SPAWNERS_TOTAL` variable slot from the Fraser Coho review. Vocabulary contents, scores, and ranks can change; read the shortlist produced by your own build before using a printed call.
 
 ```output
 ── escapement · NATURAL_SPAWNERS_TOTAL · variable ────────────────────────────
@@ -193,7 +193,9 @@ Read it in this order:
 
 Undecided is undecided. A `REVIEW:` prefix is a marker meaning *nobody has looked at this*, not a weak endorsement, and strict validation refuses to publish a package that still contains one.
 
-The variable answers "what complete measurement is this column?" For `NATURAL_SPAWNERS_TOTAL` the candidate says spawner abundance, from `gcdfo`, with a definition that matches the NuSEDS field. Read the definition, not the label. Then accept it.
+The variable answers "what complete measurement is this column?" For `NATURAL_SPAWNERS_TOTAL` the candidate says spawner abundance, from `gcdfo`. Compare its definition with `raw_data/nuseds-fraser-coho-source-dictionary.csv`, where the field is described as estimated total natural-origin spawners. Accept it only if that comparison supports the mapping.
+
+The sample has only two non-empty values in this column, `19` and `3`; the other 28 rows are blank. Do not turn blanks into zero, infer their reason from the count alone, or let a semantic annotation imply that every record contains an estimate. Missing-value meaning remains a source-review question.
 
 ## Decide, in your script
 
@@ -264,23 +266,17 @@ Error in accept_suggestion(sem_review, "FULL_CU_IN", "variable", rank = 3) :
 
 Read `Ranks available: 1.` literally, because it is the most misleading-looking thing on the page. **`create_sdp()` keeps one candidate per role by default** — `semantic_max_per_role = 1` — so the seeded `semantic_suggestions.csv` carries one row per slot rather than a ranked list, and every shortlist you have seen so far is one candidate deep. `rank = 1` is the only rank there is. "Accept rank 1" is therefore a much weaker statement than "the best of five": it is closer to "accept or reject".
 
-Ask for a deeper shortlist at build time, not at review time. The review reads what seeding stored, so this is a `create_sdp()` argument:
+Ask for a deeper shortlist at build time, not at review time. The review reads what seeding stored, so change the existing `create_sdp()` call in `scripts/build_sdp.R`:
 
 
 ``` r
-pkg_path <- create_sdp(
-  fraser_coho,
-  path = file.path("output", "fraser-coho-example-sdp"),
-  dataset_id = "fraser-coho-example",
-  table_id = "escapement",
-  seed_semantics = TRUE,
-  semantic_max_per_role = 3,
-  check_updates = FALSE,
-  overwrite = TRUE
-)
+# Inside the existing Session 3 create_sdp() call:
+semantic_max_per_role = 3
 ```
 
-The same slot then offers three:
+Keep its Fraser Coho inputs, IDs, source context, and output path unchanged. Rebuild only after preserving decisions that have not yet been recorded in the script.
+
+An illustrative three-candidate result is:
 
 ```output
 ── escapement · NATURAL_SPAWNERS_TOTAL · variable ────────────────────────────
@@ -451,7 +447,7 @@ The remaining three slots:
        review <- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "constraint", rank = 1)
 ```
 
-Note the unit candidate: score 4.65 and no definition at all. A low score with nothing to read is a prompt to check the vocabulary yourself, not a reason to accept faster. Confirm that a count is what the NuSEDS column actually stores before keeping it.
+Note the unit candidate: score 4.65 and no definition at all. A low score with nothing to read is a prompt to check the vocabulary yourself. The bundled source dictionary uses QUDT `Individual` (`https://qudt.org/vocab/unit/INDIV`), while this illustrative search found `COUNT`; it also uses a Conservation Unit entity where the search found `Population`. Those are review questions, not interchangeable spellings. Compare the row meaning and source definitions before choosing an IRI; record an unresolved difference instead of accepting a rank by habit.
 
 The statistical modifier is the one kind of "how" that stays in the dictionary, because a *mean* weight and a *maximum* weight are genuinely different variables:
 
@@ -485,7 +481,7 @@ One queue entry is not about a column at all. `tables.csv$observation_unit_iri` 
        review <- accept_suggestion(review, role = "entity", rank = 1, table = "escapement")
 ```
 
-Paste it as printed. `columns =` filters on column names, so a `columns` filter always hides this slot; build the queue without one when you want to reach it.
+Compare the candidate with the source description of one row: a NuSEDS coho escapement record identified by population and analysis year. The bundled table metadata uses `EscapementEstimate`, while this search found `Escapement`; discuss whether the candidate describes the record or only its measured quantity. Accept only a supported match. `columns =` filters on column names, so a `columns` filter always hides this slot; build the queue without one when you want to reach it.
 
 ### Methods do not live in the column dictionary
 
@@ -606,7 +602,7 @@ suggestions[
 
 ## The finished script
 
-Session 3 said every accepted decision belongs in the script rather than in a manual edit inside `output/`. This is what that looks like for semantics. Append it to `scripts/build_sdp.R`, below the `create_sdp()` call:
+Session 3 said every accepted decision belongs in the script rather than in a manual edit inside `output/`. The example below shows the shape of that record. **It is not a pre-approved answer key:** replace the decisions with the outcomes of your source review, especially the entity, unit, statistical modifier, and table observation unit. If a match remains unsupported, reject that slot with a reason and carry the question forward. Append your reviewed calls to `scripts/build_sdp.R`, below the `create_sdp()` call:
 
 
 ``` r
@@ -633,11 +629,11 @@ apply_sdp_semantics(pkg_path, review)
 validate_salmon_datapackage(pkg_path, require_iris = FALSE)
 ```
 
-Every line is a decision, every decision can carry its reasoning in a comment beside it, and the whole thing reruns. That is the property the spreadsheet could not give you.
+Every line is a decision and can carry its reasoning in a comment beside it. These calls replay the edits; a spreadsheet review log carries the same reasoning and evidence but requires the edits to be reapplied manually.
 
 Expect `validate_salmon_datapackage()` to still warn here: the slots you did not decide keep their `REVIEW:` markers, and the free-text placeholders are untouched. That is the correct state for a package mid-review.
 
-One caveat about rerunning. The decisions replay deterministically, but the *candidates* do not: shared vocabularies evolve, so a future `create_sdp(seed_semantics = TRUE)` may retrieve a different shortlist and `rank = 1` may then name a different term. Where an accepted IRI must never drift, write it as `iri = "…"` instead of `rank = 1`. That converts a position into a commitment.
+One caveat about rerunning. Recorded decisions can be replayed against the saved review evidence, but a fresh search need not return the same *candidates*: shared vocabularies evolve, so a future `create_sdp(seed_semantics = TRUE)` may retrieve a different shortlist and `rank = 1` may then name a different term. Where an accepted IRI must never drift, write it as `iri = "…"` instead of `rank = 1`. That converts a position into a commitment.
 
 ## What this review cannot decide
 
@@ -690,10 +686,10 @@ Full argument lists and return values: [`review_semantics()`][metasalmon-review-
 
 ## Challenge 1: Complete the bounded Fraser Coho review
 
-Work with the shared NuSEDS Fraser Coho package, even if you brought your own dataset.
+Continue with `output/fraser-coho-example-sdp` and the source dictionary from Session 3.
 
 1. Build the queue with `review_semantics()` and count the slots.
-2. Decide the six `NATURAL_SPAWNERS_TOTAL` slots: variable, property, entity, unit, constraint, statistical modifier. Use `iri =` where the shortlist is wrong, and write one sentence in the script saying why.
+2. Review the six `NATURAL_SPAWNERS_TOTAL` slots: variable, property, entity, unit, constraint, statistical modifier. Compare the source dictionary with the shortlist. Use `iri =` for a supported alternative, or reject and record the question when evidence is missing; write the reason in your script.
 3. Decide the table observation-unit slot.
 4. Reject `AREA` with a reason.
 5. Apply the decisions and confirm `data/escapement.csv` is byte-identical.
@@ -705,9 +701,9 @@ Do not map additional fields during this exercise.
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-## Challenge 2: Prove the review is reproducible
+## Challenge 2: Check the recorded review can be replayed
 
-Delete `output/fraser-coho-example-sdp/` and rerun `scripts/build_sdp.R` from the top. Budget a few minutes: this reruns the seeding search as well as the review.
+Preserve the current package as `output/fraser-coho-example-sdp-before-replay/`, then rerun `scripts/build_sdp.R` from the top to rebuild `output/fraser-coho-example-sdp/`. Budget a few minutes: this reruns the seeding search as well as the review. Compare against the preserved copy so a missing scripted decision is recoverable.
 
 - Does the package come back with the same accepted IRIs?
 - Which of your decisions would survive a vocabulary change, and which are pinned to `rank = 1`?
@@ -720,7 +716,7 @@ Then answer the question this chapter exists for: **if you left this project tod
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
-- The console prints the exact `accept_suggestion()` call; pasting it into your build script is what makes the decision reproducible.
+- The console prints the exact `accept_suggestion()` call; keep it, the reason, and the reviewed evidence so the decision can be reconstructed. Live seeding may retrieve different candidates later.
 - `review_semantics()` reads suggestions that already exist. It never searches, and it never contacts an LLM.
 - `REVIEW:` and a blank field both mean undecided; a retrieval score is not agreement.
 - Shortlists are one candidate deep by default (`semantic_max_per_role = 1`); ask for depth at build time, and expect it to give you more to reject rather than more to accept.

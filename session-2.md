@@ -16,7 +16,7 @@ exercises: 40
 
 - Confirm the project, `raw_data/`, `scripts/`, and `output/` layout, unless you already completed this during setup.
 - Run the bundled example unchanged to generate and inspect templates.
-- Explain why Chapter 2 uses bundled quickstart data and Chapter 3 introduces your own data.
+- Keep the same Fraser Coho data and package identity through Sessions 2–6.
 - Identify supported single-table, multi-table, and workbook inputs.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
@@ -44,11 +44,13 @@ salmon-data-workshop/
   output/                     # generated package folders
 ```
 
-Keep the prepared dataset, codebooks, methods, caveats, and other context inputs together under `raw_data/` and do not edit them in place while building a package. In Chapter 3, R users will save the reproducible build as `scripts/build_sdp.R`, Python users as `scripts/build_sdp.py`, and spreadsheet users will omit the script.
+Keep the prepared dataset, codebooks, methods, caveats, and other context inputs together under `raw_data/` and do not edit them in place while building a package. R users save the code below as `scripts/build_sdp.R`; Python users use `scripts/build_sdp.py`. Spreadsheet users keep a review log. Session 3 extends that same script.
 
-## Chapter 2 uses the bundled quickstart data
+## One Fraser Coho example throughout the workshop
 
-In this chapter, use the prepared starting point for your chosen software lane. The R and Python examples use a small NuSEDS-derived table; the spreadsheet lane uses the canonical blank SDP template. Each is a quickstart for seeing the package structure and starter metadata. Do not substitute your own files yet: Chapter 3 is the bring-your-own-data workflow.
+Everyone uses `nuseds-fraser-coho-sample.csv`: the included 30-row, 17-column NuSEDS Fraser Coho practice table, with analysis years ranging from 1996 to 2024. It stays with us through context capture, semantic review, code lists, EML, and the publication preview. Spreadsheet participants inspect a facilitator-generated package from these same rows.
+
+Keep the source unchanged. This small sample is not a complete Fraser Coho time series; blank spawner estimates are not zeroes. Do not substitute the separate 173-row `nuseds-fraser-coho-2023-2024.csv` example. [Session 7](session-7.Rmd) is the optional bring-your-own-dataset activity after the shared workflow.
 
 ## What "draft" means
 
@@ -67,17 +69,29 @@ Choose **R**, **Python**, or **Spreadsheet** below. Your selection is synchroniz
 ```r
 library(metasalmon)
 
-# Locate and read the small example bundled with metasalmon.
-data_path <- system.file(
-  "extdata",
-  "nuseds-fraser-coho-sample.csv",
-  package = "metasalmon"
+# Copy the bundled data and its source dictionary into the project once.
+# On a rerun, verify existing copies instead of replacing source inputs.
+source_files <- c(
+  "nuseds-fraser-coho-sample.csv" = "nuseds-fraser-coho-sample.csv",
+  "nuseds-fraser-coho-source-dictionary.csv" = "column_dictionary.csv"
 )
+for (local_name in names(source_files)) {
+  bundled_path <- system.file(
+    "extdata", source_files[[local_name]], package = "metasalmon"
+  )
+  stopifnot(nzchar(bundled_path))
+  local_path <- file.path("raw_data", local_name)
+  if (file.exists(local_path)) {
+    stopifnot(unname(tools::md5sum(local_path)) ==
+                unname(tools::md5sum(bundled_path)))
+  } else {
+    stopifnot(file.copy(bundled_path, local_path, overwrite = FALSE))
+  }
+}
 
-fraser_coho <- readr::read_csv(
-  data_path,
-  show_col_types = FALSE
-)
+data_path <- file.path("raw_data", "nuseds-fraser-coho-sample.csv")
+fraser_coho <- readr::read_csv(data_path, show_col_types = FALSE)
+stopifnot(nrow(fraser_coho) == 30L, ncol(fraser_coho) == 17L)
 
 # Generate a new package once. overwrite = FALSE protects an existing folder.
 pkg_path <- create_sdp(
@@ -86,7 +100,7 @@ pkg_path <- create_sdp(
   dataset_id = "fraser-coho-example",
   table_id = "escapement",
   seed_semantics = FALSE,
-  check_updates = TRUE,
+  check_updates = FALSE,
   overwrite = FALSE
 )
 
@@ -104,11 +118,25 @@ from pathlib import Path
 import pandas as pd
 from metasalmonpy import create_sdp
 
-data_path = files("metasalmonpy.data").joinpath(
-    "nuseds-fraser-coho-sample.csv"
-)
+# Read packaged resources as bytes so source copies are identical.
+raw_data_dir = Path("raw_data")
+raw_data_dir.mkdir(exist_ok=True)
+source_files = {
+    "nuseds-fraser-coho-sample.csv": "nuseds-fraser-coho-sample.csv",
+    "nuseds-fraser-coho-source-dictionary.csv": "column_dictionary.csv",
+}
+for local_name, bundled_name in source_files.items():
+    source_bytes = files("metasalmonpy.data").joinpath(bundled_name).read_bytes()
+    local_path = raw_data_dir / local_name
+    if local_path.exists():
+        if local_path.read_bytes() != source_bytes:
+            raise ValueError(f"Source copy differs from the pinned package: {local_path}")
+    else:
+        local_path.write_bytes(source_bytes)
 
+data_path = raw_data_dir / "nuseds-fraser-coho-sample.csv"
 fraser_coho = pd.read_csv(data_path)
+assert fraser_coho.shape == (30, 17)
 
 pkg_path = create_sdp(
     fraser_coho,
@@ -116,7 +144,7 @@ pkg_path = create_sdp(
     dataset_id="fraser-coho-example",
     table_id="escapement",
     seed_semantics=False,
-    check_updates=True,
+    check_updates=False,
     overwrite=False,
 )
 
@@ -128,30 +156,32 @@ for path in sorted(
 
 ### Spreadsheet
 
-Spreadsheet participants can inspect the package structure without running code. Download or clone the `smn-data-pkg` repository, copy its [blank SDP CSV template][sdp-template] into `output/spreadsheet-quickstart-sdp/`, and open the CSV files with Excel, LibreOffice Calc, or another spreadsheet editor.
+Ask the facilitator for the Fraser Coho draft package generated with the R quickstart above. Put it at `output/fraser-coho-example-sdp/` and put the accompanying `nuseds-fraser-coho-sample.csv` and `nuseds-fraser-coho-source-dictionary.csv` in `raw_data/`. Open its metadata CSVs with Excel or LibreOffice Calc, keeping identifiers and code values as text.
 
-Keep the copied folder structure and header rows unchanged. In this chapter, inspect the prepared example rather than replacing its data or metadata; Chapter 3 introduces your own data.
+You are reviewing the same 30 rows as the R and Python learners. Keep the data, folder structure, and metadata headers unchanged; write review notes separately until Session 3. You do not need a personal dataset or a blank package for the core walkthrough.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-For the R and Python lanes, `seed_semantics = FALSE` / `seed_semantics=False` is the fast classroom option. It skips live searches for links to shared definitions. Chapter 3 turns those searches on once the starter metadata has been reviewed, and Chapter 4 decides the candidates they return.
+The copied source dictionary is supporting evidence: its original dataset/table IDs and annotations are not the decisions for this workshop package. Session 3 reviews its descriptions without replacing the generated dictionary.
+
+For the R and Python lanes, `seed_semantics = FALSE` / `seed_semantics=False` is the fast classroom option. It skips live searches for links to shared definitions. Session 3 turns those searches on in R and gives Python learners saved candidate evidence from the same sample. Session 4 reviews that evidence.
 
 ## Inspect the package files
 
-Open these files in this order. A package generated by R or Python starts with `README-review.txt`; the spreadsheet template uses `README.md`.
+Open these files in this order. All three lanes inspect a generated Fraser Coho package.
 
-1. `README-review.txt` or `README.md`
+1. `README-review.txt`
 2. `metadata/column_dictionary.csv`
 3. `metadata/tables.csv`
 4. `metadata/dataset.csv`
 5. `metadata/codes.csv`, when present
 6. `semantic_suggestions.csv`, when present
 
-The R or Python quickstart has this generated structure. The spreadsheet template has the same core metadata CSVs but keeps `data/README.md` in place of a learner data table until Chapter 3.
+All three lanes use this package structure. The source CSV is preserved in `raw_data/`; the writer names the packaged table `data/escapement.csv` after its table ID.
 
 ```text
 output/fraser-coho-example-sdp/
-  README-review.txt            # README.md in the prepared example
+  README-review.txt
   datapackage.json
   .metasalmon-package          # R writer bookkeeping; Python uses .metasalmonpy-package
   metadata/
@@ -165,9 +195,9 @@ output/fraser-coho-example-sdp/
 
 If semantic seeding is enabled later, the package may also include `semantic_suggestions.csv`, and metadata fields may contain `REVIEW: <iri>` draft values. An **IRI** is a stable web identifier for a shared term. The `REVIEW:` prefix means that the proposed match has not been accepted.
 
-## What input structures are supported?
+## Transfer later: what other input structures are supported?
 
-`create_sdp()` does not open an arbitrary source file by itself. First use an appropriate reader to create R data frames; then pass one data frame or a named list of data frames.
+The shared walkthrough uses one CSV. Session 7 shows how to adapt it to other inputs. `create_sdp()` does not open an arbitrary source file by itself. First use an appropriate reader to create R data frames; then pass one data frame or a named list of data frames.
 
 | Source | Preparation | `create_sdp()` input |
 | --- | --- | --- |
@@ -223,7 +253,7 @@ print(review_check["semantic_validation"]["missing_terms"])
 
 ### Spreadsheet
 
-Spreadsheet software does not currently run the SDP validator. For this quickstart, compare the prepared example's folder structure and metadata headers with the [SDP field reference][sdp-field-reference], and keep unresolved fields or term links visibly in review state. This manual review is not evidence that strict validation has passed.
+Spreadsheet software does not currently run the SDP validator. For this quickstart, compare the Fraser Coho package's folder structure and metadata headers with the [SDP field reference][sdp-field-reference], and keep unresolved fields or term links visibly in review state. This manual review is not evidence that strict validation has passed.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -238,14 +268,15 @@ Run the bundled quickstart unchanged, then answer:
 - Where is the data table?
 - Which metadata file describes the dataset, each table, each column, and categorical codes?
 - Which fields still need human review?
-- What would you replace when moving to your own data?
+- Which Fraser Coho fields will need source context before you can describe them?
+- Where are the unchanged source and the generated `escapement.csv`?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
 - Confirm the project and folders unless you already prepared them during setup.
-- Run the bundled quickstart unchanged to learn the generated package shape; bring your own data in Chapter 3.
+- Keep this Fraser Coho package through Sessions 3–6; optional transfer to your own data comes in Session 7.
 - `create_sdp()` accepts one data frame or a named list of tabular data frames, not arbitrary scientific file structures.
 - The field reference is the source for definitions and allowed values.
 

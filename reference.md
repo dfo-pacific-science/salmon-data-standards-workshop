@@ -4,14 +4,17 @@ title: Reference
 
 ## Core workflow
 
-1. Create a draft package from one table or a named list of tables.
-2. Improve dataset, table, column, code, and README/context descriptions.
-3. Review suggested semantic links, recording each decision as a line of code in the build script rather than as an edited cell.
-4. Focus first on measurements, units, observation units, and important code lists.
+1. Create `output/fraser-coho-example-sdp` from the included 30-row `nuseds-fraser-coho-sample.csv` (dataset `fraser-coho-example`, table `escapement`).
+2. Improve that sample's dataset, table, column, code, and README/context descriptions using its bundled source dictionary.
+3. Generate candidates in R, or restore supplied same-sample evidence in Python as described in Session 3; review links and record each decision in the build script or spreadsheet review log.
+4. Review `NATURAL_SPAWNERS_TOTAL`, its unit and components, the table observation unit, and the `ESTIMATE_METHOD` code list.
 5. Render and review unresolved-term routes: `smn`, `gcdfo`, `profile`, or `skip`.
 6. Run strict validation only when the SDP is final enough for publication.
-7. Complete the reviewed EML sidecar and export schema-valid EML 2.2.
-8. Preview the KNB/DataONE object plan with a credential-free dry run; upload only with explicit authority and credentials.
+7. Continue with the instructor's reviewed checkpoint of the same sample (`output/fraser-coho-example-reviewed-sdp`), verify unchanged data, inspect the closure and EML sidecar, and export schema-valid EML 2.2.
+8. Preview the same sample's KNB/DataONE object plan with a credential-free dry run; upload only with explicit authority and credentials.
+9. Make a metadata-only second version at `output/fraser-coho-example-sdp-v2`; then optionally transfer the workflow to your own data in Session 7.
+
+The core sessions never switch to another dataset. The separate 173-row 2023–2024 example in metasalmon's KNB rehearsal is a procedure reference only. If a same-sample reviewed checkpoint is unavailable, record the missing prerequisites and inspect supplied same-sample artifacts or trace the code; do not claim an export ran.
 
 ## R and Python functions
 
@@ -41,9 +44,15 @@ Rows marked *pending* are the R-native semantic review flow, which lands in `met
 ```text
 salmon-data-workshop/
   salmon-data-workshop.Rproj
-  raw_data/       # unchanged input data, codebooks, and context files
-  scripts/        # build_sdp.R or build_sdp.py for code-based lanes
-  output/         # generated Salmon Data Packages
+  raw_data/
+    nuseds-fraser-coho-sample.csv
+    nuseds-fraser-coho-source-dictionary.csv
+  scripts/
+    build_sdp.R   # or build_sdp.py
+  output/
+    fraser-coho-example-sdp/           # classroom draft
+    fraser-coho-example-reviewed-sdp/  # same-sample reviewed checkpoint
+    fraser-coho-example-sdp-v2/        # deliberate metadata revision
 ```
 
 R users should open the `.Rproj` file. Keep the prepared dataset and all context inputs together under `raw_data/` and unchanged while the package is built. Every lane should work from the same project root and use paths relative to it. R and Python users put the reproducible build in `scripts/build_sdp.R` or `scripts/build_sdp.py`; spreadsheet users omit the script.
@@ -137,7 +146,7 @@ long <- tidyr::pivot_longer(
 | `publication/test/knb-manifest.json` | Exact-object manifest for the non-durable KNB Test Node rehearsal |
 | `publication/knb-manifest.json` | Exact-object production dry-run or recovery manifest |
 
-Use the [blank SDP CSV template][sdp-template] for a no-code starting point, or generate the current filled quickstart with `metasalmon` or `metasalmonpy` in Chapter 2.
+In the core workshop, spreadsheet users receive an instructor-prepared package for the same Fraser Coho sample; code users generate it in Session 2. The [blank SDP CSV template][sdp-template] is an optional starting point for a new dataset in Session 7.
 
 ## Standards and conventions behind the fields
 

@@ -22,7 +22,7 @@ exercises: 35
 
 ## Categorical values need definitions too
 
-A categorical column stores values from a known set, such as species codes, origin categories, run timing, method bins, or status values. The data table may store compact values, but reviewers need the meaning.
+Continue with `output/fraser-coho-example-sdp`, the same 30-row NuSEDS Fraser Coho sample. A categorical column stores values from a known set. Here `ESTIMATE_METHOD` records the method or reporting label attached to each estimate, while `ESTIMATE_CLASSIFICATION` and `ESTIMATE_STAGE` carry different kinds of information. Reviewers need those distinctions even when the stored values look readable.
 
 Use `metadata/codes.csv` when a column has controlled values. It is required when any `column_dictionary.csv` row has `column_role = categorical`. Each observed non-empty value must have exactly one matching row for its `dataset_id` + `table_id` + `column_name` + `code_value` key; do not leave observed values undocumented or duplicate that key.
 
@@ -38,6 +38,64 @@ This work is language-independent: `metasalmon` and `metasalmonpy` read and writ
 | `code_description` | Meaning, scope, or caveat |
 | `vocabulary_iri` | Recommended IRI for the whole vocabulary |
 | `term_iri` | Recommended IRI for the specific code concept |
+
+## Read the method values already in the sample
+
+Use `ESTIMATE_METHOD` for the shared exercise. The included sample contains these six non-empty stored values:
+
+| `code_value` | Sample rows | Review task |
+| --- | ---: | --- |
+| `Area Under the Curve` | 3 | Compare the prefilled procedure IRI with the source method definition. |
+| `Peak Live * Expansion` | 2 | Preserve the exact stored value and check what the expansion means. |
+| `Peak Live + Dead` | 1 | Check which observations the method combines. |
+| `Insufficient Information` | 2 | Establish what information is missing before assigning a procedure. |
+| `Not Applicable` | 12 | Check why a method is inapplicable; do not treat this as a method name. |
+| `Unknown Estimate Method` | 10 | Preserve the recorded uncertainty; do not guess a procedure. |
+
+These counts describe this teaching sample, not the full NuSEDS database. The last three labels do not justify inventing method definitions or equating them with one another. Use the source dictionary and supporting NuSEDS documentation; keep anything they do not settle as a reviewer question.
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+### R
+
+
+``` r
+# fraser_coho is the unchanged input loaded in scripts/build_sdp.R.
+fraser_coho |>
+  dplyr::count(ESTIMATE_METHOD, name = "sample_rows")
+
+pkg <- read_salmon_datapackage(pkg_path)
+pkg$codes |>
+  dplyr::filter(
+    dataset_id == "fraser-coho-example",
+    table_id == "escapement",
+    column_name == "ESTIMATE_METHOD"
+  )
+```
+
+### Python
+
+```python
+from metasalmonpy import read_salmon_datapackage
+
+print(fraser_coho["ESTIMATE_METHOD"].value_counts(dropna=False))
+
+pkg = read_salmon_datapackage(pkg_path)
+method_codes = pkg["codes"].loc[
+    (pkg["codes"]["dataset_id"] == "fraser-coho-example")
+    & (pkg["codes"]["table_id"] == "escapement")
+    & (pkg["codes"]["column_name"] == "ESTIMATE_METHOD")
+]
+print(method_codes)
+```
+
+### Spreadsheet
+
+Open `raw_data/nuseds-fraser-coho-sample.csv` read-only and list the distinct `ESTIMATE_METHOD` values. Open the package's `metadata/codes.csv` and filter to dataset `fraser-coho-example`, table `escapement`, and column `ESTIMATE_METHOD`. Compare the six observed values with those code rows.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+Package creation may already have mapped recognized NuSEDS methods. Session 4 explained why these crosswalk rows can bypass the semantic queue. Review them here, including their descriptions and IRIs. Preserve the literal `code_value` used in the data; improve its label or description in metadata rather than recoding the raw CSV.
 
 ## SKOS in plain language
 
@@ -74,7 +132,7 @@ The safe default is local/profile first when reuse is uncertain. SKOS is usually
 
 ## Challenge 1: Build a code-list review table
 
-Pick one categorical column.
+Review `ESTIMATE_METHOD` in the shared Fraser Coho package. Use `ESTIMATE_CLASSIFICATION` as an additional comparison only if time remains.
 
 Create or improve rows for each code value:
 
@@ -85,7 +143,7 @@ Create or improve rows for each code value:
 - whether a shared term already exists;
 - whether the value should stay local for now.
 
-Then compare the table with the data: every observed non-empty value should have one matching row for that dataset, table, column, and value, and that key should not be duplicated.
+Then compare the table with the six observed values above: each must have exactly one matching row for `fraser-coho-example` / `escapement` / `ESTIMATE_METHOD` / its literal value, and that key must not be duplicated. Record supported metadata changes in `scripts/build_sdp.R` or `scripts/build_sdp.py`; spreadsheet users retain a review log. Carry the same package into Session 6.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 

@@ -30,13 +30,13 @@ exercises: 55
 
 ## A gap is not a failure
 
-When no candidate term fits, do not force the closest match. Record the gap and decide where it belongs.
+Continue with the same **30-row NuSEDS Fraser Coho sample** in `output/fraser-coho-example-sdp` (dataset `fraser-coho-example`, table `escapement`). When no candidate term fits, do not force the closest match. Record the gap and decide where it belongs. The optional bring-your-own-dataset activity starts in Session 7, after this shared workflow.
 
 The package should keep enough evidence that maintainers can understand the request without a long follow-up interview.
 
 ## Build a term-gap plan in your software lane
 
-After editing the metadata files, reload and validate the current package state.
+After the semantic decisions in Session 4 and the `ESTIMATE_METHOD` code-list review in Session 5, reload and validate the current package state. Keep your decisions and their supporting source notes in the build script or review log.
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
@@ -47,7 +47,7 @@ pkg <- read_salmon_datapackage(pkg_path)
 validate_salmon_datapackage(pkg_path, require_iris = FALSE)
 ```
 
-Then rerun suggestions only for unresolved pieces.
+Refresh suggestions to inspect unresolved pieces. This returns candidate evidence; it does not apply a new review or replace your reviewed package on disk. Inspect the output for gaps that still exist after your recorded decisions.
 
 ```r
 reviewed_dict <- suggest_semantics(
@@ -69,7 +69,7 @@ if (nrow(gaps) == 0) {
     gaps,
     scope = "auto",
     ask = FALSE,
-    profile_name = "local-program"
+    profile_name = "fraser-coho-workshop"
   )
 
   reviewed_scopes <- requests$request_scope
@@ -80,7 +80,7 @@ if (nrow(gaps) == 0) {
     gaps,
     scope = "auto",
     ask = FALSE,
-    profile_name = "local-program",
+    profile_name = "fraser-coho-workshop",
     scope_overrides = reviewed_scopes
   ) |>
     dplyr::mutate(
@@ -126,25 +126,18 @@ from metasalmonpy import (
     detect_semantic_term_gaps,
     read_salmon_datapackage,
     render_ontology_term_request,
-    suggest_semantics,
     validate_salmon_datapackage,
 )
 
 pkg = read_salmon_datapackage(pkg_path)
 validate_salmon_datapackage(pkg_path, require_iris=False)
 
-reviewed_dict = suggest_semantics(
-    df=pkg["resources"],
-    dict_df=pkg["dictionary"],
-    codes=pkg["codes"],
-    table_meta=pkg["tables"],
-    dataset_meta=pkg["dataset"],
-)
-
-gaps = detect_semantic_term_gaps(reviewed_dict)
+# Use the same saved candidate evidence as Session 4; no new lookup runs.
+saved_suggestions = pd.read_csv(Path(pkg_path) / "semantic_suggestions.csv")
+gaps = detect_semantic_term_gaps(suggestions=saved_suggestions)
 
 if gaps.empty:
-    print("No unresolved term gaps; there is no request plan to render.")
+    print("No structured gaps found in the saved candidates; review questions may remain.")
     requests = pd.DataFrame()
     request_plan = pd.DataFrame()
 else:
@@ -152,7 +145,7 @@ else:
         gaps,
         scope="auto",
         ask=False,
-        profile_name="local-program",
+        profile_name="fraser-coho-workshop",
     )
 
     reviewed_scopes = requests["request_scope"].tolist()
@@ -163,7 +156,7 @@ else:
         gaps,
         scope="auto",
         ask=False,
-        profile_name="local-program",
+        profile_name="fraser-coho-workshop",
         scope_overrides=reviewed_scopes,
     )
 
@@ -205,7 +198,7 @@ Open `semantic_suggestions.csv` and the canonical metadata CSVs. For each unreso
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-`detect_semantic_term_gaps()` combines deterministic candidate gaps with final LLM `request_new_term` decisions when LLM assessment was enabled. `gap_detection_basis` records which evidence created the gap, and `llm_escalated_from` preserves an unresolved `reject_shortlist` escalation. The deterministic `suggest_semantics()` call shown above leaves those LLM fields blank.
+`detect_semantic_term_gaps()` combines deterministic candidate gaps with final LLM `request_new_term` decisions when LLM assessment was enabled. `gap_detection_basis` records which evidence created the gap, and `llm_escalated_from` preserves an unresolved `reject_shortlist` escalation. The deterministic R `suggest_semantics()` call shown above leaves those LLM fields blank. The Python lane reads the saved candidate CSV to avoid the pinned seeding failure described in Session 3. That CSV alone does not carry the complete set of zero-candidate targets or your later manual rejections; an empty detected-gap result does not close the questions in your review log.
 
 `render_ontology_term_request()` converts the gaps into reviewable draft payloads and proposed routes. It never submits an issue. The output is a working list, not an automatic governance decision.
 
@@ -281,7 +274,7 @@ A useful request includes:
 
 ## Final validation is later
 
-Strict validation is the final gate. Use the language lane you selected earlier.
+Strict validation is the final **SDP** gate. The bounded review in Sessions 4–5 does not make the whole package final: unresolved semantic slots, metadata placeholders, or incomplete code descriptions may remain. The commands below show the gate to run once those are resolved. If it fails, keep the failure report and the draft state; the same-sample reviewed checkpoint below provides the publication walkthrough without treating classroom decisions as complete review. EML and publication have additional requirements beyond this gate.
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
@@ -337,7 +330,7 @@ The canonical SDP does not contain every fact EML requires. For example, a free-
 
 `write_eml_from_sdp()` and `publish_sdp_to_knb()` are gates, not conversions. Both refuse a package that is not finished, and the refusals arrive one at a time. A first attempt on a freshly created package fails four times in a row, so it is worth knowing the whole list before you start.
 
-This is not hypothetical: the list below is what a real deposit of the shipped Fraser Coho example to the KNB **test** node required on 2026-08-25, and the executable record of it is metasalmon's [KNB rehearsal script][metasalmon-knb-rehearsal]. Read that script as the worked golden path; the stages map onto this list.
+The [KNB rehearsal script][metasalmon-knb-rehearsal] demonstrates these requirements on a **different** shipped table: the 173-row `nuseds-fraser-coho-2023-2024.csv` slice, which uses `NATURAL_ADULT_SPAWNERS`. It is a procedure reference, not a replacement workshop dataset or provenance record for our 30-row sample. Its dictionaries, reviewed selections, EML sidecar, and checksums cannot be copied into our package. We keep `nuseds-fraser-coho-sample.csv` throughout the exercise.
 
 | Prerequisite | Where it lives | Why it stops you |
 | --- | --- | --- |
@@ -352,15 +345,91 @@ This is not hypothetical: the list below is what a real deposit of the shipped F
 
 The last row is different in kind from the other three. `metasalmon` and `metasalmonpy` **validate** `semantic_vocabulary.csv` and `reviewed_semantic_selections.csv`, but neither package exports a function that **writes** them, and no vignette shows their contents. The rehearsal script has to reach into package internals to build them, which is not something you can or should reproduce from the published documentation.
 
-The practical consequence for this workshop: you can go all the way to strict validation on your own package, and you can read a prepared dry-run manifest, but you cannot produce a complete deposit unaided until that gap closes. Your instructor supplies the two artifacts for any live exercise. This is tracked as metasalmon backlog **#116**; the workshop will teach the supported route as soon as one exists, rather than teaching an internal call that may change.
+The practical consequence for this workshop: the instructor must supply a reviewed checkpoint for the **same 30-row Fraser Coho sample**, including the two closure artifacts and a reviewed EML sidecar, before learners can execute this export and dry-run segment. Finishing the small classroom review does not produce those artifacts. Without a prepared same-sample checkpoint, inspect same-sample EML and manifest artifacts if supplied, or trace the code and record the missing prerequisites. Do not switch to the 173-row example, fabricate evidence, or present the export as executed. This limitation is tracked as metasalmon backlog **#116**; replace this checkpoint requirement when a supported producer exists and its lesson path has been verified.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
+## Continue from a reviewed checkpoint of the same sample
+
+Preserve `output/fraser-coho-example-sdp` as your classroom draft. Put the instructor-provided reviewed checkpoint at `output/fraser-coho-example-reviewed-sdp`. It must retain dataset ID `fraser-coho-example`, table ID `escapement`, and the same 30 source rows and 17 columns in `data/escapement.csv`, while completing the documented metadata and semantic review. Compare its decisions with yours; the checkpoint is an explicit handoff to more complete review, not a claim that your draft passed.
+
+Before changing `pkg_path`, compare the parsed data and check the checkpoint IDs. R and Python may render equivalent CSV values differently, so this handoff checks row and value continuity rather than byte identity:
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+### R
+
+
+``` r
+draft_pkg_path <- pkg_path
+reviewed_pkg_path <- file.path("output", "fraser-coho-example-reviewed-sdp")
+
+draft_data <- file.path(draft_pkg_path, "data", "escapement.csv")
+reviewed_data <- file.path(reviewed_pkg_path, "data", "escapement.csv")
+stopifnot(file.exists(draft_data), file.exists(reviewed_data))
+draft_rows <- readr::read_csv(draft_data, show_col_types = FALSE)
+reviewed_rows <- readr::read_csv(reviewed_data, show_col_types = FALSE)
+stopifnot(
+  identical(names(draft_rows), names(reviewed_rows)),
+  identical(dim(draft_rows), c(30L, 17L)),
+  identical(dim(reviewed_rows), c(30L, 17L)),
+  isTRUE(all.equal(
+    as.data.frame(draft_rows),
+    as.data.frame(reviewed_rows),
+    check.attributes = FALSE
+  ))
+)
+
+checkpoint <- read_salmon_datapackage(reviewed_pkg_path)
+stopifnot(
+  nrow(checkpoint$dataset) == 1L,
+  nrow(checkpoint$tables) == 1L,
+  identical(checkpoint$dataset$dataset_id, "fraser-coho-example"),
+  identical(checkpoint$tables$dataset_id, "fraser-coho-example"),
+  identical(checkpoint$tables$table_id, "escapement")
+)
+
+pkg_path <- reviewed_pkg_path
+validate_salmon_datapackage(pkg_path, require_iris = TRUE)
+```
+
+### Python
+
+```python
+from pathlib import Path
+
+import pandas as pd
+
+draft_pkg_path = Path(pkg_path)
+reviewed_pkg_path = Path("output") / "fraser-coho-example-reviewed-sdp"
+
+draft_rows = pd.read_csv(draft_pkg_path / "data" / "escapement.csv")
+reviewed_rows = pd.read_csv(reviewed_pkg_path / "data" / "escapement.csv")
+assert draft_rows.shape == reviewed_rows.shape == (30, 17)
+pd.testing.assert_frame_equal(draft_rows, reviewed_rows, check_dtype=False)
+
+checkpoint = read_salmon_datapackage(reviewed_pkg_path)
+assert checkpoint["dataset"]["dataset_id"].tolist() == ["fraser-coho-example"]
+assert checkpoint["tables"]["dataset_id"].tolist() == ["fraser-coho-example"]
+assert checkpoint["tables"]["table_id"].tolist() == ["escapement"]
+
+pkg_path = reviewed_pkg_path
+validate_salmon_datapackage(pkg_path, require_iris=True)
+```
+
+### Spreadsheet
+
+Keep both folders and compare their 30 rows, 17 column names, and source values, preserving identifiers and missing values during import. Check the dataset and table IDs, then review the metadata changes side by side. Ask the instructor to demonstrate the parsed comparison and strict validation on `output/fraser-coho-example-reviewed-sdp` before inspecting its EML or deposit plan.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+Matching parsed rows and values establishes continuity of the sample, not the correctness of the completed metadata. Review the checkpoint's sources and decisions separately, and verify the artifact checksums bound by its EML sidecar against the checkpoint's actual files. Stop export if the checkpoint is absent, the source values or IDs differ, the bound checksums do not match, or validation fails. For the remaining examples, `pkg_path` names this reviewed version of the same Fraser Coho package.
+
 ## Export validated EML
 
-The code blocks from here to the end of this section operate on `pkg_path`, the reviewed package you have been building through the workshop; they are shown for you to run in your own session and are not executed when the lesson website is built. They stay display-only for the reason above: a genuine run needs a fully reviewed package and the reviewed closure, and this lesson will not fabricate either to make a code block render.
+The code blocks from here operate on `pkg_path`, now the same-sample reviewed checkpoint. They are not executed when the lesson website is built. A genuine run needs a fully reviewed package and the reviewed closure; a rendered code example is not evidence that export succeeded.
 
-Create `metadata/eml-mapping.yml` from metasalmon's [canonical mapping template][metasalmon-eml-mapping]. R users can copy the template from their installed package with the code below; Python and spreadsheet users can download the linked file and save it at the same package-relative path.
+Inspect the checkpoint's `metadata/eml-mapping.yml` against metasalmon's [canonical mapping template][metasalmon-eml-mapping]. The following copy step is for preparing a missing sidecar; it does not overwrite an existing reviewed file. Python and spreadsheet users can download the linked template at the same package-relative path when preparing a future package.
 
 
 ``` r
@@ -382,7 +451,7 @@ if (!file.exists(eml_mapping_path)) {
 }
 ```
 
-Stop and review the copied YAML. Replace every example value. The sidecar must bind the final semantic vocabulary and reviewed-selection ledger with their SHA-256 checksums; it must also record reviewed parties, rights authorization, source provenance, methods, and one measurement-scale/domain entry for every column. Set `status: final` only after that review.
+Stop and review the YAML. A newly copied template still requires every example value to be replaced; an instructor-prepared sidecar still needs its evidence inspected. The sidecar must bind the final semantic vocabulary and reviewed-selection ledger with their SHA-256 checksums; it must also record reviewed parties, rights authorization, source provenance, methods, and one measurement-scale/domain entry for every column. Set `status: final` only after that review.
 
 The detailed, current checklist is in the [metasalmon post-review and publication workflow][metasalmon-eml-workflow]. Do not invent dummy parties, checksums, rights evidence, measurement scales, or missing-value meanings merely to make validation pass.
 
@@ -423,7 +492,7 @@ The default output is `metadata/eml.xml`. An identical existing file is an idemp
 
 ## Preview the KNB/DataONE catalog deposit
 
-Use a dry run first. It creates local EML, OAI-ORE, and manifest artifacts, but it does not read credentials or make a network request:
+Use a dry run for this same Fraser Coho package. It creates local EML, OAI-ORE, and manifest artifacts, but it does not read credentials or make a network request:
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
@@ -436,7 +505,8 @@ knb_plan <- publish_sdp_to_knb(
   public = FALSE,
   dry_run = TRUE,
   representation = "expanded",
-  overwrite = FALSE,
+  # Rebuild only unpublished local EML from the preceding standalone export.
+  overwrite = TRUE,
   knb_environment = "test"
 )
 
@@ -454,7 +524,8 @@ knb_plan = publish_sdp_to_knb(
     public=False,
     dry_run=True,
     representation="expanded",
-    overwrite=False,
+    # Rebuild only unpublished local EML from the preceding standalone export.
+    overwrite=True,
     knb_environment="test",
 )
 
@@ -468,7 +539,7 @@ Spreadsheet software cannot generate the cryptographic manifest. Review an instr
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-Review `publication/test/knb-manifest.json`. The expanded plan lists the original data resources, allowlisted canonical SDP artifacts, validated EML science metadata, and the OAI-ORE resource map with exact identifiers and checksums. It does not scan and upload arbitrary files from the package folder. The test environment is a rehearsal: it is non-durable, cannot be promoted into production, is unsuitable for sensitive data, and cannot receive a DOI.
+Review `publication/test/knb-manifest.json` inside the reviewed Fraser Coho package. Confirm that it refers to `fraser-coho-example`, the `escapement` table, and the sample data you checked above. The expanded plan lists the original data resources, allowlisted canonical SDP artifacts, validated EML science metadata, and the OAI-ORE resource map with exact identifiers and checksums. It does not scan and upload arbitrary files from the package folder. The test environment is a rehearsal: it is non-durable, cannot be promoted into production, is unsuitable for sensitive data, and cannot receive a DOI.
 
 `overwrite = TRUE` / `overwrite=True` can rebuild conflicting local artifacts left by an **unpublished dry run** after you correct an input. It cannot overwrite anything that reached DataONE; published PIDs are immutable and require a reviewed revision.
 
@@ -566,9 +637,9 @@ Do not place the token in a script, `.Renviron`, YAML, manifest, command argumen
 
 Publication is complete only when the intended catalog state is verified, not merely when KNB stores the objects. If the returned manifest says `published_pending_catalog`, preserve that exact status and recheck rather than creating replacement identifiers or claiming completion.
 
-## Later example: make a new version after review
+## Make a second version of the Fraser Coho package
 
-After people have edited package metadata over time, do not regenerate the same folder from raw data and hope the edits survive. Read the reviewed state, make deliberate changes in memory, and write a new versioned folder:
+Keep the same data for this exercise and make a small, explicit metadata revision. Read the reviewed state, append a note that the teaching sample is unchanged, and write a new versioned folder. This models how to preserve reviewed metadata rather than regenerating its folder from raw data:
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
@@ -577,16 +648,16 @@ After people have edited package metadata over time, do not regenerate the same 
 ```r
 reviewed_pkg <- read_salmon_datapackage(pkg_path)
 
-# Example of an intentional metadata update. Replace with the real reviewed text.
+# A metadata-only revision: no rows or source values are added.
 reviewed_pkg$dataset <- reviewed_pkg$dataset |>
   dplyr::mutate(
     description = paste(
       description,
-      "This version adds the reviewed 2026 return-year records."
+      "Workshop metadata revision: the included 30-row NuSEDS Fraser Coho sample is unchanged."
     )
   )
 
-v2_path <- file.path("output", "my-salmon-sdp-v2")
+v2_path <- file.path("output", "fraser-coho-example-sdp-v2")
 
 write_salmon_datapackage(
   resources = reviewed_pkg$resources,
@@ -620,7 +691,7 @@ reviewed_pkg = read_salmon_datapackage(pkg_path)
 reviewed_dataset = reviewed_pkg["dataset"].copy()
 reviewed_dataset.loc[:, "description"] = (
     reviewed_dataset["description"].astype(str)
-    + " This version adds the reviewed 2026 return-year records."
+    + " Workshop metadata revision: the included 30-row NuSEDS Fraser Coho sample is unchanged."
 )
 reviewed_pkg["dataset"] = reviewed_dataset
 
@@ -630,7 +701,7 @@ v2_path = write_salmon_datapackage(
     table_meta=reviewed_pkg["tables"],
     dict_df=reviewed_pkg["dictionary"],
     codes=reviewed_pkg["codes"],
-    path=Path("output") / "my-salmon-sdp-v2",
+    path=Path("output") / "fraser-coho-example-sdp-v2",
     overwrite=False,
 )
 
@@ -654,7 +725,7 @@ For a later KNB version, keep the earlier package and verified manifest unchange
 
 ## Challenge 1: Draft a term-gap plan
 
-Choose one unresolved field or code value.
+Choose one unresolved field or code value from the Fraser Coho package. Start with an `ESTIMATE_METHOD` question from Session 5 or the rejected `AREA` mapping from Session 4. A missing or incorrect mapping is not automatically a missing ontology concept: a source clarification or a local description may be the right next step.
 
 Decide:
 
@@ -670,15 +741,15 @@ Decide:
 
 ## Challenge 2: Trace the publication workflow
 
-Using a finalized instructor-provided package or your own package when it is ready:
+Using the reviewed checkpoint of the **same 30-row Fraser Coho sample**, or its instructor-provided EML and dry-run artifacts:
 
-1. identify three SDP fields and their EML destinations;
+1. trace the dataset title, `NATURAL_SPAWNERS_TOTAL` definition, and `ESTIMATE_METHOD` code descriptions to their EML destinations;
 2. identify two facts that must come from `eml-mapping.yml` rather than inference;
 3. run or inspect the result of `write_eml_from_sdp()`;
 4. run or inspect a credential-free KNB dry-run manifest; and
 5. state who would need to authorize a live upload and whether the intended access is private or public.
 
-Do not run a live upload as a classroom experiment.
+Record whether you executed each step or inspected a supplied result. If same-sample artifacts are unavailable, identify the unmet prerequisites rather than reporting a successful export. Do not run a live upload as a classroom experiment. After this shared workflow, use Session 7 to try the process with a dataset of your own.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 

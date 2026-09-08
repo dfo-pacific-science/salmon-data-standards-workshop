@@ -37,6 +37,14 @@ The Salmon Data Package is the common foundation for all three destinations. It 
 
 An EML file is structured XML, not an arbitrary XML file with a different name. `metasalmon` and `metasalmonpy` map reviewed SDP facts into the EML model and validate the result against EML 2.2.0. A live KNB call creates persistent production objects, so the workshop uses a credential-free dry run unless an authorized publication exercise has been arranged.
 
+## One shared dataset from start to finish
+
+Everyone works with the included **NuSEDS Fraser Coho sample**, `nuseds-fraser-coho-sample.csv`. It has 30 rows and 17 columns, including `POP_ID`, `ANALYSIS_YR`, `NATURAL_SPAWNERS_TOTAL`, `ESTIMATE_METHOD`, and `ESTIMATE_CLASSIFICATION`. The selected rows span 1996–2024; this small teaching sample is not a complete Fraser Coho time series.
+
+We inspect it here, create its package in Session 2, capture context and seed suggestions in Session 3, review meanings and code lists in Sessions 4–5, and export metadata and preview a catalog deposit in Session 6. The sample stays under `raw_data/`; the package stays at `output/fraser-coho-example-sdp`, with dataset ID `fraser-coho-example` and table ID `escapement`. Spreadsheet learners receive a facilitator-generated copy of that same package.
+
+You do not need your own data to participate. After the shared workflow, optional Session 7 provides time to start a separate package with your own data or make a transfer plan from the sample.
+
 ## The problem this workshop solves
 
 Salmon data are often understandable to the person or team that collected them, but hard for someone else to reuse. Column names may be short, code values may be local, methods may be buried in reports, and important caveats may live only in people's heads. A word can also mean one thing in a stock-assessment program and something different in a hatchery, habitat, or fisheries context.
@@ -82,12 +90,12 @@ These terms describe different levels:
 
 | Term | Meaning | Example |
 | --- | --- | --- |
-| Dataset | The complete collection being documented; it can contain one or many related tables. | A coho escapement dataset containing observations, sites, and methods tables. |
-| Table | A rectangular set of rows and columns with one consistent row meaning. | One row per population and return year. |
-| Flat file | A file that stores one two-dimensional table, normally with one header row and no nested structure. | A CSV file. |
-| Workbook | A container that can hold several sheets/tables; the workbook itself is not one flat file. | An `.xlsx` file with `Escapement` and `Sites` sheets. |
+| Dataset | The collection being documented; it can contain one or many related tables. | The 30-row Fraser Coho teaching sample packaged as `fraser-coho-example`. |
+| Table | A rectangular set of rows and columns whose row meaning needs to be documented. | The sample's `escapement` table, with population, analysis year, estimate, and method fields. |
+| Flat file | A file that stores one two-dimensional table, normally with one header row and no nested structure. | `nuseds-fraser-coho-sample.csv`. |
+| Workbook | A container that can hold several sheets/tables; the workbook itself is not one flat file. | An optional own-data `.xlsx` input in Session 7. |
 
-The workshop supports one flat table, multiple CSV tables, or multiple rectangular Excel sheets. The R and Python workflows read each source table into memory and pass either one table or a named collection of tables to `create_sdp()`. The workflow does not directly preserve multidimensional NetCDF, raster, or nested-array structures.
+The core workshop uses one CSV table. Optional Session 7 extends the input pattern to learner-owned single tables, multiple CSV tables, or multiple rectangular Excel sheets. The R and Python workflows read each source table into memory and pass either one table or a named collection of tables to `create_sdp()`. The workflow does not directly preserve multidimensional NetCDF, raster, or nested-array structures.
 
 ## The workshop ladder
 
@@ -105,14 +113,14 @@ The workshop supports one flat table, multiple CSV tables, or multiple rectangul
 A package is a folder that keeps data and metadata together:
 
 ```text
-my-salmon-data-package/
+output/fraser-coho-example-sdp/
   metadata/
     dataset.csv
     tables.csv
     column_dictionary.csv
     codes.csv                  # required when categorical columns exist
   data/
-    my_table.csv
+    escapement.csv
   datapackage.json             # generated; required for complete/published packages
   README.md or README-review.txt
 ```
@@ -141,27 +149,27 @@ The workshop provides R and Python examples for the code-based workflow, with se
 | If you usually work in... | Start with... | How this path participates |
 | --- | --- | --- |
 | R | `metasalmon::create_sdp()` | Create, review, validate, export, and plan or perform authorized publication in R. |
-| Python | `metasalmonpy.create_sdp()` | Follow the corresponding creation, review, validation, export, and publication workflow in Python. |
+| Python | `metasalmonpy.create_sdp()` | Build and inspect the same sample package; Session 4 explains the current native-review gap and provides a guided alternative. |
 | Excel or Calc | Open the generated SDP metadata CSVs | Review and edit dataset, table, column, and code descriptions; follow the spreadsheet-specific subsections where they appear. |
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-## Challenge 1: Pick your dataset
+## Challenge 1: What could be misunderstood in the shared sample?
 
-Choose one salmon dataset you know well. Do not inventory its files or fields yet. Instead, look for meaning that the table alone does not explain:
+Open or view `nuseds-fraser-coho-sample.csv`, supplied by the facilitator or displayed on screen. Choose one question the column names and values alone do not answer:
 
-- an overloaded term such as `stock`, `run`, or `population` that different teams may use differently;
-- a hidden rule that currently lives in a biologist's head rather than in the data or metadata; or
-- a column whose meaning depends on another column.
+- Does a blank `NATURAL_SPAWNERS_TOTAL` mean zero, unavailable, or something else?
+- What does a value such as `RELATIVE ABUNDANCE (TYPE-4)` in `ESTIMATE_CLASSIFICATION` tell a future user about an estimate?
+- How does `ESTIMATE_METHOD` affect what someone can conclude from the spawner estimate?
+- How should `POP_ID`, `POPULATION`, and `FULL_CU_IN` be understood together?
 
-For example, a column named `count` might mean returning adult spawners when `life_stage = "adult"`, but downstream-migrating smolts when `life_stage = "smolt"`. The values are both counts, yet they describe different biological observations.
-
-Write down **one thing that could be misunderstood if the dataset were shared without that biological context**.
+Write down **one possible misunderstanding and the source evidence you would need to resolve it**. Do not invent a definition from the label. Keep the question for Session 3, when we inspect the bundled source dictionary and record supported context and remaining uncertainty.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
+- The same NuSEDS Fraser Coho sample carries the core workflow from first inspection to the catalog dry run; own-data transfer is optional near the end.
 - The integration system connects local data and expert context to an SDP, review tools, shared or local semantic resources, EML, and catalog publication.
 - The common biologist pathway is FAIR publication through a reviewed SDP; deeper pathways contribute missing shared terms or map organizational vocabularies or ontologies to shared anchors.
 - A dataset can contain multiple tables; a flat file contains one rectangular table.
