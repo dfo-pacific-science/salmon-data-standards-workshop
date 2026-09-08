@@ -118,7 +118,7 @@
     <a id="search-button" class="btn btn-primary" href="aio.html" role="button" aria-label="Search the All In One page">Search the All In One page</a>
   </div><!--/div.container-fluid -->
 </nav><aside class="col-md-12 lesson-progress"><div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 84%" aria-valuenow="84" aria-valuemin="0" aria-valuemax="100" aria-label="Lesson Progress">84%</div>
+    <div class="progress-bar incubator" role="progressbar" style="width: 85%" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100" aria-label="Lesson Progress">85%</div>
   </div>
 </aside><div class="container">
       <div class="row">
@@ -217,7 +217,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Use Your Data and Capture Context</a>
+        <a href="session-3.html">3. Capture Fraser Coho Context and Rebuild the Package</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -250,13 +250,22 @@
   </div><!--/div.accordion-item-->
 </div><!--/div.accordion-flush-->
 
+<div class="accordion accordion-flush" id="accordionFlush8">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading8">
+        <a href="session-7.html">7. Optional: Apply the Workflow to Your Own Dataset</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
 <div class="accordion accordion-flush" id="accordionFlushcurrent">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-headingcurrent">
       <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#flush-collapsecurrent" aria-expanded="true" aria-controls="flush-collapsecurrent">
         <span class="visually-hidden">Current Chapter</span>
         <span class="current-chapter">
-        7. Optional Extension: Concept Mapping Game
+        8. Optional Extension: Concept Mapping Game
         </span>
       </button>
     </div><!--/div.accordion-header-->
@@ -315,14 +324,14 @@
         <!-- START: inst/pkgdown/templates/content-instructor.html -->
   <div class="col-xl-8 col-lg-12 primary-content">
     <nav class="lesson-content mx-md-4" aria-label="Previous and Next Chapter Top"><!-- content for small screens --><div class="d-block d-sm-block d-md-none">
-        <a class="chapter-link" href="session-6.html" rel="prev"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
+        <a class="chapter-link" href="session-7.html" rel="prev"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="index.html" rel="next">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link" href="session-6.html" rel="prev">
+        <a class="chapter-link" href="session-7.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Route Term Gaps, Export EML, and Plan...
+          Previous: Optional: Apply the Workflow to Your Own...
         </a>
         <a class="chapter-link float-end" href="index.html" rel="next">
           Home
@@ -331,7 +340,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Optional Extension: Concept Mapping Game</h1>
-        <p>Last updated on 2026-08-26 |
+        <p>Last updated on 2026-09-08 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/bonus-session.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -369,32 +378,37 @@
 </div>
 </div>
 <section><h2 class="section-heading" id="when-to-use-this-extension">When to use this extension<a class="anchor" aria-label="anchor" href="#when-to-use-this-extension"></a></h2>
-<hr class="half-width"><p>Use this only after learners have seen the Salmon Data Package
-structure. It works well as a full-day warm-up before measurement
-decomposition or as a separate community vocabulary session.</p>
+<hr class="half-width"><p>Use this after learners have seen the Salmon Data Package structure.
+Keep the shared NuSEDS Fraser Coho sample as the case, either as a
+warm-up before Session 4 or as a vocabulary extension. The optional
+bring-your-own-dataset activity is Session 7.</p>
 </section><section><h2 class="section-heading" id="activity-1-sort-the-vocabulary">Activity 1: Sort the vocabulary<a class="anchor" aria-label="anchor" href="#activity-1-sort-the-vocabulary"></a></h2>
-<hr class="half-width"><p>Give each group cards with terms such as:</p>
-<pre class="text"><code>water temperature
-age
-length
-weight
-life stage
-spawn date
-smolt
-tag ID
-river reach
-capture event
-habitat type
-species
-sex
-growth rate
-migration timing</code></pre>
+<hr class="half-width"><p>Give each group cards drawn from the sample’s columns, code values,
+and review vocabulary. Keep column names distinct from the concepts and
+values they record:</p>
+<pre class="text"><code>POP_ID
+POPULATION
+AREA
+WATERBODY
+ANALYSIS_YR
+SPECIES
+RUN_TYPE
+NATURAL_SPAWNERS_TOTAL
+ESTIMATE_METHOD
+ESTIMATE_CLASSIFICATION
+FULL_CU_IN
+Area Under the Curve
+Unknown Estimate Method
+natural-origin
+abundance
+individual</code></pre>
 <p>Ask groups to sort the cards into categories that make sense to them.
 Compare the groups and discuss where the categories differ.</p>
 </section><section><h2 class="section-heading" id="activity-2-decompose-a-compound-term">Activity 2: Decompose a compound term<a class="anchor" aria-label="anchor" href="#activity-2-decompose-a-compound-term"></a></h2>
-<hr class="half-width"><p>Pick one compound term, such as <code>natural spawner count</code>,
-<code>smolt-to-adult return rate</code>, or
-<code>tag detection event</code>.</p>
+<hr class="half-width"><p>Use <code>NATURAL_SPAWNERS_TOTAL</code>, described by the source
+dictionary as estimated total natural-origin spawners. Compare the
+compound wording with the two non-empty sample values and the blank
+records. Do not assume a blank means zero.</p>
 <p>Ask:</p>
 <ul><li>What is the thing being observed?</li>
 <li>What property is measured or asserted?</li>
@@ -403,8 +417,11 @@ Compare the groups and discuss where the categories differ.</p>
 <li>Which pieces belong in package metadata, a code list, a README note,
 or a term request?</li>
 </ul></section><section><h2 class="section-heading" id="activity-3-sketch-a-small-map">Activity 3: Sketch a small map<a class="anchor" aria-label="anchor" href="#activity-3-sketch-a-small-map"></a></h2>
-<hr class="half-width"><p>Draw boxes for the pieces and connect them with plain-language
-relationships:</p>
+<hr class="half-width"><p>Sketch the same measurement and its context:
+<code>NATURAL_SPAWNERS_TOTAL</code>, abundance, natural-origin spawners,
+unit, the <code>POP_ID</code> and <code>ANALYSIS_YR</code> row context,
+and row-varying <code>ESTIMATE_METHOD</code>. Connect the boxes with
+plain-language relationships:</p>
 <ul><li>is a type of;</li>
 <li>measures;</li>
 <li>has unit;</li>
@@ -430,14 +447,14 @@ requests.</li>
 </div>
 </section></div> <!-- / div.lesson-content -->
     </main><!-- / main#main-content.main-content --><nav class="bottom-pagination mx-md-4" aria-label="Previous and Next Chapter Bottom"><div class="d-block d-sm-block d-md-none">
-        <a class="chapter-link" href="session-6.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
+        <a class="chapter-link" href="session-7.html"><i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>Previous</a>
         <a class="chapter-link float-end" href="index.html">Next<i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i></a>
       </div>
       <!-- content for large screens -->
       <div class="d-none d-sm-none d-md-block">
-        <a class="chapter-link" href="session-6.html" rel="prev">
+        <a class="chapter-link" href="session-7.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Route Term Gaps, Export EML, and Plan...
+          Previous: Optional: Apply the Workflow to Your Own...
         </a>
         <a class="chapter-link float-end" href="index.html" rel="next">
           Home
@@ -488,7 +505,7 @@ requests.</li>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/bonus-session.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/bonus-session.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-26",
+  "dateModified": "2026-09-08",
   "datePublished": "2026-09-08"
 }
 

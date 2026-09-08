@@ -214,7 +214,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Use Your Data and Capture Context</a>
+        <a href="session-3.html">3. Capture Fraser Coho Context and Rebuild the Package</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -250,7 +250,16 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="bonus-session.html">7. Optional Extension: Concept Mapping Game</a>
+        <a href="session-7.html">7. Optional: Apply the Workflow to Your Own Dataset</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="bonus-session.html">8. Optional Extension: Concept Mapping Game</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -309,7 +318,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Entrypoints</h1>
-        <p>Last updated on 2026-08-26 |
+        <p>Last updated on 2026-09-08 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/docs/entrypoints.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -370,13 +379,21 @@ different numbers</strong>: the R-native review flow
 and has not been ported to Python, so that episode’s Python lane is
 empty and says so. Pinning fixes reproducibility on both lanes; only the
 port closes the capability gap.</li>
-<li>Spreadsheet instructions use the same canonical SDP CSV files and
-appear separately where no code is required.</li>
+<li>Spreadsheet instructions use facilitator-generated SDP CSVs from the
+same bundled Fraser Coho sample and appear separately where no code is
+required.</li>
 <li>
-<code>metasalmon</code> and <code>metasalmonpy</code> are treated as
-behaviorally aligned implementations; deliberate language differences
-belong in the upstream parity guide.</li>
-</ul></div>
+<code>metasalmon</code> and <code>metasalmonpy</code> aim for
+behavioral parity; the pinned versions retain the review gap above, and
+deliberate language differences belong in the upstream parity
+guide.</li>
+</ul><p>Python semantic seeding on this sample fails with the tested
+<code>metasalmonpy 0.4.0</code> / pandas <code>3.0.5</code> combination.
+Session 3 uses facilitator-supplied R candidate evidence for the same
+sample; Python creation and metadata editing remain local. Replace that
+handoff only after a released combination passes the seeded sample
+rebuild and the workshop pins are updated.</p>
+</div>
 <div class="section level2">
 <h2 id="current-episode-ladder">Current episode ladder<a class="anchor" aria-label="anchor" href="#current-episode-ladder"></a></h2>
 <ol style="list-style-type: decimal"><li>
@@ -386,14 +403,16 @@ semantic-stewardship planning—plus the salmon data integration system,
 its SDP and software components, bounded contexts, bridge mappings, and
 the SDP-to-EML publication direction.</li>
 <li>
-<code>episodes/session-2.Rmd</code>: run a prepared quickstart in
-the selected R, Python, or Spreadsheet lane and inspect the resulting
-package structure.</li>
+<code>episodes/session-2.Rmd</code>: copy the bundled 30-row
+<code>nuseds-fraser-coho-sample.csv</code> and source dictionary into
+<code>raw_data/</code>; generate or open
+<code>output/fraser-coho-example-sdp</code> in the selected lane and
+inspect its structure.</li>
 <li>
-<code>episodes/session-3.Rmd</code>: bring learner-owned
-single-table, multi-CSV, or multi-sheet Excel inputs into a reproducible
-R or Python build script, declare context inputs, seed semantic
-candidates, and encode accepted review decisions for reruns.</li>
+<code>episodes/session-3.Rmd</code>: keep the same sample in a
+reproducible <code>scripts/build_sdp.R</code> or <code>.py</code>, read
+source notes, write <code>raw_data/fraser-coho-context.md</code>, seed
+semantic candidates, and preserve review decisions across reruns.</li>
 <li>
 <code>episodes/session-4.Rmd</code>: use the shared NuSEDS Fraser
 Coho example to run metasalmon’s R-native semantic review —
@@ -404,15 +423,23 @@ unit, one statistical modifier, one table observation-unit IRI, and one
 deliberate rejection, with optional bundle-aware LLM review named as a
 separate opt-in.</li>
 <li>
-<code>episodes/session-5.Rmd</code>: code lists, SKOS, and local
-vocabulary.</li>
+<code>episodes/session-5.Rmd</code>: review Fraser Coho code lists,
+SKOS, and local vocabulary using the same <code>escapement</code>
+table.</li>
 <li>
-<code>episodes/session-6.Rmd</code>: render SMN, GCDFO, profile, or
-skip routes; write validated EML; preview KNB publication; and create a
-later version without discarding reviewed metadata.</li>
+<code>episodes/session-6.Rmd</code>: route sample term gaps; write
+validated EML from a reviewed checkpoint of the same data; preview KNB
+publication with a dry run; and create a later version without
+discarding reviewed metadata.</li>
+<li>
+<code>episodes/session-7.Rmd</code>: optional 30–45-minute transfer
+to learner-owned tabular data, with separate
+<code>raw_data/own-data/</code>, <code>scripts/build_own_sdp.R</code> or
+<code>.py</code>, and <code>output/my-salmon-sdp</code>; learners
+without data make a transfer plan.</li>
 <li>
 <code>episodes/bonus-session.Rmd</code>: optional concept mapping
-extension.</li>
+extension grounded in the shared sample.</li>
 </ol></div>
 <div class="section level2">
 <h2 id="styling-and-presentation">Styling and presentation<a class="anchor" aria-label="anchor" href="#styling-and-presentation"></a></h2>
@@ -546,7 +573,7 @@ server.</p>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/entrypoints.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/entrypoints.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-26",
+  "dateModified": "2026-09-08",
   "datePublished": "2026-09-08"
 }
 

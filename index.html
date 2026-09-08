@@ -230,7 +230,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Use Your Data and Capture Context</a>
+        <a href="session-3.html">3. Capture Fraser Coho Context and Rebuild the Package</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -266,7 +266,16 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="bonus-session.html">7. Optional Extension: Concept Mapping Game</a>
+        <a href="session-7.html">7. Optional: Apply the Workflow to Your Own Dataset</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="bonus-session.html">8. Optional Extension: Concept Mapping Game</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -323,19 +332,27 @@
     </nav><main id="main-content" class="main-content"><h1 class="schedule-heading">Summary and Setup</h1>
       
 
-<p>This lesson helps participants create and review Salmon Data Packages
-from data they already have. The common pathway is FAIR publication:
-preserve context, link selected meanings to shared definitions, export
-validated EML 2.2, and prepare a guarded upload to an EML-aware catalog
-such as KNB. Learners can go further by proposing missing shared terms
-or by planning how an organizational vocabulary or ontology will be
-governed and mapped to the Salmon Domain Ontology as a shared
-interoperability layer.</p>
-<p>Code-driven activities include matching R and Python lanes, and
+<p>This lesson follows the included NuSEDS Fraser Coho sample through
+the entire Salmon Data Package workflow: inspect the data, build a
+package, preserve context, review meanings, export EML, and preview a
+catalog deposit. Everyone uses the same 30-row sample; no personal
+dataset is required. The common pathway is FAIR publication: preserve
+context, link selected meanings to shared definitions, export validated
+EML 2.2, and prepare a guarded upload to an EML-aware catalog such as
+KNB. Learners can go further by proposing missing shared terms or by
+planning how an organizational vocabulary or ontology will be governed
+and mapped to the Salmon Domain Ontology as a shared interoperability
+layer.</p>
+<p>Code-driven activities include R and Python lanes, and
 spreadsheet-specific subsections work with the same standard package
-files without requiring code. The R <code>metasalmon</code> and Python
-<code>metasalmonpy</code> implementations are maintained at behavioral
-parity while retaining idiomatic syntax for each language.</p>
+files without requiring code. Spreadsheet participants receive a
+facilitator-generated package from that same sample. The workshop pins R
+<code>metasalmon</code> to <code>v0.5.0</code> and Python
+<code>metasalmonpy</code> to <code>v0.4.0</code>; Session 4 explicitly
+describes the Python semantic-review capability gap. An optional
+bring-your-own-dataset activity follows the core workflow near the end,
+with a separate output folder so the shared example remains
+available.</p>
 
 
       <section id="setup"><section><h2 class="section-heading" id="what-you-will-be-ready-to-do">What you will be ready to do<a class="anchor" aria-label="anchor" href="#what-you-will-be-ready-to-do"></a></h2>
@@ -350,39 +367,37 @@ Ontology. A live catalog upload is available only to participants who
 have the required credentials and authority to redistribute the
 data.</p>
 </section><section><h2 class="section-heading" id="what-to-bring">What to bring<a class="anchor" aria-label="anchor" href="#what-to-bring"></a></h2>
-<hr class="half-width"><p>Bring one small salmon-related dataset if you can. Supported workshop
-inputs are:</p>
-<ul><li>one flat CSV or other rectangular table;</li>
-<li>several CSV files that belong to one dataset; or</li>
-<li>an Excel workbook containing one or more rectangular
-sheets/tables.</li>
-</ul><p>A <strong>flat file</strong> stores one two-dimensional table: one
-header row, then records in rows and fields in columns. A dataset can
-contain more than one table, so several flat files or workbook sheets
-can still belong to one dataset.</p>
-<p>Bring data that are already organized as tidy rectangular tables. In
-<a href="https://doi.org/10.18637/jss.v059.i10" class="external-link">Wickham’s tidy-data
-formulation</a>, each variable is a column, each observation is a row,
-and each value is a cell. Before the workshop, prepare a tabular copy
-without spreadsheet presentation features such as merged cells, repeated
-title or header rows, notes above the header, or subtotals mixed into
-the observations. If one sheet contains unrelated tables, separate them
-into distinct tables, while retaining the original source outside the
-workshop project.</p>
-<p>NetCDF, rasters, and other multidimensional scientific formats are
-outside the scope of this workshop. Do not flatten a NetCDF file and
-present it as though it were an ordinary spreadsheet or the complete
-source dataset. Use a format-specific packaging workflow instead, or
-bring a separately reviewed and documented tabular derivative whose
-meaning is preserved.</p>
-<p>Choose files you are allowed to discuss in the workshop. If you do
-not have a suitable dataset, use the included example unchanged.</p>
-<p>Before the workshop, try to identify:</p>
-<ul><li>what each row in each table represents;</li>
-<li>who created or maintains the data;</li>
-<li>any codes or abbreviations that need explanation; and</li>
-<li>one caveat that a future user should know.</li>
-</ul></section><section><h2 class="section-heading" id="prepare-the-project-folder-before-the-demo">Prepare the project folder before the demo<a class="anchor" aria-label="anchor" href="#prepare-the-project-folder-before-the-demo"></a></h2>
+<hr class="half-width"><p>Bring a laptop and choose an R, Python, or spreadsheet lane.
+<strong>You do not need to bring or prepare your own dataset.</strong>
+Everyone follows the included
+<code>nuseds-fraser-coho-sample.csv</code>: the 30-row, 17-column NuSEDS
+Fraser Coho teaching sample with selected years from 1996–2024. We use
+this same table for structure, context, semantic review, code lists,
+EML, and the catalog dry run.</p>
+<p>Session 2 copies the sample CSV and its bundled source dictionary
+from the installed package into <code>raw_data/</code>. Spreadsheet
+participants receive those identical two source files and a generated
+SDP folder from the facilitator. The facilitator also supplies source
+notes and staged copies of the same package for later checkpoints. This
+workshop does not switch to the separate 173-row, 2023–2024 example.</p>
+<p>Near the end, <strong>Session 7 is an optional bring-your-own-dataset
+activity</strong>. If you want to try it, bring a small salmon-related
+dataset you are allowed to discuss, together with any codebook, methods,
+or caveat notes. Supported inputs are one rectangular CSV, several
+related CSV tables, or an Excel workbook with rectangular sheets. Keep
+these optional files separate under <code>raw_data/own-data/</code>.</p>
+<p>For that optional activity, prepare tidy tables: one header row,
+variables in columns, observations in rows, and values in cells,
+following <a href="https://doi.org/10.18637/jss.v059.i10" class="external-link">Wickham’s
+tidy-data formulation</a>. Remove presentation features such as merged
+cells, repeated headers, and subtotals from the working copy; retain the
+original source separately. NetCDF, rasters, and other multidimensional
+formats need a format-specific workflow and are outside this workshop’s
+tabular scope.</p>
+<p>If you have no suitable data, use Session 7 to make a transfer plan
+from the Fraser Coho example. Bringing your own data is never a
+prerequisite for the core workshop.</p>
+</section><section><h2 class="section-heading" id="prepare-the-project-folder-before-the-demo">Prepare the project folder before the demo<a class="anchor" aria-label="anchor" href="#prepare-the-project-folder-before-the-demo"></a></h2>
 <hr class="half-width"><p>Create a project folder named something like
 <code>salmon-data-workshop</code>. R users should create or open an
 RStudio Project in that folder. Python and spreadsheet users can use the
@@ -403,13 +418,17 @@ same layout.</p>
 <span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"scripts"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu">dir.create</span><span class="op">(</span><span class="st">"output"</span>, showWarnings <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Copy the prepared dataset and its context files—such as codebooks,
-methods, caveats, and provenance notes—into <code>raw_data/</code> and
-leave those inputs unchanged while building the package. R users will
-put the reproducible build in <code>scripts/build_sdp.R</code>; Python
-users will use <code>scripts/build_sdp.py</code>. Spreadsheet users do
-not need a build script. Do not put source files directly inside a
-generated package.</p>
+<p>During Session 2, copy the bundled Fraser Coho CSV and source
+dictionary into <code>raw_data/</code> and leave those inputs unchanged
+while building the package. R users will put the reproducible build in
+<code>scripts/build_sdp.R</code>; Python users will use
+<code>scripts/build_sdp.py</code>. Spreadsheet users do not need a build
+script. The shared output folder is
+<code>output/fraser-coho-example-sdp</code>. Do not put source files
+directly inside a generated package. Keep optional own-data work in
+<code>raw_data/own-data/</code>, <code>scripts/build_own_sdp.R</code> or
+<code>scripts/build_own_sdp.py</code>, and
+<code>output/my-salmon-sdp</code>.</p>
 </section><section><h2 class="section-heading" id="software-options">Software options<a class="anchor" aria-label="anchor" href="#software-options"></a></h2>
 <hr class="half-width"><p>Choose the R, Python, or spreadsheet lane that fits how you work.
 Code-driven activities include examples in both R and Python, with
@@ -486,9 +505,9 @@ environment.</p>
 <div class="section level3">
 <h3 id="pythonmetasalmonpy-path">Python/metasalmonpy path<a class="anchor" aria-label="anchor" href="#pythonmetasalmonpy-path"></a></h3>
 <p><code>metasalmonpy</code> is the Python implementation of the
-<code>metasalmon</code> workflow. The two packages are maintained at
-behavioral parity and their releases move in lockstep; deliberate,
-language-idiomatic differences are documented in the <a href="https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html" class="external-link">parity
+<code>metasalmon</code> workflow. The packages aim for behavioral
+parity, with an open catch-up window at the workshop’s pinned versions;
+deliberate, language-idiomatic differences are documented in the <a href="https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html" class="external-link">parity
 guide</a>. Use the Python examples anywhere the workshop presents a
 Python lane.</p>
 <p><strong>The two lanes are pinned to different releases right now, and
@@ -529,13 +548,19 @@ documentation</a>. Validated EML export uses the optional
 <code>metasalmonpy</code> with <code>metasalmonpy[knb]</code> in the
 install command above; the <code>knb</code> extra includes EML
 support.</p>
-<p>If you will read <code>.xlsx</code> workbooks in Python during
-Chapter 3, also install <code>openpyxl</code>:</p>
+<p>If you plan to read an <code>.xlsx</code> workbook in the optional
+Session 7 activity, also install <code>openpyxl</code>:</p>
 <div class="codewrapper sourceCode" id="cb8">
 <h3 class="code-label">BASH<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="sourceCode bash" tabindex="0"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" tabindex="-1" aria-label="code-block-8-1"></a><span class="ex">python</span> <span class="at">-m</span> pip install openpyxl</span></code></pre>
 </div>
+<p>Python semantic seeding on this sample fails with the tested
+<code>metasalmonpy 0.4.0</code> / pandas <code>3.0.5</code> combination.
+Session 3 uses facilitator-supplied R candidate evidence for the same
+sample; Python creation and metadata editing remain local. Replace that
+handoff only after a released combination passes the seeded sample
+rebuild and the workshop pins are updated.</p>
 </div>
 <div class="section level3">
 <h3 id="spreadsheet-path">Spreadsheet path<a class="anchor" aria-label="anchor" href="#spreadsheet-path"></a></h3>
@@ -544,13 +569,17 @@ Chapter 3, also install <code>openpyxl</code>:</p>
 that can save CSV files.</li>
 </ul><p>Recommended:</p>
 <ul><li>the project folder described above; and</li>
-<li>a copy of the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
-SDP CSV template</a>, which you can open and edit with your spreadsheet
-software.</li>
-</ul><p>Download or clone the <code>smn-data-pkg</code> repository and copy
-that template folder. There is no standalone workbook or template ZIP.
-Spreadsheet participants can review and edit the canonical metadata CSVs
-directly with their spreadsheet software.</p>
+<li>the facilitator-provided <code>nuseds-fraser-coho-sample.csv</code>,
+<code>nuseds-fraser-coho-source-dictionary.csv</code>, and generated
+<code>fraser-coho-example-sdp</code> folder.</li>
+</ul><p>Place the input CSV and source dictionary under
+<code>raw_data/</code>, and the generated package under
+<code>output/</code>. Open its canonical metadata CSVs directly in your
+spreadsheet editor. The facilitator supplies seeded, reviewed, and
+EML-ready checkpoints from the same sample as needed, so your discussion
+and review exercises follow the same data as the code lanes. The <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
+SDP CSV template</a> is an optional reference for the later own-data
+activity.</p>
 </div>
 </section><section><h2 class="section-heading" id="pre-workshop-reading">Pre-workshop reading<a class="anchor" aria-label="anchor" href="#pre-workshop-reading"></a></h2>
 <hr class="half-width"><p>Read these only if you have time:</p>
@@ -558,9 +587,8 @@ directly with their spreadsheet software.</p>
 rules</a> and <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">field
 definitions and accepted values</a>
 </li>
-<li>Salmon Data Package starting points: the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
-CSV template</a> and the current code-generated quickstart in Chapter
-2</li>
+<li>The shared Fraser Coho sample and code-generated quickstart in
+Session 2</li>
 <li>metasalmon quickstart: <a href="https://salmon-data-mobilization.github.io/metasalmon/articles/metasalmon.html" class="external-link">create
 and review a package</a>
 </li>
@@ -582,9 +610,9 @@ it.</p>
 <li>
 <code>raw_data/</code>, <code>scripts/</code>, and
 <code>output/</code> exist;</li>
-<li>your prepared data and context files are under
-<code>raw_data/</code>, or you plan to run the included example
-unchanged;</li>
+<li>you can access the bundled Fraser Coho sample through your installed
+package, or have the facilitator-provided sample and source notes ready
+for Session 2;</li>
 <li>R or Python users have a place for <code>scripts/build_sdp.R</code>
 or <code>scripts/build_sdp.py</code>;</li>
 <li>R users can load <code>metasalmon</code> with
@@ -594,8 +622,8 @@ or <code>scripts/build_sdp.py</code>;</li>
 <li>Python users can import <code>metasalmonpy</code>, and
 <code>metasalmonpy.__version__</code> reports <code>0.4.0</code>;
 and</li>
-<li>spreadsheet users can open the blank SDP CSV template in their
-editor.</li>
+<li>spreadsheet users can open the facilitator-generated Fraser Coho SDP
+metadata CSVs in their editor.</li>
 </ul><p>If your organization restricts software installation, use the
 spreadsheet lane for the package-structure and metadata-review
 activities.</p>

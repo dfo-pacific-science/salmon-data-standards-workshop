@@ -118,7 +118,7 @@
     <a id="search-button" class="btn btn-primary" href="aio.html" role="button" aria-label="Search the All In One page">Search the All In One page</a>
   </div><!--/div.container-fluid -->
 </nav><aside class="col-md-12 lesson-progress"><div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 36%" aria-valuenow="36" aria-valuemin="0" aria-valuemax="100" aria-label="Lesson Progress">36%</div>
+    <div class="progress-bar incubator" role="progressbar" style="width: 32%" aria-valuenow="32" aria-valuemin="0" aria-valuemax="100" aria-label="Lesson Progress">32%</div>
   </div>
 </aside><div class="container">
       <div class="row">
@@ -217,7 +217,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Use Your Data and Capture Context</a>
+        <a href="session-3.html">3. Capture Fraser Coho Context and Rebuild the Package</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -236,7 +236,7 @@
 
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
-        <ul><li><a href="#the-decision-that-used-to-leave-no-record">The decision that used to leave no record</a></li>
+        <ul><li><a href="#record-the-decision-as-well-as-the-iri">Record the decision as well as the IRI</a></li>
 <li><a href="#keep-the-workshop-semantic-review-bounded">Keep the workshop semantic review bounded</a></li>
 <li><a href="#your-package-must-already-carry-suggestions">Your package must already carry suggestions</a></li>
 <li><a href="#build-the-review-queue">Build the review queue</a></li>
@@ -276,7 +276,16 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="bonus-session.html">7. Optional Extension: Concept Mapping Game</a>
+        <a href="session-7.html">7. Optional: Apply the Workflow to Your Own Dataset</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="bonus-session.html">8. Optional Extension: Concept Mapping Game</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -331,7 +340,7 @@
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="session-3.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Use Your Data and Capture Context...
+          Previous: Capture Fraser Coho Context and Rebuild...
         </a>
         <a class="chapter-link float-end" href="session-5.html" rel="next">
           Next: Code Lists, SKOS, and Local Vocabulary...
@@ -340,7 +349,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Review Terms and Measurement Meanings</h1>
-        <p>Last updated on 2026-08-26 |
+        <p>Last updated on 2026-09-08 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-4.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -386,19 +395,21 @@ still made.</li>
 </div>
 </div>
 </div>
-<section><h2 class="section-heading" id="the-decision-that-used-to-leave-no-record">The decision that used to leave no record<a class="anchor" aria-label="anchor" href="#the-decision-that-used-to-leave-no-record"></a></h2>
-<hr class="half-width"><p>By the end of Session 3 your package was reproducible almost
-everywhere. <code>raw_data/</code> holds unchanged inputs,
-<code>scripts/build_sdp.R</code> turns them into a package, and
-rerunning the script rebuilds the same bytes.</p>
-<p>Almost everywhere. Until now, the documented way to accept a semantic
-link was to open <code>metadata/column_dictionary.csv</code> in a
-spreadsheet, read <code>semantic_suggestions.csv</code> beside it, and
-copy an IRI across by hand. That worked. But the only record it left was
-the changed cell. Six months later the cell says <em>what</em> was
-decided and nothing at all about <em>why</em>, <em>by whom</em>, or
-<em>what else was on the shortlist</em>. It was the one unreproducible
-link in a chain that is otherwise byte-for-byte reproducible.</p>
+<section><h2 class="section-heading" id="record-the-decision-as-well-as-the-iri">Record the decision as well as the IRI<a class="anchor" aria-label="anchor" href="#record-the-decision-as-well-as-the-iri"></a></h2>
+<hr class="half-width"><p>By the end of Session 3, <code>raw_data/</code> holds unchanged
+inputs and <code>scripts/build_sdp.R</code> records the transformations
+that turn them into a package. Preserve the source files and the
+candidate evidence you reviewed. A fresh live seeding search can return
+different candidates as vocabularies change, so rerunning the whole
+build is not a promise of identical bytes.</p>
+<p>The decisions also need a record. Until now, the documented way to
+accept a semantic link was to open
+<code>metadata/column_dictionary.csv</code> in a spreadsheet, read
+<code>semantic_suggestions.csv</code> beside it, and copy an IRI across
+by hand. That worked, but the changed cell alone says <em>what</em> was
+decided and nothing about <em>why</em>, <em>by whom</em>, or <em>what
+else was on the shortlist</em>. A replayable review needs recorded
+decisions together with the saved source and candidate evidence.</p>
 <p>This chapter replaces that step. <code>review_semantics()</code>
 prints a shortlist and, under every candidate, the exact line of R that
 accepts it:</p>
@@ -408,15 +419,15 @@ accepts it:</p>
 <pre class="output" tabindex="0"><code><span>       <span class="va">review</span> <span class="op">&lt;-</span> <span class="fu">accept_suggestion</span><span class="op">(</span><span class="va">review</span>, <span class="st">"NATURAL_SPAWNERS_TOTAL"</span>, <span class="st">"variable"</span>, rank <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre>
 </div>
 <p>You paste that line into <code>scripts/build_sdp.R</code>.
-<strong>The paste is the audit trail.</strong> There is no prompt, no
-menu, and no interactive review screen, and that is a design decision
-rather than an omission: anything you answer at a prompt vanishes when
-the session ends, which would leave the decision exactly as
-unreproducible as the spreadsheet it replaces.</p>
-<p>A learner who understands why the spreadsheet was abandoned will not
-drift back to it. The spreadsheet lane still exists below, because a
-mixed workshop needs it — but it is now the lane that costs you the
-record, and this chapter says so plainly.</p>
+<strong>The recorded call, its reason, and the saved evidence form the
+audit trail.</strong> The function prints calls rather than collecting
+answers in an interactive prompt, so you can keep the action itself in
+the script and replay it against the saved review evidence.</p>
+<p>The spreadsheet lane also preserves a review record when you maintain
+the written log introduced in Session 3. The metadata cell records the
+selected IRI; the log records the reasoning, reviewer, and evidence.
+Reapplying those logged decisions is a manual step, while recorded R
+calls can replay the edits.</p>
 <p>Be precise about the size of the claim. <strong>This chapter’s flow
 decides semantic IRIs, and it is not the whole package.</strong>
 Free-text fields — descriptions, contacts, licences — are outside it,
@@ -452,10 +463,12 @@ has the 0.5.0 entry.</p>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="keep-the-workshop-semantic-review-bounded">Keep the workshop semantic review bounded<a class="anchor" aria-label="anchor" href="#keep-the-workshop-semantic-review-bounded"></a></h2>
-<hr class="half-width"><p>We will not try to map every column. Everyone will use the NuSEDS
-Fraser Coho escapement package from Session 2, even if you are also
-building a package from your own data. That gives the room one case to
-discuss and keeps the decisions small enough to finish.</p>
+<hr class="half-width"><p>Continue with the same <strong>30-row NuSEDS Fraser Coho
+sample</strong> you packaged in Session 2 and described in Session 3:
+<code>output/fraser-coho-example-sdp</code>, dataset
+<code>fraser-coho-example</code>, table <code>escapement</code>. We will
+not try to map every column. Keep the shared case through Session 6; the
+optional bring-your-own-dataset activity follows in Session 7.</p>
 <p>We will decide exactly these linked slots:</p>
 <table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Decision</th>
 <th>SDP destination</th>
@@ -486,10 +499,10 @@ mapped in a later review.</p>
 </section><section><h2 class="section-heading" id="your-package-must-already-carry-suggestions">Your package must already carry suggestions<a class="anchor" aria-label="anchor" href="#your-package-must-already-carry-suggestions"></a></h2>
 <hr class="half-width"><p><code>review_semantics()</code> <strong>never searches and never
 contacts a network or an LLM.</strong> It reads the suggestions your
-package already has. That is why Session 3 turned
-<code>seed_semantics = TRUE</code> on: without it there is nothing to
-review, and the function says so rather than quietly returning an empty
-queue.</p>
+package already has. That is why Session 3 generates candidates in R and
+restores supplied same-sample candidates in Python: without it there is
+nothing to review, and the function says so rather than quietly
+returning an empty queue.</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -497,10 +510,11 @@ queue.</p>
 ℹ Run `suggest_semantics()`, or `create_sdp()` with `seed_semantics = TRUE`,
   first.</code></pre>
 </div>
-<p>If the Session 2 package was built with
-<code>seed_semantics = FALSE</code>, rebuild it once with seeding on
-before continuing. Expect the search itself to take a few minutes; that
-cost is paid once, at build time, and never again during review.</p>
+<p>If your current package still has no suggestions, return to the
+Session 3 build step and generate them for this same sample. Preserve
+any manual metadata edits before rebuilding. Expect the search itself to
+take a few minutes; that cost is paid at build time and never during
+review.</p>
 </section><section><h2 class="section-heading" id="build-the-review-queue">Build the review queue<a class="anchor" aria-label="anchor" href="#build-the-review-queue"></a></h2>
 <hr class="half-width"><div class="tabs">
 <nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
@@ -555,7 +569,8 @@ guide</a>.</p>
 <p>This is also why the Setup page pins the two lanes to different
 releases: metasalmon <code>v0.5.0</code> is the release this chapter
 teaches, and metasalmonpy’s newest is <code>v0.4.0</code>. Pinning both
-makes the lesson reproducible; only the port will make it
+fixes the package versions used by the lesson; live vocabulary results
+can still change, and only the port will make the two review flows
 equivalent.</p>
 <p>What a Python user can do today is read the same evidence the R queue
 is built from, with pandas rather than with <code>metasalmonpy</code>.
@@ -603,20 +618,20 @@ row whose <code>target_sdp_field</code> is
 documentation and the data holder’s explanation, then write the accepted
 IRI into the target field named by <code>target_sdp_file</code> and
 <code>target_sdp_field</code>.</p>
-<p>Be clear about the cost. This lane records the <em>outcome</em> and
-not the <em>reasoning</em>: nothing in the saved file says which other
-candidates you saw, or why you preferred this one. Keep a written review
-log beside the package so the next reader is not guessing. Opening the
-CSV does not accept a suggestion and is not evidence that a link is
-correct.</p>
+<p>The metadata cells alone record the <em>outcome</em>. Keep the
+Session 3 review log beside the package and add the reason, reviewer,
+supporting source, and alternatives considered for each decision. That
+log preserves the reasoning and evidence; applying it to a rebuilt
+package remains manual. Opening the CSV does not accept a suggestion and
+is not evidence that a link is correct.</p>
 </div>
 </div>
 </div>
 </section><section><h2 class="section-heading" id="read-one-slot">Read one slot<a class="anchor" aria-label="anchor" href="#read-one-slot"></a></h2>
-<hr class="half-width"><p>Each queue entry is one block. This is the
-<code>NATURAL_SPAWNERS_TOTAL</code> variable slot — the first block you
-see after filtering with <code>columns =</code> — printed exactly as it
-appears:</p>
+<hr class="half-width"><p>Each queue entry is one block. The output below illustrates the
+<code>NATURAL_SPAWNERS_TOTAL</code> variable slot from the Fraser Coho
+review. Vocabulary contents, scores, and ranks can change; read the
+shortlist produced by your own build before using a printed call.</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -670,8 +685,15 @@ strict validation refuses to publish a package that still contains
 one.</p>
 <p>The variable answers “what complete measurement is this column?” For
 <code>NATURAL_SPAWNERS_TOTAL</code> the candidate says spawner
-abundance, from <code>gcdfo</code>, with a definition that matches the
-NuSEDS field. Read the definition, not the label. Then accept it.</p>
+abundance, from <code>gcdfo</code>. Compare its definition with
+<code>raw_data/nuseds-fraser-coho-source-dictionary.csv</code>, where
+the field is described as estimated total natural-origin spawners.
+Accept it only if that comparison supports the mapping.</p>
+<p>The sample has only two non-empty values in this column,
+<code>19</code> and <code>3</code>; the other 28 rows are blank. Do not
+turn blanks into zero, infer their reason from the count alone, or let a
+semantic annotation imply that every record contains an estimate.
+Missing-value meaning remains a source-review question.</p>
 </section><section><h2 class="section-heading" id="decide-in-your-script">Decide, in your script<a class="anchor" aria-label="anchor" href="#decide-in-your-script"></a></h2>
 <hr class="half-width"><p><code>accept_suggestion()</code> and <code>reject_suggestion()</code>
 take a review and return a review. Nothing is written to disk until you
@@ -782,24 +804,19 @@ one candidate deep. <code>rank = 1</code> is the only rank there is.
 “Accept rank 1” is therefore a much weaker statement than “the best of
 five”: it is closer to “accept or reject”.</p>
 <p>Ask for a deeper shortlist at build time, not at review time. The
-review reads what seeding stored, so this is a <code>create_sdp()</code>
-argument:</p>
+review reads what seeding stored, so change the existing
+<code>create_sdp()</code> call in <code>scripts/build_sdp.R</code>:</p>
 <div class="codewrapper sourceCode" id="cb13">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
 <pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">pkg_path</span> <span class="op">&lt;-</span> <span class="fu">create_sdp</span><span class="op">(</span></span>
-<span>  <span class="va">fraser_coho</span>,</span>
-<span>  path <span class="op">=</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"output"</span>, <span class="st">"fraser-coho-example-sdp"</span><span class="op">)</span>,</span>
-<span>  dataset_id <span class="op">=</span> <span class="st">"fraser-coho-example"</span>,</span>
-<span>  table_id <span class="op">=</span> <span class="st">"escapement"</span>,</span>
-<span>  seed_semantics <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  semantic_max_per_role <span class="op">=</span> <span class="fl">3</span>,</span>
-<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  overwrite <span class="op">=</span> <span class="cn">TRUE</span></span>
-<span><span class="op">)</span></span></code></pre>
+<code class="sourceCode R"><span><span class="co"># Inside the existing Session 3 create_sdp() call:</span></span>
+<span><span class="va">semantic_max_per_role</span> <span class="op">=</span> <span class="fl">3</span></span></code></pre>
 </div>
-<p>The same slot then offers three:</p>
+<p>Keep its Fraser Coho inputs, IDs, source context, and output path
+unchanged. Rebuild only after preserving decisions that have not yet
+been recorded in the script.</p>
+<p>An illustrative three-candidate result is:</p>
 <div class="codewrapper">
 <h3 class="code-label">OUTPUT<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1018,9 +1035,14 @@ one.</p>
        review &lt;- accept_suggestion(review, "NATURAL_SPAWNERS_TOTAL", "constraint", rank = 1)</code></pre>
 </div>
 <p>Note the unit candidate: score 4.65 and no definition at all. A low
-score with nothing to read is a prompt to check the vocabulary yourself,
-not a reason to accept faster. Confirm that a count is what the NuSEDS
-column actually stores before keeping it.</p>
+score with nothing to read is a prompt to check the vocabulary yourself.
+The bundled source dictionary uses QUDT <code>Individual</code>
+(<code>https://qudt.org/vocab/unit/INDIV</code>), while this
+illustrative search found <code>COUNT</code>; it also uses a
+Conservation Unit entity where the search found <code>Population</code>.
+Those are review questions, not interchangeable spellings. Compare the
+row meaning and source definitions before choosing an IRI; record an
+unresolved difference instead of accepting a rank by habit.</p>
 <p>The statistical modifier is the one kind of “how” that stays in the
 dictionary, because a <em>mean</em> weight and a <em>maximum</em> weight
 are genuinely different variables:</p>
@@ -1060,7 +1082,12 @@ table represents, so the printed call names the table instead:</p>
        https://w3id.org/smn/Escapement
        review &lt;- accept_suggestion(review, role = "entity", rank = 1, table = "escapement")</code></pre>
 </div>
-<p>Paste it as printed. <code>columns =</code> filters on column names,
+<p>Compare the candidate with the source description of one row: a
+NuSEDS coho escapement record identified by population and analysis
+year. The bundled table metadata uses <code>EscapementEstimate</code>,
+while this search found <code>Escapement</code>; discuss whether the
+candidate describes the record or only its measured quantity. Accept
+only a supported match. <code>columns =</code> filters on column names,
 so a <code>columns</code> filter always hides this slot; build the queue
 without one when you want to reach it.</p>
 </div>
@@ -1251,9 +1278,14 @@ same question again.</p>
 </div>
 </section><section><h2 class="section-heading" id="the-finished-script">The finished script<a class="anchor" aria-label="anchor" href="#the-finished-script"></a></h2>
 <hr class="half-width"><p>Session 3 said every accepted decision belongs in the script rather
-than in a manual edit inside <code>output/</code>. This is what that
-looks like for semantics. Append it to <code>scripts/build_sdp.R</code>,
-below the <code>create_sdp()</code> call:</p>
+than in a manual edit inside <code>output/</code>. The example below
+shows the shape of that record. <strong>It is not a pre-approved answer
+key:</strong> replace the decisions with the outcomes of your source
+review, especially the entity, unit, statistical modifier, and table
+observation unit. If a match remains unsupported, reject that slot with
+a reason and carry the question forward. Append your reviewed calls to
+<code>scripts/build_sdp.R</code>, below the <code>create_sdp()</code>
+call:</p>
 <div class="codewrapper sourceCode" id="cb28">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -1280,18 +1312,20 @@ below the <code>create_sdp()</code> call:</p>
 <span></span>
 <span><span class="fu">validate_salmon_datapackage</span><span class="op">(</span><span class="va">pkg_path</span>, require_iris <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></code></pre>
 </div>
-<p>Every line is a decision, every decision can carry its reasoning in a
-comment beside it, and the whole thing reruns. That is the property the
-spreadsheet could not give you.</p>
+<p>Every line is a decision and can carry its reasoning in a comment
+beside it. These calls replay the edits; a spreadsheet review log
+carries the same reasoning and evidence but requires the edits to be
+reapplied manually.</p>
 <p>Expect <code>validate_salmon_datapackage()</code> to still warn here:
 the slots you did not decide keep their <code>REVIEW:</code> markers,
 and the free-text placeholders are untouched. That is the correct state
 for a package mid-review.</p>
-<p>One caveat about rerunning. The decisions replay deterministically,
-but the <em>candidates</em> do not: shared vocabularies evolve, so a
-future <code>create_sdp(seed_semantics = TRUE)</code> may retrieve a
-different shortlist and <code>rank = 1</code> may then name a different
-term. Where an accepted IRI must never drift, write it as
+<p>One caveat about rerunning. Recorded decisions can be replayed
+against the saved review evidence, but a fresh search need not return
+the same <em>candidates</em>: shared vocabularies evolve, so a future
+<code>create_sdp(seed_semantics = TRUE)</code> may retrieve a different
+shortlist and <code>rank = 1</code> may then name a different term.
+Where an accepted IRI must never drift, write it as
 <code>iri = "…"</code> instead of <code>rank = 1</code>. That converts a
 position into a commitment.</p>
 </section><section><h2 class="section-heading" id="what-this-review-cannot-decide">What this review cannot decide<a class="anchor" aria-label="anchor" href="#what-this-review-cannot-decide"></a></h2>
@@ -1416,14 +1450,15 @@ setters</a>.</p>
 <h3 class="callout-title">Challenge 1: Complete the bounded Fraser Coho
 review</h3>
 <div class="callout-content">
-<p>Work with the shared NuSEDS Fraser Coho package, even if you brought
-your own dataset.</p>
+<p>Continue with <code>output/fraser-coho-example-sdp</code> and the
+source dictionary from Session 3.</p>
 <ol style="list-style-type: decimal"><li>Build the queue with <code>review_semantics()</code> and count the
 slots.</li>
-<li>Decide the six <code>NATURAL_SPAWNERS_TOTAL</code> slots: variable,
-property, entity, unit, constraint, statistical modifier. Use
-<code>iri =</code> where the shortlist is wrong, and write one sentence
-in the script saying why.</li>
+<li>Review the six <code>NATURAL_SPAWNERS_TOTAL</code> slots: variable,
+property, entity, unit, constraint, statistical modifier. Compare the
+source dictionary with the shortlist. Use <code>iri =</code> for a
+supported alternative, or reject and record the question when evidence
+is missing; write the reason in your script.</li>
 <li>Decide the table observation-unit slot.</li>
 <li>Reject <code>AREA</code> with a reason.</li>
 <li>Apply the decisions and confirm <code>data/escapement.csv</code> is
@@ -1435,18 +1470,21 @@ keep? Which would you question?</li>
 </div>
 </div>
 </div>
-<div id="challenge-2-prove-the-review-is-reproducible" class="callout challenge">
+<div id="challenge-2-check-the-recorded-review-can-be-replayed" class="callout challenge">
 <div class="callout-square">
 <i class="callout-icon" data-feather="zap"></i>
 </div>
 <span class="callout-header">Challenge</span>
-<div id="challenge-2-prove-the-review-is-reproducible" class="callout-inner">
-<h3 class="callout-title">Challenge 2: Prove the review is
-reproducible</h3>
+<div id="challenge-2-check-the-recorded-review-can-be-replayed" class="callout-inner">
+<h3 class="callout-title">Challenge 2: Check the recorded review can be
+replayed</h3>
 <div class="callout-content">
-<p>Delete <code>output/fraser-coho-example-sdp/</code> and rerun
-<code>scripts/build_sdp.R</code> from the top. Budget a few minutes:
-this reruns the seeding search as well as the review.</p>
+<p>Preserve the current package as
+<code>output/fraser-coho-example-sdp-before-replay/</code>, then rerun
+<code>scripts/build_sdp.R</code> from the top to rebuild
+<code>output/fraser-coho-example-sdp/</code>. Budget a few minutes: this
+reruns the seeding search as well as the review. Compare against the
+preserved copy so a missing scripted decision is recoverable.</p>
 <ul><li>Does the package come back with the same accepted IRIs?</li>
 <li>Which of your decisions would survive a vocabulary change, and which
 are pinned to <code>rank = 1</code>?</li>
@@ -1468,8 +1506,9 @@ and what would they have to guess?</strong></p>
 <div class="callout-inner">
 <div class="callout-content">
 <ul><li>The console prints the exact <code>accept_suggestion()</code> call;
-pasting it into your build script is what makes the decision
-reproducible.</li>
+keep it, the reason, and the reviewed evidence so the decision can be
+reconstructed. Live seeding may retrieve different candidates
+later.</li>
 <li>
 <code>review_semantics()</code> reads suggestions that already
 exist. It never searches, and it never contacts an LLM.</li>
@@ -1510,7 +1549,7 @@ opt-in; the review flow only displays it.</li>
       <div class="d-none d-sm-none d-md-block">
         <a class="chapter-link" href="session-3.html" rel="prev">
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-left"></i>
-          Previous: Use Your Data and Capture Context...
+          Previous: Capture Fraser Coho Context and Rebuild...
         </a>
         <a class="chapter-link float-end" href="session-5.html" rel="next">
           Next: Code Lists, SKOS, and Local Vocabulary...
@@ -1561,7 +1600,7 @@ opt-in; the review flow only displays it.</li>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-4.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-4.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-26",
+  "dateModified": "2026-09-08",
   "datePublished": "2026-09-08"
 }
 

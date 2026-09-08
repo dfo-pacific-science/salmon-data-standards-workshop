@@ -214,7 +214,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Use Your Data and Capture Context</a>
+        <a href="session-3.html">3. Capture Fraser Coho Context and Rebuild the Package</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -250,7 +250,16 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="bonus-session.html">7. Optional Extension: Concept Mapping Game</a>
+        <a href="session-7.html">7. Optional: Apply the Workflow to Your Own Dataset</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="bonus-session.html">8. Optional Extension: Concept Mapping Game</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -309,7 +318,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Reference</h1>
-        <p>Last updated on 2026-08-26 |
+        <p>Last updated on 2026-09-08 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/learners/reference.md" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -324,23 +333,37 @@
         
 
 <section><h2 class="section-heading" id="core-workflow">Core workflow<a class="anchor" aria-label="anchor" href="#core-workflow"></a></h2>
-<hr class="half-width"><ol style="list-style-type: decimal"><li>Create a draft package from one table or a named list of
-tables.</li>
-<li>Improve dataset, table, column, code, and README/context
-descriptions.</li>
-<li>Review suggested semantic links, recording each decision as a line
-of code in the build script rather than as an edited cell.</li>
-<li>Focus first on measurements, units, observation units, and important
-code lists.</li>
+<hr class="half-width"><ol style="list-style-type: decimal"><li>Create <code>output/fraser-coho-example-sdp</code> from the included
+30-row <code>nuseds-fraser-coho-sample.csv</code> (dataset
+<code>fraser-coho-example</code>, table <code>escapement</code>).</li>
+<li>Improve that sample’s dataset, table, column, code, and
+README/context descriptions using its bundled source dictionary.</li>
+<li>Generate candidates in R, or restore supplied same-sample evidence
+in Python as described in Session 3; review links and record each
+decision in the build script or spreadsheet review log.</li>
+<li>Review <code>NATURAL_SPAWNERS_TOTAL</code>, its unit and components,
+the table observation unit, and the <code>ESTIMATE_METHOD</code> code
+list.</li>
 <li>Render and review unresolved-term routes: <code>smn</code>,
 <code>gcdfo</code>, <code>profile</code>, or <code>skip</code>.</li>
 <li>Run strict validation only when the SDP is final enough for
 publication.</li>
-<li>Complete the reviewed EML sidecar and export schema-valid EML
-2.2.</li>
-<li>Preview the KNB/DataONE object plan with a credential-free dry run;
-upload only with explicit authority and credentials.</li>
-</ol></section><section><h2 class="section-heading" id="r-and-python-functions">R and Python functions<a class="anchor" aria-label="anchor" href="#r-and-python-functions"></a></h2>
+<li>Continue with the instructor’s reviewed checkpoint of the same
+sample (<code>output/fraser-coho-example-reviewed-sdp</code>), verify
+unchanged data, inspect the closure and EML sidecar, and export
+schema-valid EML 2.2.</li>
+<li>Preview the same sample’s KNB/DataONE object plan with a
+credential-free dry run; upload only with explicit authority and
+credentials.</li>
+<li>Make a metadata-only second version at
+<code>output/fraser-coho-example-sdp-v2</code>; then optionally transfer
+the workflow to your own data in Session 7.</li>
+</ol><p>The core sessions never switch to another dataset. The separate
+173-row 2023–2024 example in metasalmon’s KNB rehearsal is a procedure
+reference only. If a same-sample reviewed checkpoint is unavailable,
+record the missing prerequisites and inspect supplied same-sample
+artifacts or trace the code; do not claim an export ran.</p>
+</section><section><h2 class="section-heading" id="r-and-python-functions">R and Python functions<a class="anchor" aria-label="anchor" href="#r-and-python-functions"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Workflow</th>
 <th>R (<code>metasalmon</code>)</th>
 <th>Python (<code>metasalmonpy</code>)</th>
@@ -414,9 +437,15 @@ field named by its <code>target_sdp_file</code> and
 </section><section><h2 class="section-heading" id="recommended-project-layout">Recommended project layout<a class="anchor" aria-label="anchor" href="#recommended-project-layout"></a></h2>
 <hr class="half-width"><pre class="text"><code>salmon-data-workshop/
   salmon-data-workshop.Rproj
-  raw_data/       # unchanged input data, codebooks, and context files
-  scripts/        # build_sdp.R or build_sdp.py for code-based lanes
-  output/         # generated Salmon Data Packages</code></pre>
+  raw_data/
+    nuseds-fraser-coho-sample.csv
+    nuseds-fraser-coho-source-dictionary.csv
+  scripts/
+    build_sdp.R   # or build_sdp.py
+  output/
+    fraser-coho-example-sdp/           # classroom draft
+    fraser-coho-example-reviewed-sdp/  # same-sample reviewed checkpoint
+    fraser-coho-example-sdp-v2/        # deliberate metadata revision</code></pre>
 <p>R users should open the <code>.Rproj</code> file. Keep the prepared
 dataset and all context inputs together under <code>raw_data/</code> and
 unchanged while the package is built. Every lane should work from the
@@ -601,10 +630,11 @@ source file</td>
 rehearsal</td>
 </tr><tr><td><code>publication/knb-manifest.json</code></td>
 <td>Exact-object production dry-run or recovery manifest</td>
-</tr></tbody></table><p>Use the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
-SDP CSV template</a> for a no-code starting point, or generate the
-current filled quickstart with <code>metasalmon</code> or
-<code>metasalmonpy</code> in Chapter 2.</p>
+</tr></tbody></table><p>In the core workshop, spreadsheet users receive an
+instructor-prepared package for the same Fraser Coho sample; code users
+generate it in Session 2. The <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
+SDP CSV template</a> is an optional starting point for a new dataset in
+Session 7.</p>
 </section><section><h2 class="section-heading" id="standards-and-conventions-behind-the-fields">Standards and conventions behind the fields<a class="anchor" aria-label="anchor" href="#standards-and-conventions-behind-the-fields"></a></h2>
 <hr class="half-width"><table class="table"><colgroup><col width="50%"><col width="50%"></colgroup><thead><tr><th>Source</th>
 <th>Scope in SDP</th>
@@ -963,7 +993,7 @@ suggestion that must be checked before publication.</p>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/reference.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/reference.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-26",
+  "dateModified": "2026-09-08",
   "datePublished": "2026-09-08"
 }
 

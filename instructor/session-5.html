@@ -118,7 +118,7 @@
     <a id="search-button" class="btn btn-primary" href="../instructor/aio.html" role="button" aria-label="Search the All In One page">Search the All In One page</a>
   </div><!--/div.container-fluid -->
 </nav><aside class="col-md-12 lesson-progress"><div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 51%" aria-valuenow="51" aria-valuemin="0" aria-valuemax="100" aria-label="Lesson Progress">51%</div>
+    <div class="progress-bar incubator" role="progressbar" style="width: 46%" aria-valuenow="46" aria-valuemin="0" aria-valuemax="100" aria-label="Lesson Progress">46%</div>
   </div>
 </aside><div class="container">
       <div class="row">
@@ -217,7 +217,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Use Your Data and Capture Context</a>
+        <a href="session-3.html">3. Capture Fraser Coho Context and Rebuild the Package</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -246,6 +246,7 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#categorical-values-need-definitions-too">Categorical values need definitions too</a></li>
+<li><a href="#read-the-method-values-already-in-the-sample">Read the method values already in the sample</a></li>
 <li><a href="#skos-in-plain-language">SKOS in plain language</a></li>
 <li><a href="#shared-dfo-specific-or-local">Shared, DFO-specific, or local?</a></li>
         </ul></div><!--/div.accordion-body-->
@@ -266,7 +267,16 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="bonus-session.html">7. Optional Extension: Concept Mapping Game</a>
+        <a href="session-7.html">7. Optional: Apply the Workflow to Your Own Dataset</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="bonus-session.html">8. Optional Extension: Concept Mapping Game</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -330,7 +340,7 @@
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Code Lists, SKOS, and Local Vocabulary</h1>
-        <p>Last updated on 2026-08-26 |
+        <p>Last updated on 2026-09-08 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-5.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -374,9 +384,13 @@ ontology, or local/profile vocabulary.</li>
 </div>
 </div>
 <section><h2 class="section-heading" id="categorical-values-need-definitions-too">Categorical values need definitions too<a class="anchor" aria-label="anchor" href="#categorical-values-need-definitions-too"></a></h2>
-<hr class="half-width"><p>A categorical column stores values from a known set, such as species
-codes, origin categories, run timing, method bins, or status values. The
-data table may store compact values, but reviewers need the meaning.</p>
+<hr class="half-width"><p>Continue with <code>output/fraser-coho-example-sdp</code>, the same
+30-row NuSEDS Fraser Coho sample. A categorical column stores values
+from a known set. Here <code>ESTIMATE_METHOD</code> records the method
+or reporting label attached to each estimate, while
+<code>ESTIMATE_CLASSIFICATION</code> and <code>ESTIMATE_STAGE</code>
+carry different kinds of information. Reviewers need those distinctions
+even when the stored values look readable.</p>
 <p>Use <code>metadata/codes.csv</code> when a column has controlled
 values. It is required when any <code>column_dictionary.csv</code> row
 has <code>column_role = categorical</code>. Each observed non-empty
@@ -405,7 +419,109 @@ not cover any value observed in the data.</p>
 <td>Recommended IRI for the whole vocabulary</td>
 </tr><tr><td><code>term_iri</code></td>
 <td>Recommended IRI for the specific code concept</td>
-</tr></tbody></table></section><section><h2 class="section-heading" id="skos-in-plain-language">SKOS in plain language<a class="anchor" aria-label="anchor" href="#skos-in-plain-language"></a></h2>
+</tr></tbody></table></section><section><h2 class="section-heading" id="read-the-method-values-already-in-the-sample">Read the method values already in the sample<a class="anchor" aria-label="anchor" href="#read-the-method-values-already-in-the-sample"></a></h2>
+<hr class="half-width"><p>Use <code>ESTIMATE_METHOD</code> for the shared exercise. The
+included sample contains these six non-empty stored values:</p>
+<table class="table"><colgroup><col width="30%"><col width="40%"><col width="30%"></colgroup><thead><tr><th><code>code_value</code></th>
+<th align="right">Sample rows</th>
+<th>Review task</th>
+</tr></thead><tbody><tr><td><code>Area Under the Curve</code></td>
+<td align="right">3</td>
+<td>Compare the prefilled procedure IRI with the source method
+definition.</td>
+</tr><tr><td><code>Peak Live * Expansion</code></td>
+<td align="right">2</td>
+<td>Preserve the exact stored value and check what the expansion
+means.</td>
+</tr><tr><td><code>Peak Live + Dead</code></td>
+<td align="right">1</td>
+<td>Check which observations the method combines.</td>
+</tr><tr><td><code>Insufficient Information</code></td>
+<td align="right">2</td>
+<td>Establish what information is missing before assigning a
+procedure.</td>
+</tr><tr><td><code>Not Applicable</code></td>
+<td align="right">12</td>
+<td>Check why a method is inapplicable; do not treat this as a method
+name.</td>
+</tr><tr><td><code>Unknown Estimate Method</code></td>
+<td align="right">10</td>
+<td>Preserve the recorded uncertainty; do not guess a procedure.</td>
+</tr></tbody></table><p>These counts describe this teaching sample, not the full NuSEDS
+database. The last three labels do not justify inventing method
+definitions or equating them with one another. Use the source dictionary
+and supporting NuSEDS documentation; keep anything they do not settle as
+a reviewer question.</p>
+<div class="tabs">
+<nav><div id="nav-tab-1" class="nav nav-tabs" role="tablist">
+<button class="nav-link active" id="nav-tab-1-R" name="R" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-R" type="button" role="tab" aria-controls="nav-tabpanel-1-R" aria-selected="true">
+  <h3 class="tab-header" id="nav-tab-heading-1-R">
+  R
+  </h3>
+</button>
+<button class="nav-link" id="nav-tab-1-Python" name="Python" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Python" type="button" role="tab" aria-controls="nav-tabpanel-1-Python" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-1-Python">
+  Python
+  </h3>
+</button>
+<button class="nav-link" id="nav-tab-1-Spreadsheet" name="Spreadsheet" data-bs-toggle="tab" data-bs-target="#nav-tabpanel-1-Spreadsheet" type="button" role="tab" aria-controls="nav-tabpanel-1-Spreadsheet" aria-selected="false">
+  <h3 class="tab-header" id="nav-tab-heading-1-Spreadsheet">
+  Spreadsheet
+  </h3>
+</button>
+</div>
+</nav><div id="nav-tabContent-1" class="tab-content">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" aria-labelledby="nav-tab-1-R" role="tabpanel">
+<div class="codewrapper sourceCode" id="cb1">
+<h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># fraser_coho is the unchanged input loaded in scripts/build_sdp.R.</span></span>
+<span><span class="va">fraser_coho</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">count</span><span class="op">(</span><span class="va">ESTIMATE_METHOD</span>, name <span class="op">=</span> <span class="st">"sample_rows"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pkg</span> <span class="op">&lt;-</span> <span class="fu">read_salmon_datapackage</span><span class="op">(</span><span class="va">pkg_path</span><span class="op">)</span></span>
+<span><span class="va">pkg</span><span class="op">$</span><span class="va">codes</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu">filter</span><span class="op">(</span></span>
+<span>    <span class="va">dataset_id</span> <span class="op">==</span> <span class="st">"fraser-coho-example"</span>,</span>
+<span>    <span class="va">table_id</span> <span class="op">==</span> <span class="st">"escapement"</span>,</span>
+<span>    <span class="va">column_name</span> <span class="op">==</span> <span class="st">"ESTIMATE_METHOD"</span></span>
+<span>  <span class="op">)</span></span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-1-Python" class="tab-pane" aria-labelledby="nav-tab-1-Python" role="tabpanel">
+<div class="codewrapper sourceCode" id="cb2">
+<h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
+</h3>
+<pre class="sourceCode python" tabindex="0"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" tabindex="-1" aria-label="code-block-2-1"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> read_salmon_datapackage</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1" aria-label="code-block-2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1" aria-label="code-block-2-3"></a><span class="bu">print</span>(fraser_coho[<span class="st">"ESTIMATE_METHOD"</span>].value_counts(dropna<span class="op">=</span><span class="va">False</span>))</span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1" aria-label="code-block-2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1" aria-label="code-block-2-5"></a>pkg <span class="op">=</span> read_salmon_datapackage(pkg_path)</span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1" aria-label="code-block-2-6"></a>method_codes <span class="op">=</span> pkg[<span class="st">"codes"</span>].loc[</span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1" aria-label="code-block-2-7"></a>    (pkg[<span class="st">"codes"</span>][<span class="st">"dataset_id"</span>] <span class="op">==</span> <span class="st">"fraser-coho-example"</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" tabindex="-1" aria-label="code-block-2-8"></a>    <span class="op">&amp;</span> (pkg[<span class="st">"codes"</span>][<span class="st">"table_id"</span>] <span class="op">==</span> <span class="st">"escapement"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" tabindex="-1" aria-label="code-block-2-9"></a>    <span class="op">&amp;</span> (pkg[<span class="st">"codes"</span>][<span class="st">"column_name"</span>] <span class="op">==</span> <span class="st">"ESTIMATE_METHOD"</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" tabindex="-1" aria-label="code-block-2-10"></a>]</span>
+<span id="cb2-11"><a href="#cb2-11" tabindex="-1" aria-label="code-block-2-11"></a><span class="bu">print</span>(method_codes)</span></code></pre>
+</div>
+</div>
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-1-Spreadsheet" role="tabpanel">
+<p>Open <code>raw_data/nuseds-fraser-coho-sample.csv</code> read-only
+and list the distinct <code>ESTIMATE_METHOD</code> values. Open the
+package’s <code>metadata/codes.csv</code> and filter to dataset
+<code>fraser-coho-example</code>, table <code>escapement</code>, and
+column <code>ESTIMATE_METHOD</code>. Compare the six observed values
+with those code rows.</p>
+</div>
+</div>
+</div>
+<p>Package creation may already have mapped recognized NuSEDS methods.
+Session 4 explained why these crosswalk rows can bypass the semantic
+queue. Review them here, including their descriptions and IRIs. Preserve
+the literal <code>code_value</code> used in the data; improve its label
+or description in metadata rather than recoding the raw CSV.</p>
+</section><section><h2 class="section-heading" id="skos-in-plain-language">SKOS in plain language<a class="anchor" aria-label="anchor" href="#skos-in-plain-language"></a></h2>
 <hr class="half-width"><p>Keep three related ideas separate:</p>
 <ul><li>a <strong>code list</strong> records the allowed stored values for
 one data column;</li>
@@ -448,7 +564,9 @@ promoted later when there is evidence that other groups need them.</p>
 <h3 class="callout-title">Challenge 1: Build a code-list review
 table</h3>
 <div class="callout-content">
-<p>Pick one categorical column.</p>
+<p>Review <code>ESTIMATE_METHOD</code> in the shared Fraser Coho
+package. Use <code>ESTIMATE_CLASSIFICATION</code> as an additional
+comparison only if time remains.</p>
 <p>Create or improve rows for each code value:</p>
 <ul><li>stored value;</li>
 <li>label;</li>
@@ -456,9 +574,13 @@ table</h3>
 <li>source or reviewer;</li>
 <li>whether a shared term already exists;</li>
 <li>whether the value should stay local for now.</li>
-</ul><p>Then compare the table with the data: every observed non-empty value
-should have one matching row for that dataset, table, column, and value,
-and that key should not be duplicated.</p>
+</ul><p>Then compare the table with the six observed values above: each must
+have exactly one matching row for <code>fraser-coho-example</code> /
+<code>escapement</code> / <code>ESTIMATE_METHOD</code> / its literal
+value, and that key must not be duplicated. Record supported metadata
+changes in <code>scripts/build_sdp.R</code> or
+<code>scripts/build_sdp.py</code>; spreadsheet users retain a review
+log. Carry the same package into Session 6.</p>
 </div>
 </div>
 </div>
@@ -541,7 +663,7 @@ evidence of broad reuse.</li>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-5.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/session-5.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-26",
+  "dateModified": "2026-09-08",
   "datePublished": "2026-09-08"
 }
 

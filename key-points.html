@@ -260,7 +260,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Use Your Data and Capture Context</a>
+        <a href="session-3.html">3. Capture Fraser Coho Context and Rebuild the Package</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -308,7 +308,19 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="bonus-session.html">7. Optional Extension: Concept Mapping Game</a>
+        <a href="session-7.html">7. Optional: Apply the Workflow to Your Own Dataset</a>
+    </div>
+<!--/div.accordion-header-->
+
+  </div>
+<!--/div.accordion-item-->
+</div>
+<!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="bonus-session.html">8. Optional Extension: Concept Mapping Game</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -374,6 +386,9 @@
 <section id="session-1"><h2 class="section-heading"><a href="session-1.html">The Salmon Data Integration System</a></h2>
 <hr class="half-width">
 <ul>
+<li>The same NuSEDS Fraser Coho sample carries the core workflow from
+first inspection to the catalog dry run; own-data transfer is optional
+near the end.</li>
 <li>The integration system connects local data and expert context to an
 SDP, review tools, shared or local semantic resources, EML, and catalog
 publication.</li>
@@ -398,37 +413,36 @@ the source table alone.</li>
 <ul>
 <li>Confirm the project and folders unless you already prepared them
 during setup.</li>
-<li>Run the bundled quickstart unchanged to learn the generated package
-shape; bring your own data in Chapter 3.</li>
+<li>Keep this Fraser Coho package through Sessions 3–6; optional
+transfer to your own data comes in Session 7.</li>
 <li>
 <code>create_sdp()</code> accepts one data frame or a named list of
 tabular data frames, not arbitrary scientific file structures.</li>
 <li>The field reference is the source for definitions and allowed
 values.</li>
-</ul></section><section id="session-3"><h2 class="section-heading"><a href="session-3.html">Use Your Data and Capture Context</a></h2>
+</ul></section><section id="session-3"><h2 class="section-heading"><a href="session-3.html">Capture Fraser Coho Context and Rebuild the Package</a></h2>
 <hr class="half-width">
 <ul>
-<li>Keep raw data, context inputs, transformations, and reviewed
-metadata decisions connected through one reproducible script.</li>
-<li>One dataset may contain one or many tables; pass multiple tables as
-a named list.</li>
-<li>Prepare tidy rectangular inputs: one variable per column, one
-observation per row, and one value per cell.</li>
-<li>Semantic seeding is enabled in this chapter; LLM assessment remains
-a separate, explicit opt-in.</li>
-<li>Seeding is what makes Chapter 4 possible: the review there reads
-suggestions rather than searching, so a package built without seeding
-has nothing to review.</li>
-<li>Metadata tables hold structured facts; README/context notes hold
-narrative caveats.</li>
-<li>A clear description is more valuable than an uncertain link to a
-shared definition.</li>
+<li>The same Fraser Coho source, dataset ID, table ID, and working
+package continue through the core workshop.</li>
+<li>Source dictionaries inform review; their old IDs and annotations are
+not automatically accepted metadata.</li>
+<li>Keep inputs, context, and accepted metadata decisions connected
+through one script or an explicit spreadsheet review log.</li>
+<li>R semantic seeding retrieves the candidates for Session 4; Python
+uses supplied same-sample evidence. LLM review remains a separate
+opt-in.</li>
+<li>Missing estimates and incomplete sample coverage must remain
+visible.</li>
+<li>Optional transfer to a personal dataset comes after the shared
+publication walkthrough in Session 7.</li>
 </ul></section><section id="session-4"><h2 class="section-heading"><a href="session-4.html">Review Terms and Measurement Meanings</a></h2>
 <hr class="half-width">
 <ul>
 <li>The console prints the exact <code>accept_suggestion()</code> call;
-pasting it into your build script is what makes the decision
-reproducible.</li>
+keep it, the reason, and the reviewed evidence so the decision can be
+reconstructed. Live seeding may retrieve different candidates
+later.</li>
 <li>
 <code>review_semantics()</code> reads suggestions that already
 exist. It never searches, and it never contacts an LLM.</li>
@@ -486,6 +500,18 @@ sidecar facts.</li>
 persistent production objects.</li>
 <li>Later package and catalog versions should be explicit immutable
 revisions, not overwrite attempts.</li>
+</ul></section><section id="session-7"><h2 class="section-heading"><a href="session-7.html">Optional: Apply the Workflow to Your Own Dataset</a></h2>
+<hr class="half-width">
+<ul>
+<li>The shared Fraser Coho example remains the complete workshop
+reference.</li>
+<li>Your own dataset is an optional transfer activity after the shared
+workflow.</li>
+<li>Use separate input, script, and output paths to preserve the
+completed example.</li>
+<li>One dataset can contain one or several tidy tables.</li>
+<li>A useful first draft records context, uncertainty, and the next
+review step.</li>
 </ul></section><section id="bonus-session"><h2 class="section-heading"><a href="bonus-session.html">Optional Extension: Concept Mapping Game</a></h2>
 <hr class="half-width">
 <ul>

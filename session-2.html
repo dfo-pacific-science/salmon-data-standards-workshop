@@ -118,7 +118,7 @@
     <a id="search-button" class="btn btn-primary" href="aio.html" role="button" aria-label="Search the All In One page">Search the All In One page</a>
   </div><!--/div.container-fluid -->
 </nav><aside class="col-md-12 lesson-progress"><div class="progress incubator">
-    <div class="progress-bar incubator" role="progressbar" style="width: 8%" aria-valuenow="8" aria-valuemin="0" aria-valuemax="100" aria-label="Lesson Progress">8%</div>
+    <div class="progress-bar incubator" role="progressbar" style="width: 7%" aria-valuenow="7" aria-valuemin="0" aria-valuemax="100" aria-label="Lesson Progress">7%</div>
   </div>
 </aside><div class="container">
       <div class="row">
@@ -219,11 +219,11 @@
     <div id="flush-collapsecurrent" class="accordion-collapse collapse show" data-bs-parent="#accordionFlushcurrent">
       <div class="accordion-body">
         <ul><li><a href="#before-the-quickstart-confirm-the-project-and-folders">Before the quickstart: confirm the project and folders</a></li>
-<li><a href="#chapter-2-uses-the-bundled-quickstart-data">Chapter 2 uses the bundled quickstart data</a></li>
+<li><a href="#one-fraser-coho-example-throughout-the-workshop">One Fraser Coho example throughout the workshop</a></li>
 <li><a href="#what-draft-means">What “draft” means</a></li>
 <li><a href="#generate-or-open-the-prepared-quickstart">Generate or open the prepared quickstart</a></li>
 <li><a href="#inspect-the-package-files">Inspect the package files</a></li>
-<li><a href="#what-input-structures-are-supported">What input structures are supported?</a></li>
+<li><a href="#transfer-later-what-other-input-structures-are-supported">Transfer later: what other input structures are supported?</a></li>
 <li><a href="#field-definitions-and-accepted-values">Field definitions and accepted values</a></li>
 <li><a href="#review-state-validation">Review-state validation</a></li>
         </ul></div><!--/div.accordion-body-->
@@ -235,7 +235,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Use Your Data and Capture Context</a>
+        <a href="session-3.html">3. Capture Fraser Coho Context and Rebuild the Package</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -271,7 +271,16 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="bonus-session.html">7. Optional Extension: Concept Mapping Game</a>
+        <a href="session-7.html">7. Optional: Apply the Workflow to Your Own Dataset</a>
+    </div><!--/div.accordion-header-->
+
+  </div><!--/div.accordion-item-->
+</div><!--/div.accordion-flush-->
+
+<div class="accordion accordion-flush" id="accordionFlush9">
+  <div class="accordion-item">
+    <div class="accordion-header" id="flush-heading9">
+        <a href="bonus-session.html">8. Optional Extension: Concept Mapping Game</a>
     </div><!--/div.accordion-header-->
 
   </div><!--/div.accordion-item-->
@@ -329,13 +338,13 @@
           Previous: The Salmon Data Integration System...
         </a>
         <a class="chapter-link float-end" href="session-3.html" rel="next">
-          Next: Use Your Data and Capture Context...
+          Next: Capture Fraser Coho Context and Rebuild...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
     </nav><main id="main-content" class="main-content"><div class="container lesson-content">
         <h1>Create a Draft Salmon Data Package</h1>
-        <p>Last updated on 2026-08-26 |
+        <p>Last updated on 2026-09-08 |
 
         <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/edit/main/episodes/session-2.Rmd" class="external-link">Edit this page <i aria-hidden="true" data-feather="edit"></i></a></p>
 
@@ -369,8 +378,8 @@ and <code>output/</code> layout, unless you already completed this
 during setup.</li>
 <li>Run the bundled example unchanged to generate and inspect
 templates.</li>
-<li>Explain why Chapter 2 uses bundled quickstart data and Chapter 3
-introduces your own data.</li>
+<li>Keep the same Fraser Coho data and package identity through Sessions
+2–6.</li>
 <li>Identify supported single-table, multi-table, and workbook
 inputs.</li>
 </ul></div>
@@ -407,17 +416,22 @@ jump elsewhere.</li>
   output/                     # generated package folders</code></pre>
 <p>Keep the prepared dataset, codebooks, methods, caveats, and other
 context inputs together under <code>raw_data/</code> and do not edit
-them in place while building a package. In Chapter 3, R users will save
-the reproducible build as <code>scripts/build_sdp.R</code>, Python users
-as <code>scripts/build_sdp.py</code>, and spreadsheet users will omit
-the script.</p>
-</section><section><h2 class="section-heading" id="chapter-2-uses-the-bundled-quickstart-data">Chapter 2 uses the bundled quickstart data<a class="anchor" aria-label="anchor" href="#chapter-2-uses-the-bundled-quickstart-data"></a></h2>
-<hr class="half-width"><p>In this chapter, use the prepared starting point for your chosen
-software lane. The R and Python examples use a small NuSEDS-derived
-table; the spreadsheet lane uses the canonical blank SDP template. Each
-is a quickstart for seeing the package structure and starter metadata.
-Do not substitute your own files yet: Chapter 3 is the
-bring-your-own-data workflow.</p>
+them in place while building a package. R users save the code below as
+<code>scripts/build_sdp.R</code>; Python users use
+<code>scripts/build_sdp.py</code>. Spreadsheet users keep a review log.
+Session 3 extends that same script.</p>
+</section><section><h2 class="section-heading" id="one-fraser-coho-example-throughout-the-workshop">One Fraser Coho example throughout the workshop<a class="anchor" aria-label="anchor" href="#one-fraser-coho-example-throughout-the-workshop"></a></h2>
+<hr class="half-width"><p>Everyone uses <code>nuseds-fraser-coho-sample.csv</code>: the
+included 30-row, 17-column NuSEDS Fraser Coho practice table, with
+analysis years ranging from 1996 to 2024. It stays with us through
+context capture, semantic review, code lists, EML, and the publication
+preview. Spreadsheet participants inspect a facilitator-generated
+package from these same rows.</p>
+<p>Keep the source unchanged. This small sample is not a complete Fraser
+Coho time series; blank spawner estimates are not zeroes. Do not
+substitute the separate 173-row
+<code>nuseds-fraser-coho-2023-2024.csv</code> example. <a href="session-7.html">Session 7</a> is the optional
+bring-your-own-dataset activity after the shared workflow.</p>
 </section><section><h2 class="section-heading" id="what-draft-means">What “draft” means<a class="anchor" aria-label="anchor" href="#what-draft-means"></a></h2>
 <hr class="half-width"><p>A draft package is allowed to contain blanks, placeholders, and
 review markers. The first example has one purpose: generate the package
@@ -447,7 +461,7 @@ the other software choices on this page.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-1" class="tab-content">
-<div id="nav-tabpanel-1-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-1-R">
+<div id="nav-tabpanel-1-R" class="tab-pane show active" aria-labelledby="nav-tab-1-R" role="tabpanel">
 <p><code>metasalmon</code> includes a small NuSEDS-derived practice
 table. Generate its templates with semantic searching turned off so the
 first result is fast and local.</p>
@@ -457,17 +471,29 @@ first result is fast and local.</p>
 <pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">library</span><span class="op">(</span><span class="va">metasalmon</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Locate and read the small example bundled with metasalmon.</span></span>
-<span><span class="va">data_path</span> <span class="op">&lt;-</span> <span class="fu">system.file</span><span class="op">(</span></span>
-<span>  <span class="st">"extdata"</span>,</span>
-<span>  <span class="st">"nuseds-fraser-coho-sample.csv"</span>,</span>
-<span>  package <span class="op">=</span> <span class="st">"metasalmon"</span></span>
+<span><span class="co"># Copy the bundled data and its source dictionary into the project once.</span></span>
+<span><span class="co"># On a rerun, verify existing copies instead of replacing source inputs.</span></span>
+<span><span class="va">source_files</span> <span class="op">&lt;-</span> <span class="fu">c</span><span class="op">(</span></span>
+<span>  <span class="st">"nuseds-fraser-coho-sample.csv"</span> <span class="op">=</span> <span class="st">"nuseds-fraser-coho-sample.csv"</span>,</span>
+<span>  <span class="st">"nuseds-fraser-coho-source-dictionary.csv"</span> <span class="op">=</span> <span class="st">"column_dictionary.csv"</span></span>
 <span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">local_name</span> <span class="kw">in</span> <span class="fu">names</span><span class="op">(</span><span class="va">source_files</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">bundled_path</span> <span class="op">&lt;-</span> <span class="fu">system.file</span><span class="op">(</span></span>
+<span>    <span class="st">"extdata"</span>, <span class="va">source_files</span><span class="op">[[</span><span class="va">local_name</span><span class="op">]</span><span class="op">]</span>, package <span class="op">=</span> <span class="st">"metasalmon"</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="fu">stopifnot</span><span class="op">(</span><span class="fu">nzchar</span><span class="op">(</span><span class="va">bundled_path</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="va">local_path</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="va">local_name</span><span class="op">)</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu">file.exists</span><span class="op">(</span><span class="va">local_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu">stopifnot</span><span class="op">(</span><span class="fu">unname</span><span class="op">(</span><span class="fu">tools</span><span class="fu">::</span><span class="fu">md5sum</span><span class="op">(</span><span class="va">local_path</span><span class="op">)</span><span class="op">)</span> <span class="op">==</span></span>
+<span>                <span class="fu">unname</span><span class="op">(</span><span class="fu">tools</span><span class="fu">::</span><span class="fu">md5sum</span><span class="op">(</span><span class="va">bundled_path</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>    <span class="fu">stopifnot</span><span class="op">(</span><span class="fu">file.copy</span><span class="op">(</span><span class="va">bundled_path</span>, <span class="va">local_path</span>, overwrite <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">}</span></span>
 <span></span>
-<span><span class="va">fraser_coho</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span></span>
-<span>  <span class="va">data_path</span>,</span>
-<span>  show_col_types <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span><span class="op">)</span></span>
+<span><span class="va">data_path</span> <span class="op">&lt;-</span> <span class="fu">file.path</span><span class="op">(</span><span class="st">"raw_data"</span>, <span class="st">"nuseds-fraser-coho-sample.csv"</span><span class="op">)</span></span>
+<span><span class="va">fraser_coho</span> <span class="op">&lt;-</span> <span class="fu">readr</span><span class="fu">::</span><span class="fu">read_csv</span><span class="op">(</span><span class="va">data_path</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu">stopifnot</span><span class="op">(</span><span class="fu">nrow</span><span class="op">(</span><span class="va">fraser_coho</span><span class="op">)</span> <span class="op">==</span> <span class="fl">30L</span>, <span class="fu">ncol</span><span class="op">(</span><span class="va">fraser_coho</span><span class="op">)</span> <span class="op">==</span> <span class="fl">17L</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Generate a new package once. overwrite = FALSE protects an existing folder.</span></span>
 <span><span class="va">pkg_path</span> <span class="op">&lt;-</span> <span class="fu">create_sdp</span><span class="op">(</span></span>
@@ -476,14 +502,14 @@ first result is fast and local.</p>
 <span>  dataset_id <span class="op">=</span> <span class="st">"fraser-coho-example"</span>,</span>
 <span>  table_id <span class="op">=</span> <span class="st">"escapement"</span>,</span>
 <span>  seed_semantics <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  check_updates <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  check_updates <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  overwrite <span class="op">=</span> <span class="cn">FALSE</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">list.files</span><span class="op">(</span><span class="va">pkg_path</span>, recursive <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-1-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Python">
+<div id="nav-tabpanel-1-Python" class="tab-pane" aria-labelledby="nav-tab-1-Python" role="tabpanel">
 <p><code>metasalmonpy</code> includes the same NuSEDS-derived practice
 table. Generate its templates with semantic searching turned off so the
 first result is fast and local.</p>
@@ -496,53 +522,70 @@ first result is fast and local.</p>
 <span id="cb4-4"><a href="#cb4-4" tabindex="-1" aria-label="code-block-4-4"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb4-5"><a href="#cb4-5" tabindex="-1" aria-label="code-block-4-5"></a><span class="im">from</span> metasalmonpy <span class="im">import</span> create_sdp</span>
 <span id="cb4-6"><a href="#cb4-6" tabindex="-1" aria-label="code-block-4-6"></a></span>
-<span id="cb4-7"><a href="#cb4-7" tabindex="-1" aria-label="code-block-4-7"></a>data_path <span class="op">=</span> files(<span class="st">"metasalmonpy.data"</span>).joinpath(</span>
-<span id="cb4-8"><a href="#cb4-8" tabindex="-1" aria-label="code-block-4-8"></a>    <span class="st">"nuseds-fraser-coho-sample.csv"</span></span>
-<span id="cb4-9"><a href="#cb4-9" tabindex="-1" aria-label="code-block-4-9"></a>)</span>
-<span id="cb4-10"><a href="#cb4-10" tabindex="-1" aria-label="code-block-4-10"></a></span>
-<span id="cb4-11"><a href="#cb4-11" tabindex="-1" aria-label="code-block-4-11"></a>fraser_coho <span class="op">=</span> pd.read_csv(data_path)</span>
-<span id="cb4-12"><a href="#cb4-12" tabindex="-1" aria-label="code-block-4-12"></a></span>
-<span id="cb4-13"><a href="#cb4-13" tabindex="-1" aria-label="code-block-4-13"></a>pkg_path <span class="op">=</span> create_sdp(</span>
-<span id="cb4-14"><a href="#cb4-14" tabindex="-1" aria-label="code-block-4-14"></a>    fraser_coho,</span>
-<span id="cb4-15"><a href="#cb4-15" tabindex="-1" aria-label="code-block-4-15"></a>    path<span class="op">=</span>Path(<span class="st">"output"</span>) <span class="op">/</span> <span class="st">"fraser-coho-example-sdp"</span>,</span>
-<span id="cb4-16"><a href="#cb4-16" tabindex="-1" aria-label="code-block-4-16"></a>    dataset_id<span class="op">=</span><span class="st">"fraser-coho-example"</span>,</span>
-<span id="cb4-17"><a href="#cb4-17" tabindex="-1" aria-label="code-block-4-17"></a>    table_id<span class="op">=</span><span class="st">"escapement"</span>,</span>
-<span id="cb4-18"><a href="#cb4-18" tabindex="-1" aria-label="code-block-4-18"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb4-19"><a href="#cb4-19" tabindex="-1" aria-label="code-block-4-19"></a>    check_updates<span class="op">=</span><span class="va">True</span>,</span>
-<span id="cb4-20"><a href="#cb4-20" tabindex="-1" aria-label="code-block-4-20"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb4-21"><a href="#cb4-21" tabindex="-1" aria-label="code-block-4-21"></a>)</span>
+<span id="cb4-7"><a href="#cb4-7" tabindex="-1" aria-label="code-block-4-7"></a><span class="co"># Read packaged resources as bytes so source copies are identical.</span></span>
+<span id="cb4-8"><a href="#cb4-8" tabindex="-1" aria-label="code-block-4-8"></a>raw_data_dir <span class="op">=</span> Path(<span class="st">"raw_data"</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" tabindex="-1" aria-label="code-block-4-9"></a>raw_data_dir.mkdir(exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-10"><a href="#cb4-10" tabindex="-1" aria-label="code-block-4-10"></a>source_files <span class="op">=</span> {</span>
+<span id="cb4-11"><a href="#cb4-11" tabindex="-1" aria-label="code-block-4-11"></a>    <span class="st">"nuseds-fraser-coho-sample.csv"</span>: <span class="st">"nuseds-fraser-coho-sample.csv"</span>,</span>
+<span id="cb4-12"><a href="#cb4-12" tabindex="-1" aria-label="code-block-4-12"></a>    <span class="st">"nuseds-fraser-coho-source-dictionary.csv"</span>: <span class="st">"column_dictionary.csv"</span>,</span>
+<span id="cb4-13"><a href="#cb4-13" tabindex="-1" aria-label="code-block-4-13"></a>}</span>
+<span id="cb4-14"><a href="#cb4-14" tabindex="-1" aria-label="code-block-4-14"></a><span class="cf">for</span> local_name, bundled_name <span class="kw">in</span> source_files.items():</span>
+<span id="cb4-15"><a href="#cb4-15" tabindex="-1" aria-label="code-block-4-15"></a>    source_bytes <span class="op">=</span> files(<span class="st">"metasalmonpy.data"</span>).joinpath(bundled_name).read_bytes()</span>
+<span id="cb4-16"><a href="#cb4-16" tabindex="-1" aria-label="code-block-4-16"></a>    local_path <span class="op">=</span> raw_data_dir <span class="op">/</span> local_name</span>
+<span id="cb4-17"><a href="#cb4-17" tabindex="-1" aria-label="code-block-4-17"></a>    <span class="cf">if</span> local_path.exists():</span>
+<span id="cb4-18"><a href="#cb4-18" tabindex="-1" aria-label="code-block-4-18"></a>        <span class="cf">if</span> local_path.read_bytes() <span class="op">!=</span> source_bytes:</span>
+<span id="cb4-19"><a href="#cb4-19" tabindex="-1" aria-label="code-block-4-19"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="ss">f"Source copy differs from the pinned package: </span><span class="sc">{</span>local_path<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb4-20"><a href="#cb4-20" tabindex="-1" aria-label="code-block-4-20"></a>    <span class="cf">else</span>:</span>
+<span id="cb4-21"><a href="#cb4-21" tabindex="-1" aria-label="code-block-4-21"></a>        local_path.write_bytes(source_bytes)</span>
 <span id="cb4-22"><a href="#cb4-22" tabindex="-1" aria-label="code-block-4-22"></a></span>
-<span id="cb4-23"><a href="#cb4-23" tabindex="-1" aria-label="code-block-4-23"></a><span class="cf">for</span> path <span class="kw">in</span> <span class="bu">sorted</span>(</span>
-<span id="cb4-24"><a href="#cb4-24" tabindex="-1" aria-label="code-block-4-24"></a>    path <span class="cf">for</span> path <span class="kw">in</span> pkg_path.rglob(<span class="st">"*"</span>) <span class="cf">if</span> path.is_file()</span>
-<span id="cb4-25"><a href="#cb4-25" tabindex="-1" aria-label="code-block-4-25"></a>):</span>
-<span id="cb4-26"><a href="#cb4-26" tabindex="-1" aria-label="code-block-4-26"></a>    <span class="bu">print</span>(path.relative_to(pkg_path))</span></code></pre>
+<span id="cb4-23"><a href="#cb4-23" tabindex="-1" aria-label="code-block-4-23"></a>data_path <span class="op">=</span> raw_data_dir <span class="op">/</span> <span class="st">"nuseds-fraser-coho-sample.csv"</span></span>
+<span id="cb4-24"><a href="#cb4-24" tabindex="-1" aria-label="code-block-4-24"></a>fraser_coho <span class="op">=</span> pd.read_csv(data_path)</span>
+<span id="cb4-25"><a href="#cb4-25" tabindex="-1" aria-label="code-block-4-25"></a><span class="cf">assert</span> fraser_coho.shape <span class="op">==</span> (<span class="dv">30</span>, <span class="dv">17</span>)</span>
+<span id="cb4-26"><a href="#cb4-26" tabindex="-1" aria-label="code-block-4-26"></a></span>
+<span id="cb4-27"><a href="#cb4-27" tabindex="-1" aria-label="code-block-4-27"></a>pkg_path <span class="op">=</span> create_sdp(</span>
+<span id="cb4-28"><a href="#cb4-28" tabindex="-1" aria-label="code-block-4-28"></a>    fraser_coho,</span>
+<span id="cb4-29"><a href="#cb4-29" tabindex="-1" aria-label="code-block-4-29"></a>    path<span class="op">=</span>Path(<span class="st">"output"</span>) <span class="op">/</span> <span class="st">"fraser-coho-example-sdp"</span>,</span>
+<span id="cb4-30"><a href="#cb4-30" tabindex="-1" aria-label="code-block-4-30"></a>    dataset_id<span class="op">=</span><span class="st">"fraser-coho-example"</span>,</span>
+<span id="cb4-31"><a href="#cb4-31" tabindex="-1" aria-label="code-block-4-31"></a>    table_id<span class="op">=</span><span class="st">"escapement"</span>,</span>
+<span id="cb4-32"><a href="#cb4-32" tabindex="-1" aria-label="code-block-4-32"></a>    seed_semantics<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-33"><a href="#cb4-33" tabindex="-1" aria-label="code-block-4-33"></a>    check_updates<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-34"><a href="#cb4-34" tabindex="-1" aria-label="code-block-4-34"></a>    overwrite<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-35"><a href="#cb4-35" tabindex="-1" aria-label="code-block-4-35"></a>)</span>
+<span id="cb4-36"><a href="#cb4-36" tabindex="-1" aria-label="code-block-4-36"></a></span>
+<span id="cb4-37"><a href="#cb4-37" tabindex="-1" aria-label="code-block-4-37"></a><span class="cf">for</span> path <span class="kw">in</span> <span class="bu">sorted</span>(</span>
+<span id="cb4-38"><a href="#cb4-38" tabindex="-1" aria-label="code-block-4-38"></a>    path <span class="cf">for</span> path <span class="kw">in</span> pkg_path.rglob(<span class="st">"*"</span>) <span class="cf">if</span> path.is_file()</span>
+<span id="cb4-39"><a href="#cb4-39" tabindex="-1" aria-label="code-block-4-39"></a>):</span>
+<span id="cb4-40"><a href="#cb4-40" tabindex="-1" aria-label="code-block-4-40"></a>    <span class="bu">print</span>(path.relative_to(pkg_path))</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-1-Spreadsheet">
-<p>Spreadsheet participants can inspect the package structure without
-running code. Download or clone the <code>smn-data-pkg</code>
-repository, copy its <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template" class="external-link">blank
-SDP CSV template</a> into
-<code>output/spreadsheet-quickstart-sdp/</code>, and open the CSV files
-with Excel, LibreOffice Calc, or another spreadsheet editor.</p>
-<p>Keep the copied folder structure and header rows unchanged. In this
-chapter, inspect the prepared example rather than replacing its data or
-metadata; Chapter 3 introduces your own data.</p>
+<div id="nav-tabpanel-1-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-1-Spreadsheet" role="tabpanel">
+<p>Ask the facilitator for the Fraser Coho draft package generated with
+the R quickstart above. Put it at
+<code>output/fraser-coho-example-sdp/</code> and put the accompanying
+<code>nuseds-fraser-coho-sample.csv</code> and
+<code>nuseds-fraser-coho-source-dictionary.csv</code> in
+<code>raw_data/</code>. Open its metadata CSVs with Excel or LibreOffice
+Calc, keeping identifiers and code values as text.</p>
+<p>You are reviewing the same 30 rows as the R and Python learners. Keep
+the data, folder structure, and metadata headers unchanged; write review
+notes separately until Session 3. You do not need a personal dataset or
+a blank package for the core walkthrough.</p>
 </div>
 </div>
 </div>
+<p>The copied source dictionary is supporting evidence: its original
+dataset/table IDs and annotations are not the decisions for this
+workshop package. Session 3 reviews its descriptions without replacing
+the generated dictionary.</p>
 <p>For the R and Python lanes, <code>seed_semantics = FALSE</code> /
 <code>seed_semantics=False</code> is the fast classroom option. It skips
-live searches for links to shared definitions. Chapter 3 turns those
-searches on once the starter metadata has been reviewed, and Chapter 4
-decides the candidates they return.</p>
+live searches for links to shared definitions. Session 3 turns those
+searches on in R and gives Python learners saved candidate evidence from
+the same sample. Session 4 reviews that evidence.</p>
 </section><section><h2 class="section-heading" id="inspect-the-package-files">Inspect the package files<a class="anchor" aria-label="anchor" href="#inspect-the-package-files"></a></h2>
-<hr class="half-width"><p>Open these files in this order. A package generated by R or Python
-starts with <code>README-review.txt</code>; the spreadsheet template
-uses <code>README.md</code>.</p>
-<ol style="list-style-type: decimal"><li>
-<code>README-review.txt</code> or <code>README.md</code>
-</li>
+<hr class="half-width"><p>Open these files in this order. All three lanes inspect a generated
+Fraser Coho package.</p>
+<ol style="list-style-type: decimal"><li><code>README-review.txt</code></li>
 <li><code>metadata/column_dictionary.csv</code></li>
 <li><code>metadata/tables.csv</code></li>
 <li><code>metadata/dataset.csv</code></li>
@@ -550,12 +593,11 @@ uses <code>README.md</code>.</p>
 <code>metadata/codes.csv</code>, when present</li>
 <li>
 <code>semantic_suggestions.csv</code>, when present</li>
-</ol><p>The R or Python quickstart has this generated structure. The
-spreadsheet template has the same core metadata CSVs but keeps
-<code>data/README.md</code> in place of a learner data table until
-Chapter 3.</p>
+</ol><p>All three lanes use this package structure. The source CSV is
+preserved in <code>raw_data/</code>; the writer names the packaged table
+<code>data/escapement.csv</code> after its table ID.</p>
 <pre class="text"><code><span><span class="va">output</span><span class="op">/</span><span class="va">fraser</span><span class="op">-</span><span class="va">coho</span><span class="op">-</span><span class="va">example</span><span class="op">-</span><span class="va">sdp</span><span class="op">/</span></span>
-<span>  <span class="va">README</span><span class="op">-</span><span class="va">review.txt</span>            <span class="co"># README.md in the prepared example</span></span>
+<span>  <span class="va">README</span><span class="op">-</span><span class="va">review.txt</span></span>
 <span>  <span class="va">datapackage.json</span></span>
 <span>  <span class="va">.metasalmon</span><span class="op">-</span><span class="va">package</span>          <span class="co"># R writer bookkeeping; Python uses .metasalmonpy-package</span></span>
 <span>  <span class="va">metadata</span><span class="op">/</span></span>
@@ -570,10 +612,11 @@ Chapter 3.</p>
 <code>REVIEW: &lt;iri&gt;</code> draft values. An <strong>IRI</strong>
 is a stable web identifier for a shared term. The <code>REVIEW:</code>
 prefix means that the proposed match has not been accepted.</p>
-</section><section><h2 class="section-heading" id="what-input-structures-are-supported">What input structures are supported?<a class="anchor" aria-label="anchor" href="#what-input-structures-are-supported"></a></h2>
-<hr class="half-width"><p><code>create_sdp()</code> does not open an arbitrary source file by
-itself. First use an appropriate reader to create R data frames; then
-pass one data frame or a named list of data frames.</p>
+</section><section><h2 class="section-heading" id="transfer-later-what-other-input-structures-are-supported">Transfer later: what other input structures are supported?<a class="anchor" aria-label="anchor" href="#transfer-later-what-other-input-structures-are-supported"></a></h2>
+<hr class="half-width"><p>The shared walkthrough uses one CSV. Session 7 shows how to adapt it
+to other inputs. <code>create_sdp()</code> does not open an arbitrary
+source file by itself. First use an appropriate reader to create R data
+frames; then pass one data frame or a named list of data frames.</p>
 <table class="table"><colgroup><col width="33%"><col width="33%"><col width="33%"></colgroup><thead><tr><th>Source</th>
 <th>Preparation</th>
 <th>
@@ -652,7 +695,7 @@ lane you selected above.</p>
 </button>
 </div>
 </nav><div id="nav-tabContent-2" class="tab-content">
-<div id="nav-tabpanel-2-R" class="tab-pane show active" role="tabpanel" aria-labelledby="nav-tab-2-R">
+<div id="nav-tabpanel-2-R" class="tab-pane show active" aria-labelledby="nav-tab-2-R" role="tabpanel">
 <div class="codewrapper sourceCode" id="cb6">
 <h3 class="code-label">R<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -666,7 +709,7 @@ lane you selected above.</p>
 <span><span class="va">review_check</span><span class="op">$</span><span class="va">semantic_validation</span><span class="op">$</span><span class="va">missing_terms</span></span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Python" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Python">
+<div id="nav-tabpanel-2-Python" class="tab-pane" aria-labelledby="nav-tab-2-Python" role="tabpanel">
 <div class="codewrapper sourceCode" id="cb7">
 <h3 class="code-label">PYTHON<i aria-hidden="true" data-feather="chevron-left"></i><i aria-hidden="true" data-feather="chevron-right"></i>
 </h3>
@@ -681,9 +724,9 @@ lane you selected above.</p>
 <span id="cb7-9"><a href="#cb7-9" tabindex="-1" aria-label="code-block-7-9"></a><span class="bu">print</span>(review_check[<span class="st">"semantic_validation"</span>][<span class="st">"missing_terms"</span>])</span></code></pre>
 </div>
 </div>
-<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" role="tabpanel" aria-labelledby="nav-tab-2-Spreadsheet">
+<div id="nav-tabpanel-2-Spreadsheet" class="tab-pane" aria-labelledby="nav-tab-2-Spreadsheet" role="tabpanel">
 <p>Spreadsheet software does not currently run the SDP validator. For
-this quickstart, compare the prepared example’s folder structure and
+this quickstart, compare the Fraser Coho package’s folder structure and
 metadata headers with the <a href="https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md" class="external-link">SDP
 field reference</a>, and keep unresolved fields or term links visibly in
 review state. This manual review is not evidence that strict validation
@@ -711,7 +754,10 @@ quickstart templates</h3>
 <li>Which metadata file describes the dataset, each table, each column,
 and categorical codes?</li>
 <li>Which fields still need human review?</li>
-<li>What would you replace when moving to your own data?</li>
+<li>Which Fraser Coho fields will need source context before you can
+describe them?</li>
+<li>Where are the unchanged source and the generated
+<code>escapement.csv</code>?</li>
 </ul></div>
 </div>
 </div>
@@ -724,8 +770,8 @@ and categorical codes?</li>
 <div class="callout-content">
 <ul><li>Confirm the project and folders unless you already prepared them
 during setup.</li>
-<li>Run the bundled quickstart unchanged to learn the generated package
-shape; bring your own data in Chapter 3.</li>
+<li>Keep this Fraser Coho package through Sessions 3–6; optional
+transfer to your own data comes in Session 7.</li>
 <li>
 <code>create_sdp()</code> accepts one data frame or a named list of
 tabular data frames, not arbitrary scientific file structures.</li>
@@ -746,7 +792,7 @@ values.</li>
           Previous: The Salmon Data Integration System...
         </a>
         <a class="chapter-link float-end" href="session-3.html" rel="next">
-          Next: Use Your Data and Capture Context...
+          Next: Capture Fraser Coho Context and Rebuild...
           <i aria-hidden="true" class="small-arrow" data-feather="arrow-right"></i>
         </a>
       </div>
@@ -794,7 +840,7 @@ values.</li>
   "url": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-2.html",
   "identifier": "https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/session-2.html",
   "dateCreated": "2025-01-22",
-  "dateModified": "2026-08-26",
+  "dateModified": "2026-09-08",
   "datePublished": "2026-09-08"
 }
 
