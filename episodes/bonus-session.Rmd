@@ -22,35 +22,36 @@ exercises: 45
 
 ## When to use this extension
 
-Use this only after learners have seen the Salmon Data Package structure. It works well as a full-day warm-up before measurement decomposition or as a separate community vocabulary session.
+Use this after learners have seen the Salmon Data Package structure. Keep the shared NuSEDS Fraser Coho sample as the case, either as a warm-up before Session 4 or as a vocabulary extension. The optional bring-your-own-dataset activity is Session 7.
 
 ## Activity 1: Sort the vocabulary
 
-Give each group cards with terms such as:
+Give each group cards drawn from the sample's columns, code values, and review vocabulary. Keep column names distinct from the concepts and values they record:
 
 ```text
-water temperature
-age
-length
-weight
-life stage
-spawn date
-smolt
-tag ID
-river reach
-capture event
-habitat type
-species
-sex
-growth rate
-migration timing
+POP_ID
+POPULATION
+AREA
+WATERBODY
+ANALYSIS_YR
+SPECIES
+RUN_TYPE
+NATURAL_SPAWNERS_TOTAL
+ESTIMATE_METHOD
+ESTIMATE_CLASSIFICATION
+FULL_CU_IN
+Area Under the Curve
+Unknown Estimate Method
+natural-origin
+abundance
+individual
 ```
 
 Ask groups to sort the cards into categories that make sense to them. Compare the groups and discuss where the categories differ.
 
 ## Activity 2: Decompose a compound term
 
-Pick one compound term, such as `natural spawner count`, `smolt-to-adult return rate`, or `tag detection event`.
+Use `NATURAL_SPAWNERS_TOTAL`, described by the source dictionary as estimated total natural-origin spawners. Compare the compound wording with the two non-empty sample values and the blank records. Do not assume a blank means zero.
 
 Ask:
 
@@ -62,7 +63,7 @@ Ask:
 
 ## Activity 3: Sketch a small map
 
-Draw boxes for the pieces and connect them with plain-language relationships:
+Sketch the same measurement and its context: `NATURAL_SPAWNERS_TOTAL`, abundance, natural-origin spawners, unit, the `POP_ID` and `ANALYSIS_YR` row context, and row-varying `ESTIMATE_METHOD`. Connect the boxes with plain-language relationships:
 
 - is a type of;
 - measures;

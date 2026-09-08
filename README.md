@@ -1,16 +1,19 @@
 # Salmon Data Standards Workshop
 
-This workshop helps salmon biologists, data stewards, and data scientists turn familiar spreadsheets or CSV files into reviewable **Salmon Data Packages**. The common biologist pathway is practical FAIR publication: preserve the context behind local data, link selected meanings to shared definitions, export reviewed metadata as a validated **EML 2.2 file**, and prepare or perform an authorized upload to an EML-aware catalog such as KNB. Depending on the learner's goals, the pathway can extend to proposing missing shared terms or planning how an organizational vocabulary or ontology will be governed and mapped to the Salmon Domain Ontology. Code-driven activities include R and Python examples, with separate spreadsheet instructions where a no-code path is useful.
+This workshop helps salmon biologists, data stewards, and data scientists turn the included **NuSEDS Fraser Coho sample** into a reviewable **Salmon Data Package**, following the same dataset from first inspection through metadata, semantic review, EML export, and a catalog dry run. No personal dataset is required; an optional activity near the end applies the workflow to your own data. The common biologist pathway is practical FAIR publication: preserve the context behind local data, link selected meanings to shared definitions, export reviewed metadata as a validated **EML 2.2 file**, and prepare or perform an authorized upload to an EML-aware catalog such as KNB. Depending on the learner's goals, the pathway can extend to proposing missing shared terms or planning how an organizational vocabulary or ontology will be governed and mapped to the Salmon Domain Ontology. Code-driven activities include R and Python examples, with separate spreadsheet instructions where a no-code path is useful.
 
 The material is being refactored for the Salmon Ontology Development Working Group from an ontology-development-first course into an SDP-first learning path. An ontology is a maintained set of concepts and definitions that also records how the concepts relate. Biologists can complete the common pathway by reusing shared definitions where they help; they do not need to build an ontology or give every field an ontology term. The advanced stewardship pathway addresses organizational vocabularies, ontologies, and bridge mappings for learners whose roles require them.
 
 ## Learning Path
 
-1. **Structure first**: create a draft Salmon Data Package from existing data with R/`metasalmon`, the paired Python/`metasalmonpy` workflow, or the blank SDP CSV template.
+1. **Structure first**: create a draft Salmon Data Package from the bundled `nuseds-fraser-coho-sample.csv` with R/`metasalmon` or Python/`metasalmonpy`; spreadsheet learners open a facilitator-generated package from that same sample.
 2. **Context next**: write dataset, table, column, code, caveat, and method notes that travel with the data.
 3. **Meaning where it matters**: review suggested term mappings, focusing first on measurement columns and important code lists.
 4. **Contribution and stewardship paths**: route unresolved terms to the shared Salmon Domain Ontology, GC DFO Salmon Ontology, or a local/profile vocabulary or ontology; where needed, plan how organizational terms will be governed and mapped to shared anchors.
-5. **Publication**: map SDP fields into EML, validate the export, preview the exact catalog deposit, and upload only with appropriate credentials and redistribution authority.
+5. **Publication**: map the reviewed sample SDP into EML, validate the export, and preview the exact catalog deposit in a credential-free dry run. A live upload requires separate publication authority.
+6. **Optional transfer**: near the end, start a separate draft package with your own dataset or make a transfer plan using the sample.
+
+The shared example is the 30-row, 17-column teaching sample, covering selected years from 1996–2024. It stays under `raw_data/`, with the reproducible build in `scripts/build_sdp.R` or `scripts/build_sdp.py` and its generated package at `output/fraser-coho-example-sdp`. The separate 173-row, 2023–2024 example is outside this workshop pathway.
 
 ## Audience
 
@@ -27,12 +30,14 @@ No terminology-standards background is assumed. Session 1 defines semantic links
 
 The R package `metasalmon` and Python package `metasalmonpy` are intended to remain behaviorally aligned, but the current workshop records an open catch-up window: R is pinned to `metasalmon` `v0.5.0`, while Python is pinned to `metasalmonpy` `v0.4.0`. Session 4's native semantic-review workflow is therefore taught only in R until the Python port lands. Examples use idiomatic syntax for each language rather than forcing literal API mimicry; deliberate differences are recorded in the [metasalmonpy parity guide](https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html).
 
+Python semantic seeding on this sample fails with the tested `metasalmonpy 0.4.0` / pandas `3.0.5` combination. Session 3 uses facilitator-supplied R candidate evidence for the same sample; Python creation and metadata editing remain local. Replace that handoff only after a released combination passes the seeded sample rebuild and the workshop pins are updated.
+
 ## Formats
 
 The same materials support two delivery modes:
 
 - **One-hour introduction**: end-goal framing, SDP anatomy and example CSVs, a short package demo, one measurement mapping review, and an SDP-to-EML/catalog preview.
-- **Full-day workshop**: hands-on package creation, context capture, mapping review, measurement decomposition, code-list review, term-request planning, EML export, and a credential-free KNB publication dry run.
+- **Full-day workshop**: hands-on package creation, context capture, mapping review, measurement decomposition, code-list review, term-request planning, EML export, and a credential-free KNB publication dry run, followed by an optional bring-your-own-dataset activity.
 
 ## Repository Contents
 

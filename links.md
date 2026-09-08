@@ -41,3 +41,5 @@
 [gcdfo]: https://github.com/dfo-pacific-science/dfo-salmon-ontology
 [smn-issues]: https://github.com/salmon-data-mobilization/salmon-domain-ontology/issues/new/choose
 [gcdfo-issues]: https://github.com/dfo-pacific-science/dfo-salmon-ontology/issues/new/choose
+
+[metasalmon-example-data]: https://github.com/salmon-data-mobilization/metasalmon/blob/v0.5.0/inst/extdata/example-data-README.md
