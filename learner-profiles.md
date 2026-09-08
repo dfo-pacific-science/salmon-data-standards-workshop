@@ -2,87 +2,34 @@
 title: Learner Profiles
 ---
 
-## Spreadsheet-based operational biologist
+All learners use the 173-row, 14-column NuSEDS Fraser Coho 2023–2024 dataset. The first three chapters require interpretation, drawing, and writing before software creates the package. No personal dataset or paid account is required.
 
-Needs:
+## Spreadsheet-based salmon biologist
 
-- a familiar spreadsheet surface;
-- plain-language explanation of package files;
-- clear stop points that do not require R;
-- reassurance that local caveats and constraints will not be erased.
+Needs a familiar table, a plain-language glossary, space for source caveats, and a peer who can run code when needed. Starts with the human graph and dictionary, then edits review worksheets and inspects supplied package checkpoints. Success means explaining a measurement, questioning an unsupported mapping, and identifying what remains for domain review.
 
-Risk:
-
-- leaves if the workshop starts with ontology tools, URIs, or code.
-
-Success:
-
-- can create or review a draft package and identify what still needs context.
+The main risk is deferring to a tool or reference package when local scientific meaning is still uncertain. The facilitator should treat this learner's questions as evidence needed for the package, not interruptions to automation.
 
 ## R-capable data steward
 
-Needs:
+Needs the pinned metasalmon 0.5.0 build, consistent paths and IDs, native review calls, and examples of recording decisions so they survive a rerun. Completes the human exercises before building the SDP. Success means preserving the 173×14 source values, connecting reviewed definitions to package metadata, and interpreting validation and the Test Node outcome accurately.
 
-- a reproducible `metasalmon::create_sdp()` path;
-- review-state and final validation commands;
-- guidance for semantic suggestions and gap detection;
-- clarity on what not to automate.
-
-Risk:
-
-- over-focuses on strict validation before the data holder has reviewed meaning.
-
-Success:
-
-- can generate a package, guide Excel review, rerun checks without discarding reviewed metadata, produce a term-request plan, and export validated EML from a finalized package.
+The main risk is treating a passing check as domain approval. The reference remains a technical draft pending Bruno and Tom's review.
 
 ## Python-capable data steward
 
-Needs:
+Needs the pinned metasalmonpy 0.4.0 path and honest alternatives for the R-native review/setter functions that have not shipped in Python. Uses the same worksheets, candidate evidence, and checkpoints. Success means building and inspecting the shared package, recording review decisions, and following the documented validation/export path without assuming API parity.
 
-- a reproducible `metasalmonpy.create_sdp()` path;
-- the same project layout and package files used in the R walkthrough;
-- accurate Python calling conventions for review and gap-detection functions;
-- current Python examples for strict validation, EML export, and guarded KNB publication.
+The main risk is translating R calls by eye or treating a matching package format as a promise of identical function availability.
 
-Risk:
+## Vocabulary or ontology maintainer
 
-- assumes behavioral parity removes the need to review language-specific calling conventions and dependencies.
+Needs explicit definitions, source evidence, observed code values, and a clear distinction between field labels and shared concepts. Success means receiving a bounded gap draft with an example and unresolved question, after participants have tried to interpret and map the source.
 
-Success:
+The main risk is introducing formal modelling before participants understand the observations and results. The human graph is a discussion artifact, not a demand to mint new terms.
 
-- can create, review, strictly validate, and export a package in Python, then preview or perform an authorized catalog publication using the same guarded workflow.
+## Mixed-group facilitator
 
-## Ontology or vocabulary maintainer
+Needs a six-hour schedule, reliable downloadable material, recorded AI responses, and local checkpoints that keep every lane participating. Success means all participants complete a human–AI comparison and can distinguish technical validation, pending domain review, and a verified test publication.
 
-Needs:
-
-- high-quality requests with definitions, sources, examples, and routing rationale;
-- conservative SMN promotion criteria;
-- clear distinction between SKOS code lists and OWL structure;
-- mapping strength and review state.
-
-Risk:
-
-- receives many vague "please add this column name" requests.
-
-Success:
-
-- receives evidence-rich requests that can be accepted, revised, or routed without rediscovering context.
-
-## Community infrastructure sponsor
-
-Needs:
-
-- a workshop that scales across spreadsheet, R, and Python users;
-- low maintenance burden;
-- a clear transition from package drafting to governance and catalog publication;
-- a one-hour format for outreach and a full-day format for practice.
-
-Risk:
-
-- the workshop promises tooling or automation that the community cannot maintain.
-
-Success:
-
-- participants leave with reusable packages, a visible SDP-to-EML path, clear next actions, and fewer avoidable term requests.
+The main risk is spending the session on installation or account setup. Live AI access is optional; supplied recorded outputs require no account or purchased credits.

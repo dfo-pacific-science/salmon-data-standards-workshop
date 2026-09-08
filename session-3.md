@@ -1,318 +1,116 @@
 ---
-title: "Capture Fraser Coho Context and Rebuild the Package"
-teaching: 40
-exercises: 35
+title: "Write the Dictionary, Decompose Meanings and Review Together"
+teaching: 20
+exercises: 45
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- What does the Fraser Coho table leave unexplained?
-- How do I rebuild the same package from unchanged inputs?
-- Which source statements belong in metadata, and which remain review questions?
-- How do I prepare semantic candidates without invoking an LLM?
+- What must a dictionary explain beyond column names and data types?
+- How do we separate the parts of a compound measurement term?
+- What evidence and peer review are needed before packaging or AI-assisted interpretation?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Continue with the same 30-row NuSEDS Fraser Coho sample from Session 2.
-- Extend one build script using the same dataset ID, table ID, and output path.
-- Compare source descriptions with actual values before recording metadata decisions.
-- Write a short context note that distinguishes observations from unresolved interpretations.
-- Seed the candidates that Session 4 will review, with LLM assessment off.
+- Write working definitions for six focus fields and review all 14 source columns.
+- Decompose `NATURAL_ADULT_SPAWNERS` into distinct semantic roles without inventing unsupported qualifiers.
+- Reconcile the dictionary with the dataset graph and preserve source wording separately.
+- Record an actual peer review, including unresolved questions, before moving to metasalmon or AI.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Continue the Fraser Coho package
+![Seven workshop stages, with dictionary writing and human review highlighted.](fig/workflow-3.svg)
 
-Keep `raw_data/nuseds-fraser-coho-sample.csv` unchanged. We are extending the Session 2 package, not starting a different dataset. Use these names throughout Sessions 2–6:
+## Turn the diagram into a usable explanation
 
-| Item | Shared value |
+Continue with the unchanged 173-row Fraser Coho table and your Chapter 2 diagram. Open `worksheets/data-dictionary.csv` and `worksheets/variable-decomposition.csv` from the kit in a spreadsheet or text editor. **This is still human interpretation work: no metasalmon ingestion and no AI interpretation yet.**
+
+A [data dictionary](glossary.html#data-dictionary) explains each field: what it means, how values are represented, which values or codes are allowed, what missing values may mean, and which sources support the explanation. It should help someone identify both appropriate uses and unresolved questions.
+
+The [dictionary worksheet](files/fraser-coho-workshop/worksheets/data-dictionary.csv) includes all 14 source fields. Six rows are marked for you to write: `POP_ID`, `WATERBODY`, `ANALYSIS_YR`, `SPECIES`, `NATURAL_ADULT_SPAWNERS` and `ESTIMATE_METHOD`. The other eight have draft working descriptions to read and amend. Keep the original source description in its own column even when you question it.
+
+### What to record
+
+| Worksheet field | Purpose |
 | --- | --- |
-| Source data | `raw_data/nuseds-fraser-coho-sample.csv` |
-| Supporting dictionary | `raw_data/nuseds-fraser-coho-source-dictionary.csv` |
-| Dataset ID | `fraser-coho-example` |
-| Table ID | `escapement` |
-| Working package | `output/fraser-coho-example-sdp/` |
-| Build script | `scripts/build_sdp.R` or `scripts/build_sdp.py` |
+| `column_name`, `exercise_focus` | Preserve the exact source name and identify the six writing exercises. |
+| `source_description`, `working_definition` | Separate supplied wording from your own evidence-based account. |
+| `field_role`, `value_format`, `example_values` | Explain the field's job and representation. A number-shaped identifier is still an identifier. |
+| `units`, `code_meanings` | Record the measurement unit or N/A; retain exact category values and cite their definitions or explicit questions. The linked working code list gives source evidence and its limits. |
+| `missingness`, `related_fields` | Explain missing-value handling and the context needed to interpret a value. |
+| `evidence`, `status`, `open_question` | Make support, review state and uncertainty visible. |
 
-Use the script from Session 2. Keep its source-copy checks; replace its original read/create block with the corresponding block below. Run from the workshop project root. Spreadsheet participants continue with their facilitator-generated copy of this same package.
+These are **workshop interpretation fields**. They are not a replacement schema for an SDP metadata CSV. Chapter 4 will show how reviewed descriptions map into the package's own metadata fields, while the full worksheets remain supporting context.
 
-The single-table example is enough to learn the process. [Session 7](session-7.Rmd) provides optional single-CSV, multi-table, and Excel patterns for your own dataset after the shared walkthrough.
+## Read the data and source together
 
-## Inspect source context before writing metadata
+Do not copy every statement from the supplied starter dictionary into your own definition. That dictionary is a starting point, not scientific approval. The kit also includes the [official DFO dictionary](files/fraser-coho-workshop/raw_data/official-nuseds-dictionary.csv) and its [retrieval record](files/fraser-coho-workshop/raw_data/official-dictionary-source.json). It was retrieved on 8 September 2026 and may postdate the 2025 workbook used for this slice. Its current definitions support useful corrections to the starter. The <a href="files/fraser-coho-workshop/reference/scientific-review-packet.md" download>scientific-review packet</a> records the remaining questions that Brett will take to Bruno and Tom; its reviewer fields intentionally remain blank.
 
-Open the source dictionary beside the CSV and read the [bundled example notes][metasalmon-example-data]. The dictionary has the older example IDs `nuseds_fraser_coho_sample` and `nuseds_fraser_coho`. Use it as evidence for descriptions; do not paste the whole file over `metadata/column_dictionary.csv`, change the workshop IDs, or treat its existing semantic links as decisions you have already reviewed.
+Keep these checks beside the six writing tasks:
 
-Start with these actual fields:
+| Field | Supported observation | Boundary to preserve |
+| --- | --- | --- |
+| `POP_ID` | No blanks; 87 distinct IDs in this slice | `POP_ID` plus year does not uniquely identify all 173 rows. Do not equate the source unit with a CU. |
+| `WATERBODY` | Names include distinct Nicola River locations | A name in a record does not establish an exclusive population-to-stream relationship. |
+| `ANALYSIS_YR` | Officially the year the estimate is for; surveys may continue into the next calendar year | Do not rename it brood year or equate it with every inspection date. |
+| `SPECIES` | All rows say `Coho` | Preserve the source label; formal taxon mapping is a later review decision. |
+| `NATURAL_ADULT_SPAWNERS` | 13 blanks; some nonblank values have decimals | Preserve blanks and decimals. A source estimate is not necessarily an observed integer count. |
+| `ESTIMATE_METHOD` | Nine distinct labels | Describe code meanings; do not assume all labels are interchangeable analytical procedures. |
 
-| Field | What to examine |
+The other fields supply population naming, area, run type, estimate classification, estimate stage, survey-window dates and watershed code. **Correct `AREA` to NuSEDS subdistrict**: the official dictionary says subdistricts may differ from statistical areas, particularly for Fraser streams. The starter's PFMA wording should not be copied as an accepted definition. For example, `RUN_TYPE` contains `1`, `FALL` and blanks, and `ESTIMATE_CLASSIFICATION` includes `NO SURVEY THIS YEAR`. That context can matter for an estimate, but the classification alone does not explain every missing value.
+
+## Decompose a compound variable
+
+The [Salmon Domain Ontology metamodel](https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/ontology/views/README.md) separates the thing being described, its characteristic, the complete variable, the activity, its result and its context. This optional teaching view is aligned with the ontology's core; it is not a requirement to turn every phrase into an OWL class.
+
+Use the [decomposition worksheet](files/fraser-coho-workshop/worksheets/variable-decomposition.csv) to unpack `NATURAL_ADULT_SPAWNERS`:
+
+| Part | Working interpretation or question |
 | --- | --- |
-| `POP_ID`, `POPULATION` | How the source identifies and names a population record. |
-| `ANALYSIS_YR` | The years present; distinguish the estimate's analysis year from survey dates. |
-| `NATURAL_SPAWNERS_TOTAL` | The source description, the two populated cells, and the 28 blank cells. A blank is not evidence of zero spawners. |
-| `ESTIMATE_METHOD` | Different method labels on different rows, including `Area Under the Curve`, `Not Applicable`, and `Unknown Estimate Method`. |
-| `ESTIMATE_CLASSIFICATION` | Why abundance classifications may matter when interpreting an estimate. |
-| `START_DTT`, `END_DTT` | Survey-period dates, including missing dates, as distinct from `ANALYSIS_YR`. |
+| Variable | The reported estimate of mature spawners excluding jacks; the field's exact “natural” scope needs confirmation. |
+| Entity | The population/group represented by the source record; the precise biological unit needs review. |
+| Property | Abundance: the characteristic being represented. |
+| Result value | A reported numerical estimate, such as `758`; preserve decimals and missing values. |
+| Unit | Individuals is the supplied dictionary's unit; retain that source and seek confirmation of the estimate's interpretation. |
+| Context or constraints | Coho in this slice; the current official adult definition excludes jacks. A natural-origin restriction is not established. Row-varying place and year are recorded separately. |
+| Statistical modifier | Record only what the source establishes. Do not infer “count”, “total” or “mean” simply from the presence of a number. |
+| Method | Refer to the row's `ESTIMATE_METHOD`; its meaning belongs with the procedure that produced the result. |
+| Observation context and dimensions | Source population, waterbody, analysis year, survey-window dates, estimate classification and any other demonstrated context. |
 
-The sample contains 30 rows, 17 columns, and analysis years ranging from 1996 to 2024. It does not establish complete coverage over that interval. The separate 173-row 2023–2024 example and its derivation are described in the same upstream notes; those provenance statements must not be copied onto this sample as though they describe its extraction.
+The starter dictionary says “natural-origin adult spawners”; the current official DFO definition describes maturity and excludes jacks, without establishing natural origin. Our worksheet retains the starter phrase as **source wording requiring review**, alongside the more cautious working definition. It must not become an accepted natural-origin constraint merely because software finds a matching term. Likewise, a year value varies between rows; it is not a fixed constraint on the entire measurement column. The official definition identifies the estimate year; a claim that it is a brood year or another biological-year basis requires further evidence.
 
-## Write the shared context note
+The ontology's [composition rules](https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/CONVENTIONS.md#12-year-age-abundance-and-method-composition) keep reusable abundance, unit, procedure, qualifiers and dimensions distinct. Your dictionary should do the same in plain language. Specific ontology identifiers and mapping strengths come later.
 
-Create `raw_data/fraser-coho-context.md` with this starting text. Add your observations and source-backed answers during the exercise; leave questions visible when the available evidence does not settle them.
+## Peer review is the handoff to tools
 
-```text
-# Context for the NuSEDS Fraser Coho workshop sample
+Exchange the diagram, node/edge tables, dictionary and decomposition with another person. A peer review checks whether the explanation is understandable, internally consistent and honest about evidence. It does **not** grant scientific publication approval or settle questions beyond the available sources.
 
-## Purpose and source
-We are documenting the bundled nuseds-fraser-coho-sample.csv practice table.
-Record the installed package name and version used to obtain the files.
-The source dictionary is supporting evidence, not an accepted mapping ledger.
+Use `worksheets/peer-review.md` to record the actual reviewer, review date, observations, revisions and unresolved questions. The supplied form starts with `Completion: pending` and a blank reviewer. After the reviewer has checked the artifacts and required revisions are complete, record their name and date (as `YYYY-MM-DD`) and change that marker to `Completion: complete`. Leave unresolved scientific questions visible with a next step; never fill in a review that did not happen.
 
-## What the file contains
-30 rows and 17 columns; ANALYSIS_YR ranges from 1996 to 2024.
-POP_ID and POPULATION identify the source population record.
-ESTIMATE_METHOD and ESTIMATE_CLASSIFICATION vary between records.
-
-## Caveats
-This small sample is not a complete Fraser Coho time series.
-NATURAL_SPAWNERS_TOTAL has 28 blank values. Do not replace blanks with zero.
-The larger 2023-2024 example is a separate dataset.
-
-## Questions for reviewers
-What exact biological scope does NATURAL_SPAWNERS_TOTAL have in this source?
-How should estimate method and classification affect interpretation?
-What evidence establishes the meaning of a missing estimate?
-Which source, rights, and contact facts still need confirmation before release?
-```
-
-This learner-authored note is a review aid, not new source authority. Keep it under version control with your build script when appropriate. For a handoff, include a reviewed copy of the relevant caveats in the package README or another documented context artifact; files left only in `raw_data/` do not automatically travel with the SDP.
-
-## Rebuild the same package and seed candidates
-
-The source files and note now exist. In this chapter, `overwrite = TRUE` deliberately rebuilds the Session 2 draft at the same path. Preserve any edits that exist only inside `output/` before running; from here on, encode accepted metadata decisions after the create call so reruns apply them again.
-
-::::::::::::::::::::::::::::::::::::: group-tab
-
-### R
-
-```r
-library(metasalmon)
-
-# These are file paths. Listing context does not itself request an LLM call.
-use_llm_review <- FALSE
-context_files <- c(
-  file.path("raw_data", "nuseds-fraser-coho-source-dictionary.csv"),
-  file.path("raw_data", "fraser-coho-context.md")
-)
-stopifnot(all(file.exists(context_files)))
-
-fraser_coho <- readr::read_csv(
-  file.path("raw_data", "nuseds-fraser-coho-sample.csv"),
-  show_col_types = FALSE
-)
-stopifnot(nrow(fraser_coho) == 30L, ncol(fraser_coho) == 17L)
-
-# Same source, dataset, table, and destination as Session 2.
-# Seeding retrieves candidate terms; humans decide them in Session 4.
-pkg_path <- create_sdp(
-  fraser_coho,
-  path = file.path("output", "fraser-coho-example-sdp"),
-  dataset_id = "fraser-coho-example",
-  table_id = "escapement",
-  seed_semantics = TRUE,
-  llm_assess = use_llm_review,
-  llm_context_files = if (use_llm_review) context_files else NULL,
-  check_updates = FALSE,
-  overwrite = TRUE
-)
-
-source_dictionary <- readr::read_csv(context_files[[1]], show_col_types = FALSE)
-context_note <- readr::read_file(context_files[[2]])
-```
-
-### Python
-
-For this pinned release, use candidate evidence prepared by the facilitator's R build of the **same sample**. Save its `semantic_suggestions.csv` as `raw_data/fraser-coho-semantic_suggestions.csv`. The facilitator records the package version and lookup date with it. The Python build below stays local, then restores this evidence after writing metadata.
-
-This route avoids a measured `metasalmonpy 0.4.0` / pandas `3.0.5` seeding failure (`Can only compare identically-labeled ... DataFrame objects`). It does not accept any candidate. Retire this handoff when a released Python/dependency combination passes the sample's seeded rebuild and is pinned and tested here.
-
-```python
-from pathlib import Path
-
-import pandas as pd
-import shutil
-from metasalmonpy import create_sdp
-
-context_files = [
-    Path("raw_data") / "nuseds-fraser-coho-source-dictionary.csv",
-    Path("raw_data") / "fraser-coho-context.md",
-]
-for context_path in context_files:
-    if not context_path.is_file():
-        raise FileNotFoundError(context_path)
-
-fraser_coho = pd.read_csv(Path("raw_data") / "nuseds-fraser-coho-sample.csv")
-assert fraser_coho.shape == (30, 17)
-
-# Check the supplied evidence before rebuilding the local draft.
-suggestions_path = Path("raw_data") / "fraser-coho-semantic_suggestions.csv"
-saved_suggestions = pd.read_csv(suggestions_path)
-assert not saved_suggestions.empty
-assert set(saved_suggestions["dataset_id"]) == {"fraser-coho-example"}
-assert set(saved_suggestions["table_id"]) == {"escapement"}
-
-pkg_path = create_sdp(
-    fraser_coho,
-    path=Path("output") / "fraser-coho-example-sdp",
-    dataset_id="fraser-coho-example",
-    table_id="escapement",
-    seed_semantics=False,
-    llm_assess=False,
-    llm_context_files=None,
-    check_updates=False,
-    overwrite=True,
-)
-
-source_dictionary = pd.read_csv(context_files[0])
-context_note = context_files[1].read_text(encoding="utf-8")
-```
-
-### Spreadsheet
-
-Open the two files under `raw_data/` beside the generated metadata CSVs. Review the source descriptions and write the context note above. The facilitator supplies a seeded copy of the same Fraser Coho package for Session 4, including `semantic_suggestions.csv`; preserve your current copy and review log before replacing it.
-
-Keep the same dataset ID `fraser-coho-example` and table ID `escapement`. Record each metadata change and its evidence in the review log. The spreadsheet workflow remains inspectable; an R or Python collaborator runs the executable rebuild and validator.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-In the R lane, `seed_semantics = TRUE` performs vocabulary lookup and may contact vocabulary services. It is separate from LLM assessment and may take a few minutes. The facilitator can supply saved suggestions for the same sample if lookup would interrupt the schedule. Session 4 reads those suggestions without searching again.
-
-`llm_context_files` accepts local file paths, not the parsed dictionary or note. With the R toggle off and the Python call fixed to `False`, `NULL` / `None` avoids ignored-context warnings and no LLM request is made. Optional LLM review is a later, explicit choice after selecting a provider and deciding which context can be sent. `check_updates = FALSE` disables the unrelated version lookup.
-
-## Record a reviewed description in the script
-
-The following text describes the inspected file, not a claim that the dataset is ready for scientific reuse. Append the corresponding block after `create_sdp()`; Session 4 will append semantic decisions after it.
-
-::::::::::::::::::::::::::::::::::::: group-tab
-
-### R
-
-```r
-# Setters update the declared metadata fields and retain the review evidence.
-set_sdp_dataset(
-  pkg_path,
-  title = "NuSEDS Fraser Coho workshop sample",
-  description = paste(
-    "Thirty NuSEDS Fraser Coho sample records with analysis years from 1996 to 2024.",
-    "Prepared for workshop practice; not a complete time series.",
-    "Blank spawner estimates have not been replaced with zero."
-  )
-)
-set_sdp_table(
-  pkg_path,
-  "escapement",
-  description = "NuSEDS sample records with population, analysis year, estimate and method fields."
-)
-set_sdp_column(
-  pkg_path,
-  "POP_ID",
-  table = "escapement",
-  column_description = "NuSEDS population identifier, retained from the source sample."
-)
-
-review_check <- validate_salmon_datapackage(pkg_path, require_iris = FALSE)
-review_check$semantic_validation$issues
-```
-
-### Python
-
-The pinned Python release does not have the R setters. Record the same decisions as assignments and rebuild the metadata with its writer.
-
-```python
-from metasalmonpy import (
-    read_salmon_datapackage,
-    validate_salmon_datapackage,
-    write_salmon_datapackage,
-)
-
-reviewed_pkg = read_salmon_datapackage(pkg_path)
-reviewed_dataset = reviewed_pkg["dataset"].copy()
-reviewed_dataset.loc[:, "title"] = "NuSEDS Fraser Coho workshop sample"
-reviewed_dataset.loc[:, "description"] = (
-    "Thirty NuSEDS Fraser Coho sample records with analysis years from 1996 to 2024. "
-    "Prepared for workshop practice; not a complete time series. "
-    "Blank spawner estimates have not been replaced with zero."
-)
-reviewed_tables = reviewed_pkg["tables"].copy()
-reviewed_tables.loc[reviewed_tables["table_id"] == "escapement", "description"] = (
-    "NuSEDS sample records with population, analysis year, estimate and method fields."
-)
-reviewed_dictionary = reviewed_pkg["dictionary"].copy()
-column_rows = (
-    (reviewed_dictionary["table_id"] == "escapement")
-    & (reviewed_dictionary["column_name"] == "POP_ID")
-)
-reviewed_dictionary.loc[column_rows, "column_description"] = (
-    "NuSEDS population identifier, retained from the source sample."
-)
-
-pkg_path = write_salmon_datapackage(
-    resources=reviewed_pkg["resources"],
-    dataset_meta=reviewed_dataset,
-    table_meta=reviewed_tables,
-    dict_df=reviewed_dictionary,
-    codes=reviewed_pkg["codes"],
-    path=pkg_path,
-    overwrite=True,
-)
-# Preserve the supplied candidate evidence for Session 4 and every rebuild.
-shutil.copyfile(suggestions_path, Path(pkg_path) / "semantic_suggestions.csv")
-review_check = validate_salmon_datapackage(pkg_path, require_iris=False)
-print(review_check["semantic_validation"]["issues"])
-```
-
-### Spreadsheet
-
-Put the reviewed dataset title and description above in `metadata/dataset.csv`, the table description in the `escapement` row of `metadata/tables.csv`, and the `POP_ID` description in its dictionary row. Record the reason and source for each change beside the package. Keep contacts, rights, and uncertain meanings visibly unresolved.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-Do not use `prune = TRUE`: it removes `semantic_suggestions.csv`, which Session 4 needs. Keep the seeded evidence and the decisions together. A later live search can return different candidates; an executable script alone does not freeze a vocabulary release or make a rank number a stable identifier. Compare candidate IRIs when replaying semantic decisions.
-
-## What goes where?
-
-| Fraser Coho context | Best place |
-| --- | --- |
-| Sample purpose, confirmed provenance, coverage, contact and rights | `metadata/dataset.csv` |
-| What an `escapement` record represents | `metadata/tables.csv` |
-| Descriptions of `POP_ID`, `ANALYSIS_YR`, estimates, and dates | `metadata/column_dictionary.csv` |
-| Meanings of `ESTIMATE_METHOD` and other categorical values | `metadata/codes.csv` |
-| Incomplete sample coverage, missing estimates, interpretation questions | Context note and reviewed package README |
-
-A useful description explains the field, what each value represents, its units or format, how it was obtained, and what a reader must not assume. For this sample, `POP_ID` can be described from the dictionary and checked against the table. The precise biological scope of `NATURAL_SPAWNERS_TOTAL` requires source review; copying a plausible definition into that cell does not settle it.
+An open scientific question can travel into a draft package as an open question. A missing human explanation or an undocumented peer review cannot be replaced by asking AI to supply one. Chapter 4's build checks the review marker; the human review itself is what gives the marker meaning.
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-## Challenge 1: Make the Fraser Coho context reproducible
+## Activity: Write, reconcile and peer review
 
-1. Confirm the 30 source rows, 17 columns, and unchanged dataset/table IDs.
-2. Add the context note and source-dictionary paths to your build script.
-3. Run the same-package build with LLM review off. R generates candidates; Python restores the supplied same-sample candidates after its metadata write.
-4. Record the dataset description, table description, and `POP_ID` description above. Compare four more source descriptions with their columns; encode supported wording or record the unresolved question in your note.
-5. Inspect the generated `semantic_suggestions.csv`. Keep the `escapement.csv` data unchanged and carry this package into Session 4.
+1. **Write for 20 minutes.** Complete the six focus dictionary rows and the adult-spawner decomposition. Read all eight remaining rows and flag anything unclear. Check the units and code meanings against their cited sources; record questions where a definition is missing. Use examples from the unchanged source table.
+2. **Review for 15 minutes.** Your partner traces a source row through the graph and dictionary. Check the six focus fields, the other eight descriptions, blank handling, decimal estimates, the non-unique population/year pair, the unsupported natural-origin restriction, the supported estimate-year definition and any further year-basis claims.
+3. **Revise for 10 minutes.** Reconcile conflicting labels or relationships and record what changed. Complete the peer-review record only when the described review has actually occurred.
 
-Rerun your build script to confirm that the recorded descriptions survive. Preserve a seeded copy for review so you do not need to repeat live searches during the next exercise.
+Compare your results with the [draft dictionary](files/fraser-coho-workshop/reference/data-dictionary-working.csv) and [draft decomposition](files/fraser-coho-workshop/reference/variable-decomposition-working.csv) after your first attempt. They show a cautious working interpretation; they do not carry Bruno's or Tom's approval.
+
+**Ready for Chapter 4:** the diagram and node/edge tables agree; all 14 dictionary fields have been read; the six writing tasks and one decomposition are complete; a real reviewer and date are recorded; unresolved questions remain explicit. Keep these human-created artifacts as the baseline against which you will later compare software and AI suggestions.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
-- The same Fraser Coho source, dataset ID, table ID, and working package continue through the core workshop.
-- Source dictionaries inform review; their old IDs and annotations are not automatically accepted metadata.
-- Keep inputs, context, and accepted metadata decisions connected through one script or an explicit spreadsheet review log.
-- R semantic seeding retrieves the candidates for Session 4; Python uses supplied same-sample evidence. LLM review remains a separate opt-in.
-- Missing estimates and incomplete sample coverage must remain visible.
-- Optional transfer to a personal dataset comes after the shared publication walkthrough in Session 7.
+- Preserve source descriptions separately from your working interpretation.
+- A dictionary explains value meaning, context, representation, missingness and evidence.
+- Decomposition separates entity, property, variable, activity, result, unit, method and qualifiers.
+- Use the current source definitions for estimate year, adults excluding jacks and subdistrict; retain the unsupported natural-origin restriction as a question.
+- Complete a real human peer review before metasalmon or AI ingestion; save the baseline for later comparison.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::

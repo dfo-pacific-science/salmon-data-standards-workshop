@@ -1,58 +1,158 @@
 ---
-title: "Code Lists, SKOS, and Local Vocabulary"
-teaching: 45
-exercises: 35
+title: "Map Meanings and Compare AI Suggestions"
+teaching: 30
+exercises: 40
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- How should categorical values be documented?
-- When is SKOS the right model?
-- When should a vocabulary or ontology stay local or profile-scoped?
+- Does a suggested term express the meaning we established by hand?
+- How do we distinguish a complete variable from its components?
+- How can AI help us review without becoming the source of truth?
+- Where do we record an acceptance, rejection, or unresolved question?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Build or review `metadata/codes.csv` for categorical columns.
-- Explain SKOS as a practical way to document concept schemes and code lists.
-- Decide whether a term belongs in a shared ontology, DFO-specific ontology, or local/profile vocabulary.
+- Compare suggested mappings with the human graph, dictionary, and source evidence.
+- Review one measurement variable and its components without inventing missing meaning.
+- Record a mapping decision and rationale that another reviewer can trace.
+- Compare saved AI outputs as a common activity, with optional free-only live assessment.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Categorical values need definitions too
 
-Continue with `output/fraser-coho-example-sdp`, the same 30-row NuSEDS Fraser Coho sample. A categorical column stores values from a known set. Here `ESTIMATE_METHOD` records the method or reporting label attached to each estimate, while `ESTIMATE_CLASSIFICATION` and `ESTIMATE_STAGE` carry different kinds of information. Reviewers need those distinctions even when the stored values look readable.
 
-Use `metadata/codes.csv` when a column has controlled values. It is required when any `column_dictionary.csv` row has `column_role = categorical`. Each observed non-empty value must have exactly one matching row for its `dataset_id` + `table_id` + `column_name` + `code_value` key; do not leave observed values undocumented or duplicate that key.
+![Workflow: map and review meanings after the human description and package build.](fig/workflow-5.svg)
 
-`code_value` is required unless `vocabulary_iri` is supplied. A vocabulary-only row with a blank `code_value` documents an external vocabulary but does not cover any value observed in the data.
+## The problem: the same label can describe different things
 
-This work is language-independent: `metasalmon` and `metasalmonpy` read and write the same `metadata/codes.csv` structure.
+A [controlled vocabulary](glossary.html#controlled-vocabulary) gives a definition a reusable [IRI](glossary.html#iri). Linking to that identifier helps another system interpret our data. A convincing label alone does not establish that the definition fits.
 
-| Field | Purpose |
-| --- | --- |
-| `column_name` | Which column uses this code |
-| `code_value` | Stored value in the data |
-| `code_label` | Human-readable label |
-| `code_description` | Meaning, scope, or caveat |
-| `vocabulary_iri` | Recommended IRI for the whole vocabulary |
-| `term_iri` | Recommended IRI for the specific code concept |
+Keep your human graph, dictionary, decomposition, and `worksheets/peer-review.md` beside the package. They are the reference for this review. The same full **173-row, 14-column** source remains in `output/fraser-coho-workshop-sdp`, with dataset ID `fraser-coho-workshop` and table ID `escapement`.
 
-## Read the method values already in the sample
+Begin with `NATURAL_ADULT_SPAWNERS`. The official NuSEDS dictionary describes mature salmon excluding jacks; it does not confirm that the values are restricted to natural-origin fish. The header does not settle that distinction. Do not turn it into a natural-origin constraint because an AI response or a nearby term suggests that reading. Return to `raw_data/official-nuseds-dictionary.csv` and the source notes, including the retrieval date, and retain the question if they do not resolve it. The current dictionary may postdate the workbook used to derive this teaching file.
 
-Use `ESTIMATE_METHOD` for the shared exercise. The included sample contains these six non-empty stored values:
+## Translate the human decomposition into mapping questions
 
-| `code_value` | Sample rows | Review task |
-| --- | ---: | --- |
-| `Area Under the Curve` | 3 | Compare the prefilled procedure IRI with the source method definition. |
-| `Peak Live * Expansion` | 2 | Preserve the exact stored value and check what the expansion means. |
-| `Peak Live + Dead` | 1 | Check which observations the method combines. |
-| `Insufficient Information` | 2 | Establish what information is missing before assigning a procedure. |
-| `Not Applicable` | 12 | Check why a method is inapplicable; do not treat this as a method name. |
-| `Unknown Estimate Method` | 10 | Preserve the recorded uncertainty; do not guess a procedure. |
+A [variable](glossary.html#variable) describes what is measured; a [result](glossary.html#result) is a recorded value. Keep the variable, observation context, and result distinct in your graph and dictionary.
 
-These counts describe this teaching sample, not the full NuSEDS database. The last three labels do not justify inventing method definitions or equating them with one another. Use the source dictionary and supporting NuSEDS documentation; keep anything they do not settle as a reviewer question.
+| Review question | SDP destination | Source of the answer |
+| --- | --- | --- |
+| What complete variable does this column represent? | `column_dictionary.csv`: `term_iri` | Your supported variable definition. |
+| What property is measured? | `property_iri` | The decomposed characteristic, separate from the whole variable. |
+| What entity is it about? | `entity_iri` | The object of interest established in the human model. |
+| What supported qualifier narrows the meaning? | `constraint_iri` | Evidence for that qualifier; leave unresolved if uncertain. |
+| In what unit is the result expressed? | `unit_iri` | The unit definition and applicability to these estimates. |
+| Does aggregation belong to the variable definition? | `statistical_modifier_iri` | Evidence for a total, mean, peak, or other modifier. |
+| What thing are these records about? | `tables.csv`: `observation_unit_iri` | The object of observation; describe record context and row meaning separately. |
+
+The [field reference](field-reference.html#column-fields) explains which fields are conditional. A numeric identifier such as `POP_ID` is not a measurement merely because its stored values contain digits. Do not use measurement decomposition slots as generic graph relationships for identifiers or names.
+
+Methods belong where they apply: a table-level procedure when constant, a protocol citation when supported, or a coded field when the method varies among rows. Chapter 6 examines `ESTIMATE_METHOD`.
+
+## Inspect saved candidates before deciding
+
+The kit's `checkpoints/seeded-sdp/` contains saved candidate evidence for the same source and IDs. Read its stage notes before use. Candidates are drafts, and their retrieval date and package version matter. A saved shortlist lets the group review the same evidence even if a live vocabulary service changes.
+
+Retrieval is separate from AI assessment. A retrieval score is a ranking signal, not a calibrated probability that the mapping is right. A single returned candidate can have rank 1 simply because no alternative was returned.
+
+::::::::::::::::::::::::::::::::::::: group-tab
+
+### R
+
+The R `metasalmon` v0.5.0 review queue reads saved suggestions. It does not search or contact an AI provider:
+
+
+``` r
+pkg_path <- file.path("output", "fraser-coho-workshop-sdp")
+candidate_path <- file.path("checkpoints", "seeded-sdp")
+
+review <- metasalmon::review_semantics(
+  candidate_path,
+  columns = "NATURAL_ADULT_SPAWNERS"
+)
+review
+```
+
+Read the printed definition, its source, the target slot, and any qualification. Check the linked source against your human description. The queue prints the applicable acceptance call; copy it only after your decision. Do not assume the same rank or candidate will appear in a later live search.
+
+Create `scripts/review_decisions.R` with the queue construction above and your actual decisions. For an acceptance, paste the call printed for the chosen candidate and write a preceding comment recording your reason and source. `accept_suggestion()` has no `reason` argument in this pinned release. A rejection can store its reason directly:
+
+
+``` r
+# Use this only if the constraint slot exists in the displayed queue and
+# your source review found its entire shortlist unsuitable.
+# Replace the placeholder with your own reason before running it.
+review <- metasalmon::reject_suggestion(
+  review,
+  column = "NATURAL_ADULT_SPAWNERS",
+  role = "constraint",
+  reason = "<record the specific unsupported assumption and source question>"
+)
+
+# Apply only the decisions recorded in review to the classroom draft.
+# This writes metadata and retained review evidence; it preserves the data CSV.
+metasalmon::apply_sdp_semantics(pkg_path, review)
+```
+
+A rejection clears that semantic slot. Leaving a decision open is also valid; record the remaining question. Run the decision script against the preserved candidate evidence when replaying this review, rather than rebuilding over the edited package.
+
+### Python
+
+The pinned `metasalmonpy` v0.4.0 has no native equivalents of R's `review_semantics()`, `accept_suggestion()`, `reject_suggestion()`, or `apply_sdp_semantics()`. Use the same saved candidate evidence and human decision process:
+
+```python
+from pathlib import Path
+import pandas as pd
+
+candidates = pd.read_csv(
+    Path("checkpoints") / "seeded-sdp" / "semantic_suggestions.csv",
+    dtype=str,
+    keep_default_na=False,
+)
+print(candidates.loc[
+    candidates["column_name"].eq("NATURAL_ADULT_SPAWNERS")
+].to_string(index=False))
+```
+
+For a supported decision, use `target_sdp_file`, `target_sdp_field`, the dataset/table/column keys, and any code value to identify the exact metadata cell. Record the selected IRI or rejection, reason, reviewer, and source in your review notes. A changed cell alone does not preserve the reasoning. Preserve the current package before metadata editing, and use the package writer or an R collaborator to keep the generated descriptor consistent with the CSVs.
+
+Do not call missing R-style functions in Python. The saved candidate evidence keeps this exercise reproducible while those review APIs are unavailable in v0.4.0. Revisit this lane when a pinned Python release provides the required review workflow and passes the same-source exercises.
+
+### Spreadsheet
+
+Open `checkpoints/seeded-sdp/semantic_suggestions.csv` beside your working dictionary and the draft's metadata CSVs. Filter to `NATURAL_ADULT_SPAWNERS`, then inspect one candidate and its target field.
+
+Record the exact target, the candidate considered, your decision, the reason, your name, and the evidence in your review notes. Edit the draft's existing target field only when the decision is supported. Do not strip a `REVIEW:` prefix merely to make the cell look complete. An R or Python collaborator updates the descriptor and runs validation after your metadata edits.
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+An empty queue is not a completed package. The queue contains returned suggestions; it does not prove that every necessary target was found, every definition was reviewed, or all publication facts are present.
+
+## Everyone compares the saved AI assessment
+
+[AI](glossary.html#ai) can point out missing context or propose a decomposition. The human artifacts come first so you can test those proposals against an independent interpretation instead of accepting fluent text as evidence.
+
+Open `ai/README.md` in the kit and use the recorded outputs it identifies. Read the input context, provider/model identity, run date, and success or failure status. Compare actual saved responses; do not treat an example prompt, a failed request, or a facilitator's hypothetical response as a completed model run. If a saved response is unavailable, record that limitation and perform the source-and-candidate review with the material that is present.
+
+The common recording is `ai/recorded-assessment.md`, produced by the Codex authoring assistant and preserved as such. `ai/recorded-suggestions.csv` gives its individually numbered propositions, and `ai/comparison-worksheet.csv` leaves your human decisions blank. This is an actual authoring-assistant response, not a successful OpenRouter run or native `semantic_llm_assessments` output. Keep those origins distinct when comparing a later live result.
+
+Choose from the recorded propositions about natural origin (AI02), activity and result (AI04), year basis (AI05), method (AI07), missingness (AI08), and repeated population-year pairs (AI10). For the common comparison, each pair answers:
+
+1. Which parts agree with the human graph and dictionary, and on what evidence?
+2. Did the response confuse a variable with a result, an entity with an identifier, or a method with a property?
+3. Did it assign a meaning to “natural,” a blank, or `RUN_TYPE = 1` that the sources do not establish?
+4. Which suggestion would you retain, revise, reject, or leave unresolved?
+
+Record the model's suggestion separately from the final human decision. Agreement among models is not source confirmation.
+
+## Optional: run a free live assessment
+
+Recheck that your diagram, dictionary, decomposition, and peer review are complete before a live call. Read the payload and the provider information in `ai/README.md`; only use the approved public teaching material. A live AI request sends that context to the provider.
+
+The kit's optional scripts use the fixed **`openrouter/free` route** and do not fall back to a paid model. Free availability and rate limits can change. If no suitable free route is available or the request fails, use the saved comparison activity and keep the failure visible.
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
@@ -60,98 +160,47 @@ These counts describe this teaching sample, not the full NuSEDS database. The la
 
 
 ``` r
-# fraser_coho is the unchanged input loaded in scripts/build_sdp.R.
-fraser_coho |>
-  dplyr::count(ESTIMATE_METHOD, name = "sample_rows")
-
-pkg <- read_salmon_datapackage(pkg_path)
-pkg$codes |>
-  dplyr::filter(
-    dataset_id == "fraser-coho-example",
-    table_id == "escapement",
-    column_name == "ESTIMATE_METHOD"
-  )
+# Follow ai/README.md for the explicit opt-in and runtime credential setup.
+# Read the script and prepared payload before choosing to send the request.
+source("scripts/review_ai.R")
 ```
+
+Supplying context to metasalmon does not itself authorize an AI call. Package-native LLM review requires its explicit `llm_assess = TRUE` opt-in. Choosing to run this optional comparison script enables that setting and sends the prepared request.
 
 ### Python
 
-```python
-from metasalmonpy import read_salmon_datapackage
-
-print(fraser_coho["ESTIMATE_METHOD"].value_counts(dropna=False))
-
-pkg = read_salmon_datapackage(pkg_path)
-method_codes = pkg["codes"].loc[
-    (pkg["codes"]["dataset_id"] == "fraser-coho-example")
-    & (pkg["codes"]["table_id"] == "escapement")
-    & (pkg["codes"]["column_name"] == "ESTIMATE_METHOD")
-]
-print(method_codes)
+```bash
+# Follow ai/README.md for explicit opt-in and runtime credential setup.
+python scripts/review_ai.py
 ```
+
+The comparison script does not imply that Python's missing native semantic-review APIs have shipped. Review the resulting assessment against your human artifacts before changing package metadata.
 
 ### Spreadsheet
 
-Open `raw_data/nuseds-fraser-coho-sample.csv` read-only and list the distinct `ESTIMATE_METHOD` values. Open the package's `metadata/codes.csv` and filter to dataset `fraser-coho-example`, table `escapement`, and column `ESTIMATE_METHOD`. Compare the six observed values with those code rows.
+The saved-output activity gives you the same comparison task without an API account. For an optional live demonstration, follow the facilitator's submitted payload and returned response, then make your own documented review decision. An account or API key is not a prerequisite for completing this chapter.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-Package creation may already have mapped recognized NuSEDS methods. Session 4 explained why these crosswalk rows can bypass the semantic queue. Review them here, including their descriptions and IRIs. Preserve the literal `code_value` used in the data; improve its label or description in metadata rather than recoding the raw CSV.
-
-## SKOS in plain language
-
-Keep three related ideas separate:
-
-- a **code list** records the allowed stored values for one data column;
-- a **vocabulary** is a maintained list of reusable terms and definitions;
-- an **ontology** is a maintained set of concepts and definitions that also records relationships among them.
-
-SKOS is a way to publish controlled vocabularies: lists of concepts, labels, definitions, and relationships. It is usually the right pattern for:
-
-- code values;
-- method bins;
-- status categories;
-- local policy or program categories;
-- labels that people need to review and govern.
-
-SKOS is not a full logical model of the world. That is why it is often easier and safer for operational code lists.
-
-## Shared, DFO-specific, or local?
-
-Use this decision path before proposing a new shared term.
-
-| If the term is... | Put it first in... |
-| --- | --- |
-| stable, policy-neutral, and likely useful across organizations | shared Salmon Domain Ontology (`smn:`) |
-| specific to DFO policy, operations, or stewardship practice | GC DFO Salmon Ontology or DFO profile |
-| specific to one project, program, workbook, or local workflow | local/profile vocabulary or ontology |
-| unclear or poorly sourced | package description and reviewer question |
-
-The safe default is local/profile first when reuse is uncertain. SKOS is usually best for local code lists, status categories, and method bins. OWL should be reserved for durable formal structure. Terms can be promoted later when there is evidence that other groups need them.
+Keep API keys out of worksheets, scripts, saved outputs, and screenshots. The response is review evidence; it is not an instruction to modify the package automatically.
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-## Challenge 1: Build a code-list review table
+## Activity: make one defensible mapping decision
 
-Review `ESTIMATE_METHOD` in the shared Fraser Coho package. Use `ESTIMATE_CLASSIFICATION` as an additional comparison only if time remains.
+Use 20 minutes to compare the human decomposition with saved vocabulary candidates, and 20 minutes to compare the saved AI assessment and discuss it with a partner. A live call is an optional variation within that time.
 
-Create or improve rows for each code value:
+Produce a record containing the target column and role, proposed interpretation, evidence, candidate IRI when available, decision, reason, reviewer, and remaining question. Include one rejected or unresolved claim when the sources do not warrant it. Revisit the graph if the review exposes an unsupported relationship.
 
-- stored value;
-- label;
-- definition;
-- source or reviewer;
-- whether a shared term already exists;
-- whether the value should stay local for now.
-
-Then compare the table with the six observed values above: each must have exactly one matching row for `fraser-coho-example` / `escapement` / `ESTIMATE_METHOD` / its literal value, and that key must not be duplicated. Record supported metadata changes in `scripts/build_sdp.R` or `scripts/build_sdp.py`; spreadsheet users retain a review log. Carry the same package into Session 6.
+The useful output is a justified decision, not a filled cell count.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
-- `codes.csv` is the review surface for controlled categorical values.
-- Each observed non-empty categorical value needs exactly one matching row for its dataset/table/column/value key.
-- SKOS is usually the right model for code lists and status/method categories, but local/profile work is not always SKOS-only.
-- Do not promote local vocabulary to shared `smn:` without evidence of broad reuse.
+- The human model and source evidence are the basis for reviewing suggestions.
+- A complete variable, its components, observation context, and result are distinct.
+- Saved AI output is a common comparison activity; live AI remains optional and free-only.
+- Keep the candidate, human decision, and rationale together, including unresolved questions.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::

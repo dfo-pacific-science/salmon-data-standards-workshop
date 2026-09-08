@@ -43,3 +43,10 @@
 [gcdfo-issues]: https://github.com/dfo-pacific-science/dfo-salmon-ontology/issues/new/choose
 
 [metasalmon-example-data]: https://github.com/salmon-data-mobilization/metasalmon/blob/v0.5.0/inst/extdata/example-data-README.md
+[workshop-kit]: files/fraser-coho-workshop.zip
+[workshop-glossary]: glossary.html
+[workshop-field-reference]: field-reference.html
+[workshop-teaching-record]: reference.html#teaching-record
+[rdf-primer]: https://www.w3.org/TR/rdf11-primer/
+[openrouter-free]: https://openrouter.ai/docs/guides/routing/routers/free-router
+[ollama-quickstart]: https://docs.ollama.com/quickstart
