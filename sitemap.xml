@@ -13,6 +13,9 @@
     <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/advanced.html</loc>
+  </url>
+  <url>
     <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/aio.html</loc>
   </url>
   <url>
@@ -23,6 +26,48 @@
   </url>
   <url>
     <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/entrypoints.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/extended-practice.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/field-reference.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/files/fraser-coho-workshop/README.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/files/fraser-coho-workshop/ai/README.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/files/fraser-coho-workshop/ai/recorded-assessment.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/files/fraser-coho-workshop/publication/README.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/files/fraser-coho-workshop/raw_data/PROVENANCE.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/files/fraser-coho-workshop/reference/dataset-graph-working.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/files/fraser-coho-workshop/reference/metamodel-source-notes.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/files/fraser-coho-workshop/reference/scientific-review-packet.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/files/fraser-coho-workshop/validation/README.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/files/fraser-coho-workshop/validation/unseeded-code-iri-issue.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/files/fraser-coho-workshop/validation/upstream-validator-issue.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/glossary.html</loc>
   </url>
   <url>
     <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/images.html</loc>
@@ -43,6 +88,9 @@
     <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/LICENSE.html</loc>
   </url>
   <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/advanced.html</loc>
+  </url>
+  <url>
     <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/aio.html</loc>
   </url>
   <url>
@@ -53,6 +101,15 @@
   </url>
   <url>
     <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/entrypoints.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/extended-practice.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/field-reference.html</loc>
+  </url>
+  <url>
+    <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/glossary.html</loc>
   </url>
   <url>
     <loc>https://salmon-data-mobilization.github.io/salmon-data-standards-workshop/instructor/images.html</loc>

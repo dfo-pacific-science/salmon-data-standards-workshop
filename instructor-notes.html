@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<title>Creating Salmon Data Packages With Shared Standards: Instructor Notes</title>
+<title>Salmon Data Standards Workshop: Instructor Notes</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="assets/themetoggle.js"></script><link rel="stylesheet" type="text/css" href="assets/styles.css">
 <script src="assets/scripts.js" type="text/javascript"></script><!-- mathjax --><!-- NOTE: https://docs.mathjax.org/en/latest/output/mathml.html#mathml-support --><!-- Changes from V2 to V4: https://mathjax.github.io/MathJax-demos-web/convert-configuration/convert-configuration.html
@@ -99,7 +99,7 @@
       <img class="small-logo" alt="Salmon Data Package workshop lesson" src="assets/images/incubator-logo-sm.svg">
 </div>
     <div class="lesson-title-md">
-      Creating Salmon Data Packages With Shared Standards
+      Salmon Data Standards Workshop
     </div>
     <div class="search-icon-sm">
       <!-- TODO: do not show until we have search
@@ -110,7 +110,7 @@
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 <li class="nav-item">
           <span class="lesson-title">
-            Creating Salmon Data Packages With Shared Standards
+            Salmon Data Standards Workshop
           </span>
         </li>
         <li class="nav-item">
@@ -127,7 +127,11 @@
             More <i data-feather="chevron-down"></i>
           </button>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+<li><a class="dropdown-item" href="glossary.html">Glossary</a></li>
+<li><a class="dropdown-item" href="field-reference.html">Field Reference</a></li>
 <li><a class="dropdown-item" href="reference.html">Reference</a></li>
+<li><a class="dropdown-item" href="extended-practice.html">Extended Practice With the Fraser Coho Dataset</a></li>
+<li><a class="dropdown-item" href="advanced.html">Optional Extension: From the Dataset Graph to Ontology Work</a></li>
           </ul>
 </li>
       </ul>
@@ -236,7 +240,7 @@
 <div class="accordion accordion-flush" id="accordionFlush2">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading2">
-        <a href="session-1.html">1. The Salmon Data Integration System</a>
+        <a href="session-1.html">1. See the Whole Journey: From NuSEDS to Reusable Data</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -248,7 +252,7 @@
 <div class="accordion accordion-flush" id="accordionFlush3">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading3">
-        <a href="session-2.html">2. Create a Draft Salmon Data Package</a>
+        <a href="session-2.html">2. Draw the Dataset Before Using Tools</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -260,7 +264,7 @@
 <div class="accordion accordion-flush" id="accordionFlush4">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading4">
-        <a href="session-3.html">3. Capture Fraser Coho Context and Rebuild the Package</a>
+        <a href="session-3.html">3. Write the Dictionary, Decompose Meanings and Review Together</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -272,7 +276,7 @@
 <div class="accordion accordion-flush" id="accordionFlush5">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading5">
-        <a href="session-4.html">4. Review Terms and Measurement Meanings</a>
+        <a href="session-4.html">4. Build the Package from Your Human Description</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -284,7 +288,7 @@
 <div class="accordion accordion-flush" id="accordionFlush6">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading6">
-        <a href="session-5.html">5. Code Lists, SKOS, and Local Vocabulary</a>
+        <a href="session-5.html">5. Map Meanings and Compare AI Suggestions</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -296,7 +300,7 @@
 <div class="accordion accordion-flush" id="accordionFlush7">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading7">
-        <a href="session-6.html">6. Route Term Gaps, Export EML, and Plan Catalog Publication</a>
+        <a href="session-6.html">6. Explain Code Values and Route Unresolved Meanings</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -308,19 +312,7 @@
 <div class="accordion accordion-flush" id="accordionFlush8">
   <div class="accordion-item">
     <div class="accordion-header" id="flush-heading8">
-        <a href="session-7.html">7. Optional: Apply the Workflow to Your Own Dataset</a>
-    </div>
-<!--/div.accordion-header-->
-
-  </div>
-<!--/div.accordion-item-->
-</div>
-<!--/div.accordion-flush-->
-
-<div class="accordion accordion-flush" id="accordionFlush9">
-  <div class="accordion-item">
-    <div class="accordion-header" id="flush-heading9">
-        <a href="bonus-session.html">8. Optional Extension: Concept Mapping Game</a>
+        <a href="session-7.html">7. Validate, Inspect the Test Record, and Explain Publication</a>
     </div>
 <!--/div.accordion-header-->
 
@@ -353,7 +345,11 @@
                       <li>
                         <a href="profiles.html">Learner Profiles</a>
                       </li>
-                      <li><a href="reference.html">Reference</a></li>
+                      <li><a href="glossary.html">Glossary</a></li>
+<li><a href="field-reference.html">Field Reference</a></li>
+<li><a href="reference.html">Reference</a></li>
+<li><a href="extended-practice.html">Extended Practice With the Fraser Coho Dataset</a></li>
+<li><a href="advanced.html">Optional Extension: From the Dataset Graph to Ontology Work</a></li>
                     </ul>
 </div>
                 </div>
@@ -384,390 +380,260 @@
         <h1>Instructor Notes</h1>
         
 
-<section><h2 class="section-heading" id="teaching-stance">Teaching stance<a class="anchor" aria-label="anchor" href="#teaching-stance"></a>
+<section><h2 class="section-heading" id="the-teaching-contract">The teaching contract<a class="anchor" aria-label="anchor" href="#the-teaching-contract"></a>
 </h2>
 <hr class="half-width">
-<p>Start with the end goal and the shared NuSEDS Fraser Coho sample. In
-the first five minutes, say:</p>
-<blockquote>
-<p>How far you take this workflow depends on your goals. The common
-biologist pathway is FAIR publication through a reviewed Salmon Data
-Package, validated EML, and a guarded catalog plan. The pathway can
-extend to proposing missing shared terms or planning how organizational
-terminology will be governed and mapped to the Salmon Domain Ontology. A
-live upload is a separate, authorized publication action.</p>
-</blockquote>
-<p>Everyone uses <code>nuseds-fraser-coho-sample.csv</code> from first
-inspection through the final dry run: 30 rows, 17 columns, and selected
-years from 1996–2024. Introduce own data only in optional Session 7,
-after the shared workflow. No learner-owned dataset is required.</p>
-<p>The first hands-on win is still a package that someone else can
-review. The first code example should only generate templates; do not
-turn it into a full semantic or publication demonstration.</p>
-<p>Before using specialized language, say:</p>
-<blockquote>
-<p>An ontology is a maintained set of concepts and definitions that also
-records how the concepts relate. Biologists can complete the common
-pathway by reusing shared definitions; data stewards and digital
-librarians can follow the advanced pathway for organizational
-vocabularies, ontologies, and bridge mappings.</p>
-</blockquote>
-<p>Say “link to a shared definition” before introducing “semantic link”
-or “semantic mapping.” Present R and Python as parallel language lanes
-while naming the current Session 4 Python review gap. Give spreadsheet
-participants a generated package from the same sample and point them to
-the no-code subsection.</p>
-<p>Repeat these messages throughout:</p>
-<ul>
-<li>A clear description is better than a forced IRI.</li>
-<li>A decision that is not in the script did not happen. The pasted call
-is the audit trail.</li>
-<li>Not every field needs an ontology term.</li>
-<li>Measurement columns deserve the most careful semantic review.</li>
-<li>Local context should be preserved and mapped, not renamed away.</li>
-<li>New-term requests are evidence packages for maintainers.</li>
-<li>A dataset may contain several tables; a flat file contains one
-rectangular table.</li>
-<li>The EML sidecar records facts and authority that cannot be inferred
-safely.</li>
-<li>A credential-free KNB dry run is different from a persistent live
-upload.</li>
-</ul></section><section><h2 class="section-heading" id="one-hour-introduction">One-hour introduction<a class="anchor" aria-label="anchor" href="#one-hour-introduction"></a>
+<p>Use the same <strong>173-row, 14-column NuSEDS Fraser Coho 2023–2024
+dataset</strong> for the whole workshop. The source is
+<code>nuseds-fraser-coho-2023-2024.csv</code>, the dataset ID is
+<code>fraser-coho-workshop</code>, and the table ID is
+<code>escapement</code>. The measurement is
+<code>NATURAL_ADULT_SPAWNERS</code>. Begin with human interpretation;
+introduce packaging software only after the graph, dictionary, and peer
+review.</p>
+<p>Show the destination in Chapter 1, then return to the raw data.
+Participants should understand why definitions, context, and
+relationships matter before they encounter identifiers or automated
+suggestions. The kit supplies the dataset for everyone.</p>
+<p>The supplied reference package is a <strong>technical draft pending
+Bruno and Tom’s domain review</strong>. Label it that way in handouts
+and demonstrations. Structural validation and a successful test upload
+are useful technical evidence; neither is an expert ruling about
+biological meanings.</p>
+</section><section><h2 class="section-heading" id="six-hours-of-teaching-and-activities">Six hours of teaching and activities<a class="anchor" aria-label="anchor" href="#six-hours-of-teaching-and-activities"></a>
 </h2>
 <hr class="half-width">
-<p>Use this when the goal is awareness and recruitment. Keep the same
-Fraser Coho sample on screen for every demonstration; invite later
-own-data practice as a next step.</p>
+<table class="table">
+<colgroup>
+<col width="23%">
+<col width="23%">
+<col width="30%">
+<col width="23%">
+</colgroup>
+<thead><tr>
+<th>Elapsed time</th>
+<th>Chapter</th>
+<th align="right">Minutes</th>
+<th>Learner result</th>
+</tr></thead>
+<tbody>
+<tr>
+<td>0:00–0:55</td>
+<td>1. Overview and endpoint tour</td>
+<td align="right">55</td>
+<td>Explain how source data, metadata, and the test record connect.</td>
+</tr>
+<tr>
+<td>0:55–1:50</td>
+<td>2. Human concept graph</td>
+<td align="right">55</td>
+<td>Draw entities, properties, observations, results, units, and methods
+with named relationships.</td>
+</tr>
+<tr>
+<td>1:50–2:55</td>
+<td>3. Human dictionary and peer review</td>
+<td align="right">65</td>
+<td>Define fields, decompose the measurement, and record review
+questions.</td>
+</tr>
+<tr>
+<td>2:55–3:35</td>
+<td>4. Build the SDP</td>
+<td align="right">40</td>
+<td>Create or inspect the same-data draft and locate the metadata
+files.</td>
+</tr>
+<tr>
+<td>3:35–4:45</td>
+<td>5. Mapping and AI comparison</td>
+<td align="right">70</td>
+<td>Compare human and recorded AI proposals and record supported
+decisions.</td>
+</tr>
+<tr>
+<td>4:45–5:15</td>
+<td>6. Codes and term gaps</td>
+<td align="right">30</td>
+<td>Describe a code meaning and draft an unresolved-term question.</td>
+</tr>
+<tr>
+<td>5:15–6:00</td>
+<td>7. Validation and test publication</td>
+<td align="right">45</td>
+<td>Interpret validation, EML, a manifest, and the teaching-record
+outcome.</td>
+</tr>
+<tr>
+<td></td>
+<td><strong>Total</strong></td>
+<td align="right"><strong>360</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Add breaks and lunch outside these six hours. Preserve the human
+graph, dictionary, and required AI comparison if discussion runs long;
+shorten optional live tool demonstrations first. Do not use installation
+or account creation time as a substitute for the review exercises.</p>
+<p>The <a href="extended-practice.html">extended practice labs</a> are
+optional follow-up work outside the 360-minute schedule. They
+investigate repeated population–year records, missingness and method
+context, code sources, a reviewed metadata edit across R and Python, and
+validation/EML/manifest evidence using the same included dataset.
+Require the actual Chapter 2–3 human work and peer review before any
+lab; do not use supplied reference answers to bypass that checkpoint.
+Pair across tools where useful and assess the stated output and
+self-check for each lab. The separate <a href="advanced.html">advanced
+ontology extension</a> formalizes a small part of the same human
+graph.</p>
+</section><section><h2 class="section-heading" id="prepare-the-kit-and-endpoint-tour">Prepare the kit and endpoint tour<a class="anchor" aria-label="anchor" href="#prepare-the-kit-and-endpoint-tour"></a>
+</h2>
+<hr class="half-width">
+<ol style="list-style-type: decimal">
+<li>Download and open the <a href="files/fraser-coho-workshop.zip">workshop kit</a>. Confirm that the
+source has 173 rows and 14 columns and that its README explains the
+source, extraction, and limitations.</li>
+<li>Check the worksheets, blank human dictionary, context notes,
+recorded AI outputs, and <code>draft-sdp</code>,
+<code>seeded-sdp</code>, and <code>reference-sdp</code> checkpoints.
+Confirm that checkpoint data retain the same rows and values. Preserve
+the raw CSV byte-for-byte; do not require separate language writers to
+produce identical CSV formatting.</li>
+<li>Run the relevant R/Python scripts in a fresh project and verify
+their documented outputs. R is pinned to metasalmon 0.5.0 and Python to
+metasalmonpy 0.4.0; use supplied candidate evidence for the documented
+Python review alternatives. Do not imply the missing R-native APIs exist
+in Python.</li>
+<li>Open the <a href="glossary.html">Glossary</a>, <a href="field-reference.html">Field reference</a>, and <a href="reference.html#teaching-record">teaching-record section</a> in the
+browser. Verify the public Test Node link and its recorded status before
+using it in the opening tour. If the record is unavailable, show the
+supplied local artifacts and state the actual status.</li>
+<li>Prepare one example where a plausible label or AI explanation
+requires source evidence. Do not present a synthetic teaching response
+as though it were a captured provider output; the kit must identify what
+was recorded, when, and from which model or process.</li>
+<li>Retain evidence for creator, contact, licence, provenance, and
+export decisions. Separate the source dataset’s creators from the
+workshop compiler and the authorized test publisher.</li>
+</ol>
+<p>The test deposit is authorized under Brett’s identity and scoped to
+the KNB Test Node. Learners do not need credentials and must not copy a
+token from a demonstration. No production deposit is included in this
+workshop. Update the teaching-record section only from an actual
+observed outcome and receipt.</p>
+</section><section><h2 class="section-heading" id="facilitate-the-human-work">Facilitate the human work<a class="anchor" aria-label="anchor" href="#facilitate-the-human-work"></a>
+</h2>
+<hr class="half-width">
+<p>For mixed groups, rotate four roles: source reader, graph or
+dictionary editor, skeptical reviewer, and recorder. Spreadsheet users
+can lead source interpretation and peer review; R and Python users
+should complete those activities before automating them.</p>
+<p>In Chapter 2, ask what each arrow claims. Keep the observation
+activity separate from its result, the property from the entity, and the
+method from the variable meaning. A sketch can contain useful open
+questions. It need not become a formal ontology during the exercise.</p>
+<p>In Chapter 3, ask another pair to explain a field using only the
+draft definition and cited context. Record where their interpretation
+differs. Check proposed row grain and keys against the source records,
+and preserve missing estimates as missing. Do not silently resolve
+uncertainty because the reference worksheet supplies a plausible
+answer.</p>
+</section><section><h2 class="section-heading" id="facilitate-the-ai-comparison">Facilitate the AI comparison<a class="anchor" aria-label="anchor" href="#facilitate-the-ai-comparison"></a>
+</h2>
+<hr class="half-width">
+<p>Comparing human reasoning with the supplied recorded AI outputs is a
+required activity for every lane. Have learners identify one agreement,
+one disputed or unsupported claim, the evidence that would resolve it,
+and a decision or open question. Their own dictionary must be available
+before they see the AI response.</p>
+<p>Live requests are optional. OpenRouter practice uses an explicitly
+free model and no paid fallback; no credit purchase is required or
+requested. Free endpoints may be unavailable or rate-limited, so the
+recorded comparison is always available. Ollama is an optional local
+route for participants who have prepared it. Do not spend the group
+session troubleshooting an individual installation.</p>
+<p>A fluent response, retrieval rank, or numerical score is not
+approval. Keep source excerpts, human interpretations, retrieval
+candidates, and AI proposals visibly distinguishable.</p>
+</section><section><h2 class="section-heading" id="checks-at-each-handoff">Checks at each handoff<a class="anchor" aria-label="anchor" href="#checks-at-each-handoff"></a>
+</h2>
+<hr class="half-width">
 <table class="table">
 <colgroup>
 <col width="50%">
 <col width="50%">
 </colgroup>
 <thead><tr>
-<th>Time</th>
-<th>Activity</th>
+<th>After chapter</th>
+<th>Check before continuing</th>
 </tr></thead>
 <tbody>
 <tr>
-<td>0:00-0:05</td>
-<td>Introduce the tiered destinations; focus this format on reviewed SDP
--&gt; valid EML -&gt; guarded catalog plan</td>
+<td>1</td>
+<td>Participants can name the shared dataset and distinguish a test
+record from production publication.</td>
 </tr>
 <tr>
-<td>0:05-0:15</td>
-<td>Introduce the integration system and give a high-level tour of the
-SDP structure</td>
+<td>2</td>
+<td>The graph names relationships and leaves unsupported claims as
+questions.</td>
 </tr>
 <tr>
-<td>0:15-0:20</td>
-<td>Confirm the project plus <code>raw_data/</code>,
-<code>scripts/</code>, and <code>output/</code> before code</td>
+<td>3</td>
+<td>The dictionary covers the fields, includes a measurement
+decomposition, and records peer-review feedback.</td>
 </tr>
 <tr>
-<td>0:20-0:32</td>
-<td>Run the simple <code>create_sdp()</code> template-generation
-example; point out the R, Python, and spreadsheet lanes</td>
+<td>4</td>
+<td>Dataset/table IDs and 173×14 source values remain unchanged in the
+package.</td>
 </tr>
 <tr>
-<td>0:32-0:45</td>
-<td>Review key field definitions, one measurement row, and one code
-row</td>
+<td>5</td>
+<td>Each comparison records evidence and a human decision or question;
+AI output is not silently accepted.</td>
 </tr>
 <tr>
-<td>0:45-0:55</td>
-<td>Trace SDP fields into EML and inspect a credential-free KNB dry-run
-manifest</td>
+<td>6</td>
+<td>A stored code has a source-backed description, and any gap is a
+draft request rather than an unapproved submission.</td>
 </tr>
 <tr>
-<td>0:55-1:00</td>
-<td>Explain rerun safety, authorization boundaries, and next steps</td>
+<td>7</td>
+<td>Participants distinguish review validation, strict validation, EML
+validity, domain review, and the actual test upload outcome.</td>
 </tr>
 </tbody>
-</table>
-<p>Do not teach ontology editing in the one-hour format.</p>
-</section><section><h2 class="section-heading" id="full-day-workshop">Full-day workshop<a class="anchor" aria-label="anchor" href="#full-day-workshop"></a>
-</h2>
-<hr class="half-width">
-<table class="table">
-<colgroup>
-<col width="50%">
-<col width="50%">
-</colgroup>
-<thead><tr>
-<th>Time</th>
-<th>Activity</th>
-</tr></thead>
-<tbody>
-<tr>
-<td>0:00-0:30</td>
-<td>Integration-system overview, dataset/table/flat-file definitions,
-and high-level package anatomy</td>
-</tr>
-<tr>
-<td>0:30-0:45</td>
-<td>Create/open project and confirm <code>raw_data/</code>,
-<code>scripts/</code>, and <code>output/</code>
-</td>
-</tr>
-<tr>
-<td>0:45-1:30</td>
-<td>Generate or open the shared Fraser Coho draft package and inspect
-its structure</td>
-</tr>
-<tr>
-<td>1:30-2:15</td>
-<td>Save the reproducible sample build and peer-review package
-structure</td>
-</tr>
-<tr>
-<td>2:15-3:00</td>
-<td>Read the sample source notes, capture context, and seed semantic
-candidates</td>
-</tr>
-<tr>
-<td>3:00-4:00</td>
-<td>Review Fraser Coho measurement semantics</td>
-</tr>
-<tr>
-<td>4:00-4:45</td>
-<td>Review the sample code lists and SKOS/profile choices</td>
-</tr>
-<tr>
-<td>4:45-5:15</td>
-<td>Route sample term gaps and draft requests</td>
-</tr>
-<tr>
-<td>5:15-6:00</td>
-<td>Strict validation, sample EML export, KNB dry run, and later-version
-workflow</td>
-</tr>
-<tr>
-<td>6:00-6:45</td>
-<td>Optional Session 7: start a separate own-data package or make a
-transfer plan</td>
-</tr>
-</tbody>
-</table>
-<p>These are 6–6¾ hours of teaching and activities; add breaks and lunch
-to the delivery schedule. Allow 30–45 minutes for optional Session 7. If
-time is tight, retain the shared end-to-end workflow and offer own-data
-practice as follow-up.</p>
-</section><section><h2 class="section-heading" id="mixed-audience-facilitation">Mixed-audience facilitation<a class="anchor" aria-label="anchor" href="#mixed-audience-facilitation"></a>
-</h2>
-<hr class="half-width">
-<p>Spreadsheet participants use the canonical metadata CSVs from a
-facilitator-generated package of the same Fraser Coho sample, rather
-than assembling a different blank-template example. Automated
-validation, EML export, manifest generation, and publication currently
-require R or Python; explain that boundary without treating either code
-implementation as primary.</p>
-<p>Recommended table roles:</p>
-<ul>
-<li>source reader: checks the supplied dictionary and notes for evidence
-about meaning;</li>
-<li>package editor: edits the metadata CSV cells;</li>
-<li>reviewer: asks what could be misunderstood;</li>
-<li>mapper: checks suggestions and records gaps.</li>
-</ul></section><section><h2 class="section-heading" id="checkpoint-prompts">Checkpoint prompts<a class="anchor" aria-label="anchor" href="#checkpoint-prompts"></a>
-</h2>
-<hr class="half-width">
-<p>After Session 1:</p>
-<ul>
-<li>Can another person find the data table?</li>
-<li>Can they tell what each row represents?</li>
-<li>Can learners distinguish a dataset, table, flat file, and
-workbook?</li>
-<li>Are required metadata blanks visible?</li>
-<li>Can learners explain an ontology as shared concepts, definitions,
-and relationships?</li>
-<li>Can learners name the end product and explain why EML needs an
-explicit mapping sidecar?</li>
-</ul>
-<p>After Session 2:</p>
-<ul>
-<li>Was the project and folder layout ready before the demo?</li>
-<li>Did the chosen R or Python path generate
-<code>output/fraser-coho-example-sdp</code>, or did the spreadsheet path
-open that same facilitator-generated sample package?</li>
-<li>Are the unchanged CSV and source dictionary under
-<code>raw_data/</code>?</li>
-<li>Can learners explain that Sessions 2–6 keep using this sample and
-own-data transfer is optional in Session 7?</li>
-<li>Which fields still contain placeholders or <code>REVIEW:</code>
-suggestions?</li>
-</ul>
-<p>After Session 3:</p>
-<ul>
-<li>Are the prepared source data and context files together and
-unchanged under <code>raw_data/</code>, reproducible R/Python builds
-under <code>scripts/</code>, and generated packages under
-<code>output/</code>?</li>
-<li>Can learners read
-<code>raw_data/nuseds-fraser-coho-sample.csv</code> using a path
-relative to the project root?</li>
-<li>Do the build and metadata consistently identify dataset
-<code>fraser-coho-example</code> and table <code>escapement</code>?</li>
-<li>Have they distinguished facts supported by the source dictionary
-from questions that remain unresolved?</li>
-<li>Is enough context present to prevent obvious misuse?</li>
-<li>Can they explain what an unsafe rerun could overwrite and how a new
-version protects reviewed work?</li>
-</ul>
-<p>After Session 4:</p>
-<ul>
-<li>Which measurement mappings are accepted?</li>
-<li>Which are rejected, and is the reason recorded in the script rather
-than only in the room?</li>
-<li>Can a learner point at the line in <code>scripts/build_sdp.R</code>
-that made each decision, and rerun it?</li>
-<li>Are units treated separately from I-ADOPT roles, statistical
-modifiers used only for aggregations, and methods placed at the table,
-protocol, or code level rather than in the dictionary?</li>
-<li>Can they say what the review queue does <em>not</em> show them?</li>
-</ul>
-<p>After Sessions 5 and 6:</p>
-<ul>
-<li>Which terms are shared candidates?</li>
-<li>Which are DFO-specific?</li>
-<li>Which should stay local/profile?</li>
-<li>Is there enough evidence to make a useful request?</li>
-<li>Did strict validation pass before EML export?</li>
-<li>Which facts came directly from SDP, and which required
-<code>eml-mapping.yml</code>?</li>
-<li>Was catalog work a dry run or an authorized live upload?</li>
-<li>If updating an older package, was a new version written instead of
-overwriting reviewed or published state?</li>
-</ul>
-<p>After optional Session 7:</p>
-<ul>
-<li>Is own-data work separate from the shared sample, with its own
-input, build script, and output folder?</li>
-<li>Has the learner explained the new table’s row meaning and recorded
-one unresolved question?</li>
-<li>Have they reviewed which decisions transfer, instead of copying
-Fraser Coho mappings into unrelated data?</li>
-</ul></section><section><h2 class="section-heading" id="common-pitfalls">Common pitfalls<a class="anchor" aria-label="anchor" href="#common-pitfalls"></a>
+</table></section><section><h2 class="section-heading" id="common-corrections">Common corrections<a class="anchor" aria-label="anchor" href="#common-corrections"></a>
 </h2>
 <hr class="half-width">
 <ul>
-<li>Learners try to fill every semantic field. Redirect to “measurements
-first.”</li>
-<li>Learners trust <code>REVIEW:</code> suggestions. Ask them to read
-the definition and scope.</li>
-<li>Learners read the retrieval score as a confidence score. It is
-neither. <code>AREA</code> in the shared example retrieves an ENVO body
-of water at score 9.35 and is wrong; use it as the worked
-counterexample.</li>
-<li>Learners assume <code>rank = 1</code> was the best of several. In a
-one-shot seeded package each slot’s shortlist is one candidate deep, so
-<code>rank = 1</code> is usually the only rank there is. Show them
-<code>Ranks available: 1.</code>
-</li>
-<li>Learners decide in the console and never paste the call into the
-script. That is the spreadsheet problem in a new costume; stop and have
-them paste before moving on.</li>
-<li>Learners treat an empty review queue as a finished package. The
-queue shows shortlists, not gaps; the validation report is the
-authority.</li>
-<li>Groups debate ontology classes too early. Bring them back to the
-package row, column, code value, or caveat.</li>
-<li>Local method bins get proposed as shared terms. Ask whether another
-organization would use the same definition.</li>
-<li>Participants add extra columns to canonical metadata CSVs. Put extra
-context in the README or sidecar notes instead.</li>
-<li>Participants call a workbook, sheet, dataset, and table the same
-thing. Ask what the whole collection is, how many rectangular tables it
-contains, and what one row means in each.</li>
-<li>Participants expect NetCDF to work because Excel workbooks do.
-Explain that multi-sheet tabular input is different from
-multidimensional scientific arrays.</li>
-<li>Participants rerun <code>create_sdp(..., overwrite = TRUE)</code>
-after manual edits. Stop and read the reviewed package or write a new
-versioned folder.</li>
-<li>Participants assume an EML file can be made by renaming another XML
-file. Show schema validation and the sidecar requirements.</li>
-<li>Participants treat <code>public = FALSE</code> as a disposable
-server-side draft. A live KNB call still creates persistent production
-objects; use a local dry run for teaching.</li>
-</ul></section><section><h2 class="section-heading" id="facilitator-preparation">Facilitator preparation<a class="anchor" aria-label="anchor" href="#facilitator-preparation"></a>
+<li>A blank estimate is not zero; an analysis year is not automatically
+a survey date.</li>
+<li>A row is not automatically one field observation; document what this
+source record represents.</li>
+<li>A method describes how a value was obtained. A statistical modifier
+describes what a reported summary means.</li>
+<li>One first-ranked candidate may be the only candidate. Read its
+definition and scope.</li>
+<li>An empty review queue does not prove that all required metadata are
+filled.</li>
+<li>Rerunning a build may replace generated edits. Preserve the
+worksheet and record accepted decisions in the script or review
+log.</li>
+<li>A public Test Node object is a test publication, and the reference
+remains pending Bruno and Tom’s review.</li>
+</ul></section><section><h2 class="section-heading" id="maintaining-the-lesson">Maintaining the lesson<a class="anchor" aria-label="anchor" href="#maintaining-the-lesson"></a>
 </h2>
 <hr class="half-width">
-<p>Before delivery:</p>
-<ul>
-<li>use exactly the bundled <code>nuseds-fraser-coho-sample.csv</code>
-throughout; do not substitute the separate 173-row
-<code>nuseds-fraser-coho-2023-2024.csv</code> partway through;</li>
-<li>prepare an RStudio Project containing <code>raw_data/</code>,
-<code>scripts/</code>, and <code>output/</code>. Session 2 copies the
-CSV and <code>column_dictionary.csv</code> renamed
-<code>nuseds-fraser-coho-source-dictionary.csv</code> from the installed
-package into <code>raw_data/</code>;</li>
-<li>give spreadsheet learners those same two source files and a
-generated <code>output/fraser-coho-example-sdp</code> folder. Keep the
-source dictionary as review evidence: its legacy IDs and annotations
-must not replace the generated metadata directly;</li>
-<li>prepare the reproducible sample build at
-<code>scripts/build_sdp.R</code> or <code>scripts/build_sdp.py</code>,
-using dataset ID <code>fraser-coho-example</code>, table ID
-<code>escapement</code>, and
-<code>output/fraser-coho-example-sdp</code>;</li>
-<li>prepare the Session 3 context-note activity at
-<code>raw_data/fraser-coho-context.md</code>, distinguishing
-source-supported descriptions, teaching notes, and unresolved
-questions;</li>
-<li>install the pinned releases — R/<code>metasalmon</code>
-<strong>v0.5.0</strong> and Python/<code>metasalmonpy</code>
-<strong>v0.4.0</strong>, per <code>learners/setup.md</code> — and verify
-the examples in each language being taught. The two numbers differ on
-purpose: Session 4’s review flow shipped in metasalmon 0.5.0 and has no
-Python port yet;</li>
-<li>prepare the <code>NATURAL_SPAWNERS_TOTAL</code> measurement review
-using the sample source notes;</li>
-<li>prepare a seeded checkpoint of the same sample before teaching if
-vocabulary lookup is slow or unavailable. Build separate seeded,
-reviewed, and EML-ready checkpoints with the same dataset/table IDs,
-rows, and values, label their stage clearly, and retain the build/review
-decisions that produced each one. Session 4’s native queue review does
-not need new network calls;</li>
-<li>supply the R-seeded <code>semantic_suggestions.csv</code> as
-<code>raw_data/fraser-coho-semantic_suggestions.csv</code> for Python
-learners, recording the package version and lookup date. Session 3
-validates its sample IDs and restores it after the local metadata write;
-direct Python seeding failed with the tested
-<code>metasalmonpy 0.4.0</code> / pandas <code>3.0.5</code>
-combination;</li>
-<li>prepare the <code>ESTIMATE_METHOD</code> code-list review from this
-same sample;</li>
-<li>prepare one unresolved term with routing rationale;</li>
-<li>if demonstrating optional LLM review, use an approved provider and
-non-sensitive context, and show how bundle decisions can be downgraded
-to manual review;</li>
-<li>prepare a strictly valid, fully reviewed checkpoint of this same
-30-row sample with real checksum-bound EML sidecars for Session 6.
-Verify that it preserves the shared input’s rows and values; metadata
-checkpoints must not silently substitute another sample. Retain sources
-for descriptive metadata and any licence or provenance claim; the
-bundled README’s fuller-example derivation does not establish the tiny
-sample’s exact extraction history. Do not fabricate facts during
-delivery;</li>
-<li>generate and review that sample checkpoint’s credential-free KNB
-dry-run manifest before teaching. If the necessary evidence or
-publication-ready metadata is unavailable, teach the failing gate and
-unresolved requirements; do not switch datasets to obtain a passing
-example;</li>
-<li>decide whether strict validation and EML export in the taught R or
-Python lane will be learner-run or instructor-led;</li>
-<li>reserve 30–45 minutes for optional Session 7. Own-data inputs go in
-<code>raw_data/own-data/</code>, builds in
-<code>scripts/build_own_sdp.R</code> or
-<code>scripts/build_own_sdp.py</code>, and output in
-<code>output/my-salmon-sdp</code>; learners without their own data make
-a transfer plan from the sample; and</li>
-<li>default to no live catalog upload. If a live demonstration is
-explicitly authorized, pre-confirm credentials, redistribution
-authority, intended access, rollback/recovery expectations, and how
-<code>published_pending_catalog</code> will be reported.</li>
-</ul></section><section id="aggregate-instructor-notes"></section>
+<p>Keep the kit, literal episode code, package pins, and field
+references aligned. When a released Python version closes a documented
+gap, verify the complete workshop path before removing the alternative.
+Run the checks in <a href="https://github.com/salmon-data-mobilization/salmon-data-standards-workshop/blob/main/docs/entrypoints.md" class="external-link">Entrypoints</a>
+and inspect rendered pages after changing headings, tables, or
+links.</p>
+</section><section id="aggregate-instructor-notes"></section>
 </div>
     </main>
 </div>
