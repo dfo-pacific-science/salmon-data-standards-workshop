@@ -1,769 +1,127 @@
 ---
-title: "Route Term Gaps, Export EML, and Plan Catalog Publication"
-teaching: 80
-exercises: 55
+title: "Explain Code Values and Route Unresolved Meanings"
+teaching: 15
+exercises: 15
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- What should I do when no existing term fits?
-- What information makes a new-term request useful?
-- How do review-state and publication-state validation differ?
-- How do reviewed SDP fields become a valid EML file?
-- How can I preview or perform a guarded KNB catalog upload?
-- How should I create a later package version without discarding reviewed metadata?
+- What does each stored code mean in this source?
+- When should a definition stay local, reuse a shared term, or become a term request?
+- What should we do when the source does not settle the meaning?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Turn unresolved mappings into a term-gap plan.
-- Route candidate terms to shared, DFO-specific, or local/profile governance.
-- Run the strict SDP validation gate before export.
-- Export the reviewed SDP as validated EML 2.2.
-- Preview an exact KNB/DataONE deposit and distinguish a dry run from a persistent live upload.
-- Write an intentional new package version from reviewed metadata.
+- Document a method value without changing the source code.
+- Distinguish an actual procedure from a reporting label or missing-information state.
+- Draft one evidence-based route for an unresolved meaning.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-```{r metasalmon-available, include = FALSE}
-# This chunk runs when the lesson is built. It proves the workshop's
-# metasalmon dependency loads, and it is what keeps
-# {metasalmon} registered as a lesson dependency for sandpaper's renv
-# machinery. The workflow chunks below are display-only (eval = FALSE): they
-# need a fully reviewed package, a completed EML sidecar, and - for the live
-# call - credentials, none of which exist at build time.
-library(metasalmon)
-```
+![Workflow: review code meanings and unresolved terms before final validation.](fig/workflow-6.svg)
 
-## A gap is not a failure
+## The problem: readable codes can still hide important distinctions
 
-Continue with the same **30-row NuSEDS Fraser Coho sample** in `output/fraser-coho-example-sdp` (dataset `fraser-coho-example`, table `escapement`). When no candidate term fits, do not force the closest match. Record the gap and decide where it belongs. The optional bring-your-own-dataset activity starts in Session 7, after this shared workflow.
+The same Fraser Coho package contains `ESTIMATE_METHOD`, `ESTIMATE_CLASSIFICATION`, `ESTIMATE_STAGE`, and `RUN_TYPE`. These columns answer different questions. A [code list](glossary.html#controlled-vocabulary) records the exact stored values and what each one means in context. The [code-field reference](field-reference.html#code-fields) explains the canonical `metadata/codes.csv` fields.
 
-The package should keep enough evidence that maintainers can understand the request without a long follow-up interview.
+Return to your graph and human dictionary before assigning a shared definition. In particular, a method label does not establish whether an estimate is absolute or relative, and a numeric-looking run-type code does not establish a biological definition.
 
-## Build a term-gap plan in your software lane
+## Inspect the method values in the unchanged source
 
-After the semantic decisions in Session 4 and the `ESTIMATE_METHOD` code-list review in Session 5, reload and validate the current package state. Keep your decisions and their supporting source notes in the build script or review log.
+`ESTIMATE_METHOD` varies by row, so its procedure information belongs with those coded values. It must not be promoted to one table-wide method merely because a single method is common.
+
+| Stored value | Rows in the 173-row source | Review question |
+| --- | ---: | --- |
+| `Area Under the Curve` | 84 | Which documented procedure does this label denote? |
+| `Peak Live * Expansion` | 39 | What is expanded, and under what assumptions? |
+| `Not Applicable` | 27 | Why is no method applicable in this record? |
+| `Combined Methods` | 12 | Which methods were combined, and where is that context recorded? |
+| `Resistivity Counter` | 4 | What procedure does the counter support? |
+| `Sonar-ARIS` | 4 | Does the source describe a method, an instrument, or both? |
+| `Sonar-DIDSON` | 1 | What procedure and instrument context are available? |
+| `Fixed Site Census` | 1 | What is counted and how? |
+| `Fence` | 1 | What operational definition accompanies this label? |
+
+These are sample counts, not claims about all NuSEDS records. `Not Applicable` is not automatically a procedure. `Combined Methods` needs context that a generic label may not supply.
 
 ::::::::::::::::::::::::::::::::::::: group-tab
 
 ### R
 
-```r
-pkg <- read_salmon_datapackage(pkg_path)
-validate_salmon_datapackage(pkg_path, require_iris = FALSE)
-```
-
-Refresh suggestions to inspect unresolved pieces. This returns candidate evidence; it does not apply a new review or replace your reviewed package on disk. Inspect the output for gaps that still exist after your recorded decisions.
-
-```r
-reviewed_dict <- suggest_semantics(
-  df = pkg$resources,
-  dict = pkg$dictionary,
-  codes = pkg$codes,
-  table_meta = pkg$tables,
-  dataset_meta = pkg$dataset
+```{r, eval = FALSE, purl = FALSE}
+pkg <- metasalmon::read_salmon_datapackage(
+  file.path("output", "fraser-coho-workshop-sdp")
 )
 
-gaps <- detect_semantic_term_gaps(reviewed_dict)
+# Inspect stored categories without changing source values.
+pkg$resources$escapement |>
+  dplyr::count(ESTIMATE_METHOD, name = "sample_rows")
 
-if (nrow(gaps) == 0) {
-  message("No unresolved term gaps; there is no request plan to render.")
-  requests <- tibble::tibble()
-  request_plan <- tibble::tibble()
-} else {
-  requests <- render_ontology_term_request(
-    gaps,
-    scope = "auto",
-    ask = FALSE,
-    profile_name = "fraser-coho-workshop"
-  )
-
-  reviewed_scopes <- requests$request_scope
-  # Review every value. For example, route a DFO-specific row explicitly:
-  # reviewed_scopes[2] <- "gcdfo"
-
-  requests <- render_ontology_term_request(
-    gaps,
-    scope = "auto",
-    ask = FALSE,
-    profile_name = "fraser-coho-workshop",
-    scope_overrides = reviewed_scopes
-  ) |>
-    dplyr::mutate(
-      ontology_repo = dplyr::if_else(
-        request_scope %in% c("smn", "gcdfo"),
-        ontology_repo,
-        NA_character_
-      )
-    )
-
-  request_plan <- requests |>
-    dplyr::select(
-      dataset_id,
-      table_id,
-      target_scope,
-      target_row_key,
-      target_sdp_field,
-      dictionary_role,
-      search_query,
-      top_non_smn_label,
-      top_non_smn_source,
-      gap_detection_basis,
-      llm_new_term_namespace,
-      llm_escalated_from,
-      placement_recommendation,
-      placement_confidence,
-      request_scope,
-      ontology_repo
-    )
-
-  request_plan
-  readr::write_csv(request_plan, file.path(pkg_path, "term-request-plan.csv"))
-}
+pkg$codes |>
+  dplyr::filter(column_name == "ESTIMATE_METHOD")
 ```
 
 ### Python
 
 ```python
 from pathlib import Path
+from metasalmonpy import read_salmon_datapackage
 
-import pandas as pd
-from metasalmonpy import (
-    detect_semantic_term_gaps,
-    read_salmon_datapackage,
-    render_ontology_term_request,
-    validate_salmon_datapackage,
+pkg = read_salmon_datapackage(
+    str(Path("output") / "fraser-coho-workshop-sdp")
 )
-
-pkg = read_salmon_datapackage(pkg_path)
-validate_salmon_datapackage(pkg_path, require_iris=False)
-
-# Use the same saved candidate evidence as Session 4; no new lookup runs.
-saved_suggestions = pd.read_csv(Path(pkg_path) / "semantic_suggestions.csv")
-gaps = detect_semantic_term_gaps(suggestions=saved_suggestions)
-
-if gaps.empty:
-    print("No structured gaps found in the saved candidates; review questions may remain.")
-    requests = pd.DataFrame()
-    request_plan = pd.DataFrame()
-else:
-    requests = render_ontology_term_request(
-        gaps,
-        scope="auto",
-        ask=False,
-        profile_name="fraser-coho-workshop",
-    )
-
-    reviewed_scopes = requests["request_scope"].tolist()
-    # Review every value. For example, route a DFO-specific row explicitly:
-    # reviewed_scopes[1] = "gcdfo"
-
-    requests = render_ontology_term_request(
-        gaps,
-        scope="auto",
-        ask=False,
-        profile_name="fraser-coho-workshop",
-        scope_overrides=reviewed_scopes,
-    )
-
-    non_repository_rows = ~requests["request_scope"].isin(
-        ["smn", "gcdfo"]
-    )
-    requests.loc[non_repository_rows, "ontology_repo"] = pd.NA
-
-    request_columns = [
-        "dataset_id",
-        "table_id",
-        "target_scope",
-        "target_row_key",
-        "target_sdp_field",
-        "dictionary_role",
-        "search_query",
-        "top_non_smn_label",
-        "top_non_smn_source",
-        "gap_detection_basis",
-        "llm_new_term_namespace",
-        "llm_escalated_from",
-        "placement_recommendation",
-        "placement_confidence",
-        "request_scope",
-        "ontology_repo",
-    ]
-
-    request_plan = requests.loc[:, request_columns]
-    print(request_plan)
-    request_plan.to_csv(
-        Path(pkg_path) / "term-request-plan.csv",
-        index=False,
-    )
+print(pkg["resources"]["escapement"]["ESTIMATE_METHOD"].value_counts(dropna=False))
+print(pkg["codes"].loc[pkg["codes"]["column_name"] == "ESTIMATE_METHOD"])
 ```
 
 ### Spreadsheet
 
-Open `semantic_suggestions.csv` and the canonical metadata CSVs. For each unresolved field or code, record the dataset, table, field, search wording, closest candidate, why it does not fit, supporting source, and proposed route (`smn`, `gcdfo`, `profile`, or defer). Keep this as a reviewable term-gap plan; spreadsheet review does not submit a request.
+Open the source read-only and filter `ESTIMATE_METHOD`, or create a pivot table in a separate workbook. Compare the observed values with the rows for `ESTIMATE_METHOD` in the draft's `metadata/codes.csv`.
+
+Keep `code_value` exactly as stored. Use `code_label` and `code_description` for the explanation, and preserve the source and review rationale in your working notes. Have a collaborator regenerate the descriptor and validate any edited package files.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-`detect_semantic_term_gaps()` combines deterministic candidate gaps with final LLM `request_new_term` decisions when LLM assessment was enabled. `gap_detection_basis` records which evidence created the gap, and `llm_escalated_from` preserves an unresolved `reject_shortlist` escalation. The deterministic R `suggest_semantics()` call shown above leaves those LLM fields blank. The Python lane reads the saved candidate CSV to avoid the pinned seeding failure described in Session 3. That CSV alone does not carry the complete set of zero-candidate targets or your later manual rejections; an empty detected-gap result does not close the questions in your review log.
+Every observed non-empty value in a categorical column needs a matching code row. A `vocabulary_iri` alone does not explain undocumented values. Do not replace a source value with a prettier label and lose the link back to the data.
 
-`render_ontology_term_request()` converts the gaps into reviewable draft payloads and proposed routes. It never submits an issue. The output is a working list, not an automatic governance decision.
+## Decide where a meaning belongs
 
-To preview the SMN and GCDFO issue bodies without posting anything:
+An [ontology](glossary.html#ontology) can express concepts and their relationships; an organization also needs authority to maintain its own definitions. Sharing a word does not mean sharing its exact meaning.
 
-::::::::::::::::::::::::::::::::::::: group-tab
-
-### R
-
-```r
-issue_preview <- if (nrow(requests) == 0) {
-  tibble::tibble()
-} else {
-  requests |>
-    dplyr::filter(request_scope %in% c("smn", "gcdfo")) |>
-    submit_term_request_issues(dry_run = TRUE)
-}
-
-issue_preview
-```
-
-### Python
-
-```python
-from metasalmonpy import submit_term_request_issues
-
-if requests.empty:
-    issue_preview = pd.DataFrame()
-else:
-    routable = requests.loc[
-        requests["request_scope"].isin(["smn", "gcdfo"])
-    ]
-    issue_preview = (
-        submit_term_request_issues(routable, dry_run=True)
-        if not routable.empty
-        else pd.DataFrame()
-    )
-
-print(issue_preview)
-```
-
-### Spreadsheet
-
-Use the term-gap plan as the draft review surface. A maintainer can turn an approved row into the relevant repository's request format later; nothing in the spreadsheet posts an issue or mints a term.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-## Routing decision
-
-Use this plain-language triage:
-
-| Route | Use when |
+| Finding | Next action |
 | --- | --- |
-| `smn` | reusable salmon science concept, stable across organizations |
-| `gcdfo` | DFO policy, operations, data stewardship, or DFO-specific concept |
-| `profile` | local code list, project method bin, status category, formal local structure, or uncertain reuse |
-| `skip` or defer | description is enough for now, or evidence is too weak |
+| An existing shared definition fits the supported local meaning | Reuse its IRI and record the evidence. |
+| A well-supported concept could be reused across organizations | Draft a request for the Salmon Domain Ontology or the appropriate shared vocabulary. |
+| The definition depends on DFO policy or NuSEDS operations | Keep the local definition explicit and consider the DFO-specific resource or a local profile. |
+| The source evidence is insufficient | Retain an unresolved question and identify the person or document that could answer it. |
 
-Treat any LLM namespace suggestion as evidence, not authority. Review `request_scope` row by row before filing or publishing anything.
+A `POP_ID` is a source-system identifier, not automatically the name of a new domain class. A label containing “natural” is not enough evidence to mint a natural-origin concept. Broadly useful concepts and locally governed definitions can be connected later with a documented mapping whose strength matches the evidence.
 
-## Useful term-request ingredients
+The packages provide `detect_semantic_term_gaps()` and `render_ontology_term_request()` to prepare candidate requests. Their suggested route is review evidence, not a governance decision. A saved suggestion CSV cannot prove that every zero-candidate target or later human rejection was included, so check it against your own unresolved-question log. Rendering a request does not submit it.
 
-A useful request includes:
+## Draft one useful request or source question
 
-- proposed label;
-- one or two sentence definition;
-- source of the definition;
-- example values or rows;
-- where the term might sit in a hierarchy or concept scheme;
-- related terms that were close but not exact;
-- whether the term is shared, DFO-specific, or local/profile;
-- any mapping strength you believe is appropriate.
+Keep the draft in your workshop notes. Include the source column or code, the supported meaning, examples from this dataset, evidence, nearby terms that do not fit, the proposed route, and the unresolved question or requested change. Refer back to the relevant graph node or edge and dictionary row.
 
-## Final validation is later
-
-Strict validation is the final **SDP** gate. The bounded review in Sessions 4–5 does not make the whole package final: unresolved semantic slots, metadata placeholders, or incomplete code descriptions may remain. The commands below show the gate to run once those are resolved. If it fails, keep the failure report and the draft state; the same-sample reviewed checkpoint below provides the publication walkthrough without treating classroom decisions as complete review. EML and publication have additional requirements beyond this gate.
-
-::::::::::::::::::::::::::::::::::::: group-tab
-
-### R
-
-```r
-validate_salmon_datapackage(pkg_path, require_iris = TRUE)
-```
-
-### Python
-
-```python
-validate_salmon_datapackage(pkg_path, require_iris=True)
-```
-
-### Spreadsheet
-
-Spreadsheet review can resolve metadata content, but it cannot execute the strict validator. Run this final gate against the same package folder in R or Python before EML export or publication.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-Run it only when:
-
-- review markers such as `REVIEW:` have been resolved;
-- required metadata placeholders are gone;
-- canonical metadata headers exactly match the schema fields, in schema order, with no missing or extra columns;
-- every `tables.csv$file_name` is a safe relative path to an existing data file;
-- `column_dictionary.csv` rows and column names match the headers of the referenced data files;
-- every observed non-empty categorical value has exactly one matching `codes.csv` row for its dataset/table/column/value key;
-- measurement rows have final `term_iri`, `property_iri`, `entity_iri`, and `unit_iri`;
-- `datapackage.json` exists, declares the SDP profile and resources, and agrees with the canonical metadata CSVs and referenced data files;
-- term requests or local/profile decisions are documented.
-
-Deferred measurement gaps are valid in draft or review state. They will not pass strict publication validation until the required measurement semantic fields are resolved.
-
-## Map the reviewed SDP into EML
-
-`metasalmon` and `metasalmonpy` do not simply rename SDP fields. They build a new EML document and validate the result:
-
-| Reviewed SDP source | EML output |
-| --- | --- |
-| Dataset ID, title, description, keywords, temporal coverage | Alternate identifier, title, abstract, keyword set, and temporal coverage |
-| Each table row and referenced data CSV | One EML `dataTable` with an identified physical object |
-| Column name, label, description, and `value_type` | Attribute name, label, definition, and storage type |
-| `required = TRUE` and table primary keys | Not-null and primary-key constraints |
-| Categorical `codes.csv` rows | Enumerated-domain code definitions |
-| Reviewed measurement term and unit IRIs | Conservative semantic annotations |
-| Reviewed EML sidecar | Parties, rights, methods, measurement scales, missing values, geographic/taxonomic coverage, provenance, and access intent |
-
-The canonical SDP does not contain every fact EML requires. For example, a free-text `creator` cell cannot safely be guessed into structured people, organizations, ORCIDs, and metadata-provider roles. Measurement scale and the meanings of missing-value tokens also need explicit review.
-
-## What a package needs before EML export will run
-
-`write_eml_from_sdp()` and `publish_sdp_to_knb()` are gates, not conversions. Both refuse a package that is not finished, and the refusals arrive one at a time. A first attempt on a freshly created package fails four times in a row, so it is worth knowing the whole list before you start.
-
-The [KNB rehearsal script][metasalmon-knb-rehearsal] demonstrates these requirements on a **different** shipped table: the 173-row `nuseds-fraser-coho-2023-2024.csv` slice, which uses `NATURAL_ADULT_SPAWNERS`. It is a procedure reference, not a replacement workshop dataset or provenance record for our 30-row sample. Its dictionaries, reviewed selections, EML sidecar, and checksums cannot be copied into our package. We keep `nuseds-fraser-coho-sample.csv` throughout the exercise.
-
-| Prerequisite | Where it lives | Why it stops you |
-| --- | --- | --- |
-| Every measurement column carries a complete annotation | `column_dictionary.csv`: `term_iri`, `property_iri`, `entity_iri`, `unit_iri` | Strict validation with `require_iris = TRUE` refuses an unannotated measurement column. A column you skipped in Session 4 surfaces here, not earlier. |
-| No placeholders remain | `dataset.csv` and `tables.csv` | `create_sdp()` writes `MISSING METADATA:` for facts it cannot know — description, creator, contact, license, source citation. Strict validation refuses to ship them. |
-| Each table says what one row is | `tables.csv$observation_unit_iri` | A blank observation unit is a canonical review target. It must be decided, not defaulted. |
-| The reviewed closure exists | `metadata/semantic_vocabulary.csv` and `reviewed_semantic_selections.csv` | Both are required: one evidence row per canonical measurement IRI, and exactly one accepted row per canonical review target. |
-
-::::::::::::::::::::::::::::::::::::: callout
-
-## The reviewed closure has no public producer yet
-
-The last row is different in kind from the other three. `metasalmon` and `metasalmonpy` **validate** `semantic_vocabulary.csv` and `reviewed_semantic_selections.csv`, but neither package exports a function that **writes** them, and no vignette shows their contents. The rehearsal script has to reach into package internals to build them, which is not something you can or should reproduce from the published documentation.
-
-The practical consequence for this workshop: the instructor must supply a reviewed checkpoint for the **same 30-row Fraser Coho sample**, including the two closure artifacts and a reviewed EML sidecar, before learners can execute this export and dry-run segment. Finishing the small classroom review does not produce those artifacts. Without a prepared same-sample checkpoint, inspect same-sample EML and manifest artifacts if supplied, or trace the code and record the missing prerequisites. Do not switch to the 173-row example, fabricate evidence, or present the export as executed. This limitation is tracked as metasalmon backlog **#116**; replace this checkpoint requirement when a supported producer exists and its lesson path has been verified.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-## Continue from a reviewed checkpoint of the same sample
-
-Preserve `output/fraser-coho-example-sdp` as your classroom draft. Put the instructor-provided reviewed checkpoint at `output/fraser-coho-example-reviewed-sdp`. It must retain dataset ID `fraser-coho-example`, table ID `escapement`, and the same 30 source rows and 17 columns in `data/escapement.csv`, while completing the documented metadata and semantic review. Compare its decisions with yours; the checkpoint is an explicit handoff to more complete review, not a claim that your draft passed.
-
-Before changing `pkg_path`, compare the parsed data and check the checkpoint IDs. R and Python may render equivalent CSV values differently, so this handoff checks row and value continuity rather than byte identity:
-
-::::::::::::::::::::::::::::::::::::: group-tab
-
-### R
-
-```{r, eval = FALSE, purl = FALSE}
-draft_pkg_path <- pkg_path
-reviewed_pkg_path <- file.path("output", "fraser-coho-example-reviewed-sdp")
-
-draft_data <- file.path(draft_pkg_path, "data", "escapement.csv")
-reviewed_data <- file.path(reviewed_pkg_path, "data", "escapement.csv")
-stopifnot(file.exists(draft_data), file.exists(reviewed_data))
-draft_rows <- readr::read_csv(draft_data, show_col_types = FALSE)
-reviewed_rows <- readr::read_csv(reviewed_data, show_col_types = FALSE)
-stopifnot(
-  identical(names(draft_rows), names(reviewed_rows)),
-  identical(dim(draft_rows), c(30L, 17L)),
-  identical(dim(reviewed_rows), c(30L, 17L)),
-  isTRUE(all.equal(
-    as.data.frame(draft_rows),
-    as.data.frame(reviewed_rows),
-    check.attributes = FALSE
-  ))
-)
-
-checkpoint <- read_salmon_datapackage(reviewed_pkg_path)
-stopifnot(
-  nrow(checkpoint$dataset) == 1L,
-  nrow(checkpoint$tables) == 1L,
-  identical(checkpoint$dataset$dataset_id, "fraser-coho-example"),
-  identical(checkpoint$tables$dataset_id, "fraser-coho-example"),
-  identical(checkpoint$tables$table_id, "escapement")
-)
-
-pkg_path <- reviewed_pkg_path
-validate_salmon_datapackage(pkg_path, require_iris = TRUE)
-```
-
-### Python
-
-```python
-from pathlib import Path
-
-import pandas as pd
-
-draft_pkg_path = Path(pkg_path)
-reviewed_pkg_path = Path("output") / "fraser-coho-example-reviewed-sdp"
-
-draft_rows = pd.read_csv(draft_pkg_path / "data" / "escapement.csv")
-reviewed_rows = pd.read_csv(reviewed_pkg_path / "data" / "escapement.csv")
-assert draft_rows.shape == reviewed_rows.shape == (30, 17)
-pd.testing.assert_frame_equal(draft_rows, reviewed_rows, check_dtype=False)
-
-checkpoint = read_salmon_datapackage(reviewed_pkg_path)
-assert checkpoint["dataset"]["dataset_id"].tolist() == ["fraser-coho-example"]
-assert checkpoint["tables"]["dataset_id"].tolist() == ["fraser-coho-example"]
-assert checkpoint["tables"]["table_id"].tolist() == ["escapement"]
-
-pkg_path = reviewed_pkg_path
-validate_salmon_datapackage(pkg_path, require_iris=True)
-```
-
-### Spreadsheet
-
-Keep both folders and compare their 30 rows, 17 column names, and source values, preserving identifiers and missing values during import. Check the dataset and table IDs, then review the metadata changes side by side. Ask the instructor to demonstrate the parsed comparison and strict validation on `output/fraser-coho-example-reviewed-sdp` before inspecting its EML or deposit plan.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-Matching parsed rows and values establishes continuity of the sample, not the correctness of the completed metadata. Review the checkpoint's sources and decisions separately, and verify the artifact checksums bound by its EML sidecar against the checkpoint's actual files. Stop export if the checkpoint is absent, the source values or IDs differ, the bound checksums do not match, or validation fails. For the remaining examples, `pkg_path` names this reviewed version of the same Fraser Coho package.
-
-## Export validated EML
-
-The code blocks from here operate on `pkg_path`, now the same-sample reviewed checkpoint. They are not executed when the lesson website is built. A genuine run needs a fully reviewed package and the reviewed closure; a rendered code example is not evidence that export succeeded.
-
-Inspect the checkpoint's `metadata/eml-mapping.yml` against metasalmon's [canonical mapping template][metasalmon-eml-mapping]. The following copy step is for preparing a missing sidecar; it does not overwrite an existing reviewed file. Python and spreadsheet users can download the linked template at the same package-relative path when preparing a future package.
-
-```{r, eval = FALSE, purl = FALSE}
-eml_mapping_path <- file.path(
-  pkg_path,
-  "metadata",
-  "eml-mapping.yml"
-)
-
-if (!file.exists(eml_mapping_path)) {
-  file.copy(
-    system.file(
-      "extdata",
-      "eml-mapping-template.yml",
-      package = "metasalmon"
-    ),
-    eml_mapping_path
-  )
-}
-```
-
-Stop and review the YAML. A newly copied template still requires every example value to be replaced; an instructor-prepared sidecar still needs its evidence inspected. The sidecar must bind the final semantic vocabulary and reviewed-selection ledger with their SHA-256 checksums; it must also record reviewed parties, rights authorization, source provenance, methods, and one measurement-scale/domain entry for every column. Set `status: final` only after that review.
-
-The detailed, current checklist is in the [metasalmon post-review and publication workflow][metasalmon-eml-workflow]. Do not invent dummy parties, checksums, rights evidence, measurement scales, or missing-value meanings merely to make validation pass.
-
-When the SDP, its semantic-review evidence, and the sidecar are final, use your software lane:
-
-::::::::::::::::::::::::::::::::::::: group-tab
-
-### R
-
-```{r, eval = FALSE, purl = FALSE}
-eml_result <- write_eml_from_sdp(pkg_path)
-
-eml_result$path
-eml_result$eml_version
-eml_result$validation
-```
-
-### Python
-
-```python
-from metasalmonpy import write_eml_from_sdp
-
-eml_result = write_eml_from_sdp(pkg_path)
-
-print(eml_result["path"])
-print(eml_result["eml_version"])
-print(eml_result["validation"])
-```
-
-### Spreadsheet
-
-Spreadsheet software can be used to complete and review the SDP metadata and `eml-mapping.yml`, but it does not run the EML schema validator. When you are ready for export, open the same package folder in either code lane and run its exporter; the reviewed package remains the source state.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-The default output is `metadata/eml.xml`. An identical existing file is an idempotent success. A different existing file is protected unless you deliberately pass `overwrite = TRUE` / `overwrite=True` after reviewing why the bytes changed.
-
-## Preview the KNB/DataONE catalog deposit
-
-Use a dry run for this same Fraser Coho package. It creates local EML, OAI-ORE, and manifest artifacts, but it does not read credentials or make a network request:
-
-::::::::::::::::::::::::::::::::::::: group-tab
-
-### R
-
-```{r, eval = FALSE, purl = FALSE}
-knb_plan <- publish_sdp_to_knb(
-  pkg_path,
-  public = FALSE,
-  dry_run = TRUE,
-  representation = "expanded",
-  # Rebuild only unpublished local EML from the preceding standalone export.
-  overwrite = TRUE,
-  knb_environment = "test"
-)
-
-knb_plan$status
-knb_plan$manifest_path
-```
-
-### Python
-
-```python
-from metasalmonpy import publish_sdp_to_knb
-
-knb_plan = publish_sdp_to_knb(
-    pkg_path,
-    public=False,
-    dry_run=True,
-    representation="expanded",
-    # Rebuild only unpublished local EML from the preceding standalone export.
-    overwrite=True,
-    knb_environment="test",
-)
-
-print(knb_plan["status"])
-print(knb_plan["manifest_path"])
-```
-
-### Spreadsheet
-
-Spreadsheet software cannot generate the cryptographic manifest. Review an instructor-provided dry-run manifest alongside the package: confirm the intended files, identifiers, checksums, selected environment, and access decision. Generate a new manifest in R or Python before any real deposit.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-Review `publication/test/knb-manifest.json` inside the reviewed Fraser Coho package. Confirm that it refers to `fraser-coho-example`, the `escapement` table, and the sample data you checked above. The expanded plan lists the original data resources, allowlisted canonical SDP artifacts, validated EML science metadata, and the OAI-ORE resource map with exact identifiers and checksums. It does not scan and upload arbitrary files from the package folder. The test environment is a rehearsal: it is non-durable, cannot be promoted into production, is unsuitable for sensitive data, and cannot receive a DOI.
-
-`overwrite = TRUE` / `overwrite=True` can rebuild conflicting local artifacts left by an **unpublished dry run** after you correct an input. It cannot overwrite anything that reached DataONE; published PIDs are immutable and require a reviewed revision.
-
-## Live upload is a separate authorized action
-
-A live call mutates the selected KNB environment. A production call creates persistent KNB objects even when `public = FALSE`; private access is a review posture, not a server-side draft. Rehearse against the test node first, then create and review a separate production dry-run plan before authorizing production. The production call requires:
-
-- the exact pre-existing production dry-run plan;
-- a short-lived production DataONE JWT entered only into the current process;
-- an authenticated subject matching the reviewed EML metadata provider;
-- `confirm = TRUE`; and
-- authority for the chosen access and redistribution decision.
-
-The code below is intentionally display-only. It first creates the credential-free production plan that must be reviewed, then shows the separate live action. Here `overwrite = TRUE` / `overwrite=True` permits the planner to replace the unpublished standalone EML with the publication-aware EML that names the planned objects; it is not permission to overwrite anything already deposited.
-
-::::::::::::::::::::::::::::::::::::: group-tab
-
-### R
-
-```{r, eval = FALSE, purl = FALSE}
-production_plan <- publish_sdp_to_knb(
-  pkg_path,
-  public = FALSE,
-  dry_run = TRUE,
-  representation = "expanded",
-  overwrite = TRUE,
-  knb_environment = "production"
-)
-
-production_plan$manifest_path
-
-previous_token <- getOption("dataone_token")
-
-options(
-  dataone_token = rstudioapi::askForPassword(
-    "Short-lived DataONE JWT"
-  )
-)
-
-tryCatch(
-  publish_sdp_to_knb(
-    pkg_path,
-    public = FALSE,
-    dry_run = FALSE,
-    confirm = TRUE,
-    representation = "expanded",
-    knb_environment = "production"
-  ),
-  finally = options(dataone_token = previous_token)
-)
-```
-
-### Python
-
-```python
-from getpass import getpass
-
-from metasalmonpy import publish_sdp_to_knb
-from metasalmonpy.knb_publication import set_dataone_token
-
-production_plan = publish_sdp_to_knb(
-    pkg_path,
-    public=False,
-    dry_run=True,
-    representation="expanded",
-    overwrite=True,
-    knb_environment="production",
-)
-
-print(production_plan["manifest_path"])
-
-set_dataone_token(getpass("Short-lived production DataONE JWT: "))
-
-try:
-    publication_result = publish_sdp_to_knb(
-        pkg_path,
-        public=False,
-        dry_run=False,
-        confirm=True,
-        representation="expanded",
-        knb_environment="production",
-    )
-finally:
-    set_dataone_token(None)
-```
-
-### Spreadsheet
-
-Do not perform a live upload from a spreadsheet. Use the manifest as the approval surface, then run the exact reviewed plan in R or Python only when the data owner and publisher have authorized the production access and redistribution decision.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-Do not place the token in a script, `.Renviron`, YAML, manifest, command argument, or shell history. Do not switch to `public = TRUE` merely for convenience: public access is a separate redistribution decision and requests DataONE preservation replicas.
-
-Publication is complete only when the intended catalog state is verified, not merely when KNB stores the objects. If the returned manifest says `published_pending_catalog`, preserve that exact status and recheck rather than creating replacement identifiers or claiming completion.
-
-## Make a second version of the Fraser Coho package
-
-Keep the same data for this exercise and make a small, explicit metadata revision. Read the reviewed state, append a note that the teaching sample is unchanged, and write a new versioned folder. This models how to preserve reviewed metadata rather than regenerating its folder from raw data:
-
-::::::::::::::::::::::::::::::::::::: group-tab
-
-### R
-
-```r
-reviewed_pkg <- read_salmon_datapackage(pkg_path)
-
-# A metadata-only revision: no rows or source values are added.
-reviewed_pkg$dataset <- reviewed_pkg$dataset |>
-  dplyr::mutate(
-    description = paste(
-      description,
-      "Workshop metadata revision: the included 30-row NuSEDS Fraser Coho sample is unchanged."
-    )
-  )
-
-v2_path <- file.path("output", "fraser-coho-example-sdp-v2")
-
-write_salmon_datapackage(
-  resources = reviewed_pkg$resources,
-  dataset_meta = reviewed_pkg$dataset,
-  table_meta = reviewed_pkg$tables,
-  dict = reviewed_pkg$dictionary,
-  codes = reviewed_pkg$codes,
-  path = v2_path,
-  overwrite = FALSE
-)
-
-validate_salmon_datapackage(
-  v2_path,
-  require_iris = TRUE
-)
-```
-
-### Python
-
-```python
-from pathlib import Path
-
-from metasalmonpy import (
-    read_salmon_datapackage,
-    validate_salmon_datapackage,
-    write_salmon_datapackage,
-)
-
-reviewed_pkg = read_salmon_datapackage(pkg_path)
-
-reviewed_dataset = reviewed_pkg["dataset"].copy()
-reviewed_dataset.loc[:, "description"] = (
-    reviewed_dataset["description"].astype(str)
-    + " Workshop metadata revision: the included 30-row NuSEDS Fraser Coho sample is unchanged."
-)
-reviewed_pkg["dataset"] = reviewed_dataset
-
-v2_path = write_salmon_datapackage(
-    resources=reviewed_pkg["resources"],
-    dataset_meta=reviewed_pkg["dataset"],
-    table_meta=reviewed_pkg["tables"],
-    dict_df=reviewed_pkg["dictionary"],
-    codes=reviewed_pkg["codes"],
-    path=Path("output") / "fraser-coho-example-sdp-v2",
-    overwrite=False,
-)
-
-validate_salmon_datapackage(
-    v2_path,
-    require_iris=True,
-)
-```
-
-### Spreadsheet
-
-Preserve the reviewed package unchanged. Copy it to a clearly named new version folder, make the deliberate metadata or data changes in that copy, and document what changed. Before EML export or publication, run strict validation against the new folder in R or Python; do not treat a manual copy as validated merely because its files open successfully.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-If data columns changed, update the dictionary. If new categorical values appeared, update `codes.csv`. Rebuild and review version-specific semantic, EML, and publication artifacts; do not blindly copy old checksum-bound sidecars.
-
-For a later KNB version, keep the earlier package and verified manifest unchanged, add a new reviewed `publication.revision_key` to the new version's EML sidecar, and plan against the preceding `revision_manifest`. This creates an immutable revision rather than overwriting published bytes.
+The workshop does not post requests automatically. A maintainer can review a draft at the [Salmon Domain Ontology request page][smn-issues] or the [DFO Salmon Ontology request page][gcdfo-issues] when a request is warranted. Organizational vocabulary construction and formal ontology editing are [extensions](advanced.html).
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-## Challenge 1: Draft a term-gap plan
+## Activity: explain one method and one unresolved meaning
 
-Choose one unresolved field or code value from the Fraser Coho package. Start with an `ESTIMATE_METHOD` question from Session 5 or the rejected `AREA` mapping from Session 4. A missing or incorrect mapping is not automatically a missing ontology concept: a source clarification or a local description may be the right next step.
+In 15 minutes, choose one method value and check its source definition with a partner. Record the exact code, its interpretation, and the evidence. Then choose one unresolved question from your graph, dictionary, or mapping review and draft its next action.
 
-Decide:
-
-- route: `smn`, `gcdfo`, `profile`, or `skip`/defer;
-- proposed label and definition;
-- evidence source;
-- why existing terms do not fit;
-- next action.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-::::::::::::::::::::::::::::::::::::: challenge
-
-## Challenge 2: Trace the publication workflow
-
-Using the reviewed checkpoint of the **same 30-row Fraser Coho sample**, or its instructor-provided EML and dry-run artifacts:
-
-1. trace the dataset title, `NATURAL_SPAWNERS_TOTAL` definition, and `ESTIMATE_METHOD` code descriptions to their EML destinations;
-2. identify two facts that must come from `eml-mapping.yml` rather than inference;
-3. run or inspect the result of `write_eml_from_sdp()`;
-4. run or inspect a credential-free KNB dry-run manifest; and
-5. state who would need to authorize a live upload and whether the intended access is private or public.
-
-Record whether you executed each step or inspected a supplied result. If same-sample artifacts are unavailable, identify the unmet prerequisites rather than reporting a successful export. Do not run a live upload as a classroom experiment. After this shared workflow, use Session 7 to try the process with a dataset of your own.
+Success is a code explanation that preserves the source meaning and a route another person can assess. An honest request for source clarification is a useful outcome.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
-- Missing terms are governance work, not a reason to force bad mappings.
-- High-quality requests carry definitions, sources, examples, and routing rationale.
-- Rendering produces reviewable SMN, GCDFO, or profile request drafts; it does not submit them.
-- Strict validation is a publication-readiness check, not the first review step.
-- EML export is a validated transformation that also requires reviewed sidecar facts.
-- A KNB dry run is local and reversible; a live call creates persistent production objects.
-- Later package and catalog versions should be explicit immutable revisions, not overwrite attempts.
+- A readable source label still needs context and evidence.
+- Row-varying methods remain linked to their code values.
+- Reuse, shared contribution, local definition, and unresolved source questions are different outcomes.
+- Term requests are drafts for human stewardship decisions.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::

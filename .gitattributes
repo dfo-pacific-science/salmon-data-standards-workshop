@@ -1,0 +1,9 @@
+# The teaching kit has a byte-level source and checksum inventory contract.
+# Preserve its recorded encodings and line endings on every checkout platform.
+/episodes/files/fraser-coho-workshop/** -text
+/episodes/files/fraser-coho-workshop.zip -text
+# The official CSV has CRLF record endings (and embedded LF inside fields).
+# Field W also ends in a source-provided space. Preserve that source value;
+# retire these whitespace settings when a deliberately refreshed source no
+# longer contains those endings. Never normalize the archived bytes.
+/episodes/files/fraser-coho-workshop/raw_data/official-nuseds-dictionary.csv whitespace=cr-at-eol,-blank-at-eol

@@ -4,65 +4,83 @@ title: Entrypoints
 
 # Entrypoints
 
-This repository is a Carpentries/Sandpaper lesson for the Salmon Data Standards Workshop.
+This is the canonical source map for the Carpentries/Sandpaper workshop. Edit source Markdown and R Markdown; never hand-edit generated `site/` pages or theme assets.
 
-## Main lesson surfaces
+## Learner and facilitator surfaces
 
-- `config.yaml`: lesson title, navigation, and visible episode order.
-- `index.md`: site landing text.
-- `README.md`: repository overview and current workshop promise.
-- `episodes/`: learner-facing sessions.
-- `learners/setup.md`: setup and prerequisite guidance.
-- `learners/reference.md`: glossary and decision aids.
-- `instructors/instructor-notes.md`: one-hour and full-day delivery notes.
-- `profiles/learner-profiles.md`: target learner personas.
+| Source | Responsibility |
+| --- | --- |
+| `config.yaml` | Navigation: seven chapters, setup, glossary, field reference, reference, extended practice, and an advanced extension. |
+| `index.md`, `README.md` | Workshop promise, six-hour sequence, and start links. |
+| `episodes/session-1.Rmd` | Overview and endpoint tour, 55 minutes. |
+| `episodes/session-2.Rmd` | Human concept graph, 55 minutes. |
+| `episodes/session-3.Rmd` | Human dictionary, decomposition, and peer review, 65 minutes. |
+| `episodes/session-4.Rmd` | Build the SDP, 40 minutes. |
+| `episodes/session-5.Rmd` | Mapping and required human–AI comparison, 70 minutes. |
+| `episodes/session-6.Rmd` | Codes and term gaps, 30 minutes. |
+| `episodes/session-7.Rmd` | Validation, EML, and test publication, 45 minutes. |
+| `learners/setup.md` | Download, project layout, package pins, and optional live AI setup. |
+| `learners/glossary.md` | Plain-language concepts and stable first-use anchors. |
+| `learners/field-reference.md` | Workshop field guide linked to the canonical SDP specification. |
+| `learners/reference.md` | Paths, checkpoints, software boundaries, and `#teaching-record` status. |
+| `learners/extended-practice.md` | Five optional same-source labs outside the 360-minute route; the Chapter 2–3 human checkpoint remains required. |
+| `learners/advanced.md` | Optional ontology formalization after the six-hour sequence; the canonical page moved from `episodes/bonus-session.Rmd`. |
+| `instructors/instructor-notes.md` | Six-hour facilitation and preparation checks. |
+| `profiles/learner-profiles.md` | Design needs and success criteria for each audience. |
+| `links.md` | Shared external references and workshop-kit download link. |
 
-## Software lanes
+The source is `nuseds-fraser-coho-2023-2024.csv`, 173 rows and 14 columns. Project root `fraser-coho-workshop/`, dataset ID `fraser-coho-workshop`, table ID `escapement`, and output `output/fraser-coho-workshop-sdp` are fixed across the seven chapters.
 
-- R instructions pin `metasalmon` to the **`v0.5.0`** release tag, and `renv/profiles/lesson-requirements/renv.lock` pins the same release, so a learner's install and the lesson build are the same package. Bump the two together — `learners/setup.md` and the lockfile — whenever an episode starts teaching a newer function. The build-log note `episodes/session-4.Rmd` used to emit when the pin was behind what it taught has been removed; the pin is no longer behind, and that was the condition the note named for its own retirement.
-- Python instructions pin `metasalmonpy` to the **`v0.4.0`** release tag tarball (its releases carry no wheel assets). **The two lanes are deliberately on different numbers**: the R-native review flow `episodes/session-4.Rmd` teaches shipped in metasalmon 0.5.0 and has not been ported to Python, so that episode's Python lane is empty and says so. Pinning fixes reproducibility on both lanes; only the port closes the capability gap.
-- Spreadsheet instructions use facilitator-generated SDP CSVs from the same bundled Fraser Coho sample and appear separately where no code is required.
-- `metasalmon` and `metasalmonpy` aim for behavioral parity; the pinned versions retain the review gap above, and deliberate language differences belong in the upstream parity guide.
+## Kit and evidence
 
-Python semantic seeding on this sample fails with the tested `metasalmonpy 0.4.0` / pandas `3.0.5` combination. Session 3 uses facilitator-supplied R candidate evidence for the same sample; Python creation and metadata editing remain local. Replace that handoff only after a released combination passes the seeded sample rebuild and the workshop pins are updated.
+- `episodes/files/fraser-coho-workshop/`: canonical kit inputs, worksheets, scripts, recorded AI outputs, and `draft-sdp`, `seeded-sdp`, and `reference-sdp` checkpoints.
+- `episodes/files/fraser-coho-workshop.zip`: downloadable archive of that kit, served as `files/fraser-coho-workshop.zip`.
+- `learners/reference.md#teaching-record`: the learner-facing status of the public KNB Test Node rehearsal. Replace pending wording only after verifying the actual record and receipt.
 
-## Current episode ladder
+The reference is a technical draft pending Bruno and Tom's domain review. Do not turn a passing check or test upload into an approval claim. Keep recorded AI output distinguishable from human-authored teaching material; the required comparison must remain available without accounts, keys, or purchased credits.
 
-1. `episodes/session-1.Rmd`: introduce the tiered end goals—FAIR publication, shared-term contribution, and organizational semantic-stewardship planning—plus the salmon data integration system, its SDP and software components, bounded contexts, bridge mappings, and the SDP-to-EML publication direction.
-2. `episodes/session-2.Rmd`: copy the bundled 30-row `nuseds-fraser-coho-sample.csv` and source dictionary into `raw_data/`; generate or open `output/fraser-coho-example-sdp` in the selected lane and inspect its structure.
-3. `episodes/session-3.Rmd`: keep the same sample in a reproducible `scripts/build_sdp.R` or `.py`, read source notes, write `raw_data/fraser-coho-context.md`, seed semantic candidates, and preserve review decisions across reruns.
-4. `episodes/session-4.Rmd`: use the shared NuSEDS Fraser Coho example to run metasalmon's R-native semantic review — `review_semantics()` prints the decision call, the learner pastes it into the build script, and `apply_sdp_semantics()` writes it — covering one measurement IRI, one I-ADOPT decomposition, one unit, one statistical modifier, one table observation-unit IRI, and one deliberate rejection, with optional bundle-aware LLM review named as a separate opt-in.
-5. `episodes/session-5.Rmd`: review Fraser Coho code lists, SKOS, and local vocabulary using the same `escapement` table.
-6. `episodes/session-6.Rmd`: route sample term gaps; write validated EML from a reviewed checkpoint of the same data; preview KNB publication with a dry run; and create a later version without discarding reviewed metadata.
-7. `episodes/session-7.Rmd`: optional 30–45-minute transfer to learner-owned tabular data, with separate `raw_data/own-data/`, `scripts/build_own_sdp.R` or `.py`, and `output/my-salmon-sdp`; learners without data make a transfer plan.
-8. `episodes/bonus-session.Rmd`: optional concept mapping extension grounded in the shared sample.
+## Maintainer scripts
 
-## Styling and presentation
+| Script | Responsibility |
+| --- | --- |
+| `scripts/build-reference.R` | Build the technical reference package from the declared workshop inputs. |
+| `scripts/seed-reference.R` | Generate and retain semantic candidate evidence for the reference workflow. |
+| `scripts/complete-reference.R` | Apply the documented technical reference metadata and export preparation. |
+| `scripts/check-workshop.py` | Check consistency across the source lesson, kit, paths, and identifiers. |
+| `scripts/build-workshop-kit.py` | Assemble the downloadable kit from its canonical source artifacts. |
+| `scripts/verify-test-record.py` | Verify the test catalog record through anonymous, read-only requests; it does not upload or change access. |
 
-- **Canonical styling system:** author semantic Markdown in Sandpaper and use the global CSS and Bootstrap design tokens supplied by the Varnish theme. Sandpaper's native `group-tab` fenced div is the canonical control for synchronized R, Python, and Spreadsheet alternatives.
-- **Style entry pattern:** inside every `group-tab`, use third-level headings in the consistent order `### R`, `### Python`, and `### Spreadsheet`. Sandpaper preserves that heading level and Varnish's existing `h3.tab-header` rule supplies the smaller responsive label size. A tab group shows one software lane at a time.
-- **Subsections inside tabs:** Sandpaper converts every Markdown heading inside a `group-tab` into another tab button. Use an ordinary Markdown span with the theme's Bootstrap heading and display classes plus an accessible heading role (for example, `[Subsection]{.h4 .d-block role="heading" aria-level="4"}`) for a visually prominent subsection that must remain inside one software lane.
-- **Tokens:** this repository defines no custom design tokens. Colors, spacing, typography, responsive breakpoints, and tab behavior come from Varnish/Bootstrap. Theme assets under `site/docs/assets/` are generated build output and must not be edited.
-- **Inline-style policy:** do not add inline CSS, page-local `<style>` elements, template overrides, or parallel JavaScript for language selection. Prefer supported Sandpaper structure and existing Varnish rules; introduce a repository-wide stylesheet only if a future requirement cannot be expressed through those native patterns.
-- Edit learner source under `episodes/`, `learners/`, and `index.md`; never hand-edit generated files under `site/`.
+Read each script's inputs and options before running it. Keep its technical results separate from pending domain review and the actual test publication receipt.
 
-## Upstream workflow sources
+## Software and source authority
 
-- `metasalmon`: <https://github.com/salmon-data-mobilization/metasalmon>
-- `metasalmonpy` repository: <https://github.com/salmon-data-mobilization/metasalmonpy>
-- R/Python parity contract: <https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html>
-- Salmon Data Package specification: <https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md>
-- Blank SDP CSV template: <https://github.com/salmon-data-mobilization/smn-data-pkg/tree/main/templates/salmon-data-package-template>
-- SDP field reference: <https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md>
-- metasalmon post-review, EML, and KNB workflow: <https://github.com/salmon-data-mobilization/metasalmon/blob/main/vignettes/post-review-package-publication.Rmd>
+R setup and the lesson lockfile pin metasalmon **v0.5.0**; Python setup pins metasalmonpy **v0.4.0**. The R-native review queue and metadata setters are not available in this Python release. The Python lane uses the stated alternatives and supplied candidate evidence. Verify the full path against a newly released version before retiring a workaround, and change setup and build pins together.
 
-## Local checks
+The [SDP specification](https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md) owns format validity; its [field reference](https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/docs/field-reference.md) owns the full field inventory. Workshop guides explain these sources rather than creating a parallel schema or validator.
 
-Use the repo's Sandpaper workflow when R dependencies are available:
+## Presentation conventions
 
-```r
-sandpaper::check_lesson()
-sandpaper::build_lesson()
+Use Sandpaper's native `group-tab` control for software alternatives. Inside it, only `### R`, `### Python`, and `### Spreadsheet` are tab headings, in that order. For a subsection within a lane, use a span such as `[Subsection]{.h4 .d-block role="heading" aria-level="4"}`; another Markdown heading creates another tab.
+
+Varnish/Bootstrap owns colors, spacing, typography, and tab behavior. Do not add page-local CSS or custom tab JavaScript. Inspect rendered pages when changing headings, tables, diagrams, or download links.
+
+Known theme limitation: with Sandpaper 0.20.2 and Varnish 1.1.1, the fixed “Search the All In One page” button overlaps the lesson title at a 560-pixel viewport, even with the shortened workshop title. The installed theme exposes no lesson-level search-label or global stylesheet override. Keep the canonical theme and recheck this limitation after a Varnish upgrade; retire this note when the header fits at narrow widths.
+
+## Checks
+
+From the repository root, run the workshop consistency check and the Sandpaper checks:
+
+```bash
+python3 scripts/check-workshop.py
+Rscript --vanilla -e 'sandpaper::check_lesson()'
+Rscript --vanilla -e 'sandpaper::build_lesson(rebuild = TRUE, preview = FALSE)'
+git diff --check
 ```
 
-The lesson is documentation-only. It does not run a local app server.
+The rendered site is `site/docs/`. `check_lesson()` checks lesson structure; inspect the built pages and local links as well. Sandpaper places setup inside `index.html#setup`, renders glossary and reference pages at the site root, and rewrites links to Markdown files as HTML links. Downloadable Markdown references therefore need matching HTML companions or another explicitly supported download route.
+
+The consistency script checks the lesson/kit contract; it does not replace running the literal R/Python build, validating the generated package and EML, or verifying the actual test catalog record. Technical checks do not supply domain review.
+
+## Site deployment
+
+`.github/workflows/sandpaper-main.yaml` builds and deploys on a push to `main` or `master`, or a manual workflow run. It provisions R 4.4.2, Pandoc, and the lesson dependencies, then runs `sandpaper:::ci_deploy(reset = reset)`. A successful local build is evidence about the local toolchain; inspect the workflow outcome before claiming the published site is current.

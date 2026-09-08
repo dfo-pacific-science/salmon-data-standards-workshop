@@ -1,69 +1,46 @@
 # Salmon Data Standards Workshop
 
-This workshop helps salmon biologists, data stewards, and data scientists turn the included **NuSEDS Fraser Coho sample** into a reviewable **Salmon Data Package**, following the same dataset from first inspection through metadata, semantic review, EML export, and a catalog dry run. No personal dataset is required; an optional activity near the end applies the workflow to your own data. The common biologist pathway is practical FAIR publication: preserve the context behind local data, link selected meanings to shared definitions, export reviewed metadata as a validated **EML 2.2 file**, and prepare or perform an authorized upload to an EML-aware catalog such as KNB. Depending on the learner's goals, the pathway can extend to proposing missing shared terms or planning how an organizational vocabulary or ontology will be governed and mapped to the Salmon Domain Ontology. Code-driven activities include R and Python examples, with separate spreadsheet instructions where a no-code path is useful.
+This six-hour workshop follows one **NuSEDS Fraser Coho 2023–2024 dataset** from human interpretation to a Salmon Data Package and a KNB Test Node publication exercise. Everyone uses the included `nuseds-fraser-coho-2023-2024.csv`: **173 rows and 14 columns**. No personal dataset is needed.
 
-The material is being refactored for the Salmon Ontology Development Working Group from an ontology-development-first course into an SDP-first learning path. An ontology is a maintained set of concepts and definitions that also records how the concepts relate. Biologists can complete the common pathway by reusing shared definitions where they help; they do not need to build an ontology or give every field an ontology term. The advanced stewardship pathway addresses organizational vocabularies, ontologies, and bridge mappings for learners whose roles require them.
+Participants first draw how observations, results, populations, methods, and units relate. They write and peer-review a data dictionary before asking software to suggest mappings. They then compare human decisions with recorded AI outputs, document code meanings and gaps, and inspect validation, EML, and a test catalog record. The reference package is a technical draft pending Bruno and Tom's domain review; a passing software check does not supply that review.
 
-## Learning Path
+## The six-hour sequence
 
-1. **Structure first**: create a draft Salmon Data Package from the bundled `nuseds-fraser-coho-sample.csv` with R/`metasalmon` or Python/`metasalmonpy`; spreadsheet learners open a facilitator-generated package from that same sample.
-2. **Context next**: write dataset, table, column, code, caveat, and method notes that travel with the data.
-3. **Meaning where it matters**: review suggested term mappings, focusing first on measurement columns and important code lists.
-4. **Contribution and stewardship paths**: route unresolved terms to the shared Salmon Domain Ontology, GC DFO Salmon Ontology, or a local/profile vocabulary or ontology; where needed, plan how organizational terms will be governed and mapped to shared anchors.
-5. **Publication**: map the reviewed sample SDP into EML, validate the export, and preview the exact catalog deposit in a credential-free dry run. A live upload requires separate publication authority.
-6. **Optional transfer**: near the end, start a separate draft package with your own dataset or make a transfer plan using the sample.
+| Chapter | Activity | Minutes |
+| --- | --- | ---: |
+| 1 | See the complete workflow and the shared data | 55 |
+| 2 | Draw a human concept graph | 55 |
+| 3 | Write a dictionary, decompose a measurement, and peer-review | 65 |
+| 4 | Build the Salmon Data Package | 40 |
+| 5 | Review mappings and compare human and AI reasoning | 70 |
+| 6 | Describe codes and record term gaps | 30 |
+| 7 | Validate, export EML, and inspect test publication | 45 |
+| | **Teaching and activities; add breaks and lunch** | **360** |
 
-The shared example is the 30-row, 17-column teaching sample, covering selected years from 1996–2024. It stays under `raw_data/`, with the reproducible build in `scripts/build_sdp.R` or `scripts/build_sdp.py` and its generated package at `output/fraser-coho-example-sdp`. The separate 173-row, 2023–2024 example is outside this workshop pathway.
+## Start here
 
-## Audience
+- [Setup](learners/setup.md): download the workshop kit and choose spreadsheet, R, or Python tools.
+- [Glossary](learners/glossary.md): plain-language terms linked from their first use in the lesson.
+- [Field reference](learners/field-reference.md): package files, required fields, and links to the canonical SDP specification.
+- [Reference and teaching record](learners/reference.md#teaching-record): checkpoints, software boundaries, and test catalog status.
+- [Instructor notes](instructors/instructor-notes.md): timing, preparation, and review criteria.
+- [Extended practice](learners/extended-practice.md): five optional labs using the same source, after the human graph and dictionary checkpoints.
+- [Advanced extension](learners/advanced.md): optional ontology formalization after the six-hour workshop, using the same human graph.
 
-This workshop is designed for mixed groups:
+Extended practice is outside the 360-minute schedule. The labs investigate repeated population–year records, missingness and method context, code sources, a reviewed metadata edit across R and Python, and validation/EML/manifest evidence. They use the included data and local artifacts without requiring live AI or a deposit.
 
-- operational salmon biologists who mostly work in Excel;
-- data stewards standardizing datasets for sharing;
-- R or Python users who want a reproducible SDP workflow;
-- ontology maintainers who need better evidence from contributors.
+The project is `fraser-coho-workshop/`. Keep the source at `raw_data/nuseds-fraser-coho-2023-2024.csv`, the build at `scripts/build_sdp.R` or `scripts/build_sdp.py`, and the working package at `output/fraser-coho-workshop-sdp`. Dataset ID `fraser-coho-workshop` and table ID `escapement` remain consistent throughout. The kit contains `draft-sdp`, `seeded-sdp`, and `reference-sdp` checkpoints from the same data.
 
-No terminology-standards background is assumed. Session 1 defines semantic links, vocabularies, code lists, and ontologies in plain language; later standards are introduced only when they help with a concrete review decision.
+## Tools and access
 
-## R and Python implementations
+The lesson pins R `metasalmon` to **v0.5.0** and Python `metasalmonpy` to **v0.4.0**. The Python release does not yet provide the R-native review and metadata setters; its lane uses the documented alternatives and supplied evidence. Spreadsheet participants review the same files and decisions.
 
-The R package `metasalmon` and Python package `metasalmonpy` are intended to remain behaviorally aligned, but the current workshop records an open catch-up window: R is pinned to `metasalmon` `v0.5.0`, while Python is pinned to `metasalmonpy` `v0.4.0`. Session 4's native semantic-review workflow is therefore taught only in R until the Python port lands. Examples use idiomatic syntax for each language rather than forcing literal API mimicry; deliberate differences are recorded in the [metasalmonpy parity guide](https://salmon-data-mobilization.github.io/metasalmonpy/guides/parity.html).
+The human–AI comparison is required, using supplied recorded outputs. Live AI calls are optional. Participants need no AI account, API key, purchased credits, or catalog account to complete the workshop. Optional OpenRouter practice uses a free model with no paid fallback; optional Ollama practice can use a local model.
 
-Python semantic seeding on this sample fails with the tested `metasalmonpy 0.4.0` / pandas `3.0.5` combination. Session 3 uses facilitator-supplied R candidate evidence for the same sample; Python creation and metadata editing remain local. Replace that handoff only after a released combination passes the seeded sample rebuild and the workshop pins are updated.
+Catalog work uses a separately authorized **KNB Test Node** teaching record under Brett's identity. It does not authorize a production deposit or imply Bruno and Tom have reviewed the scientific meanings. See the [teaching-record status](learners/reference.md#teaching-record) before presenting a live result.
 
-## Formats
+## Repository maintenance
 
-The same materials support two delivery modes:
+Edit lesson sources under `episodes/` and `learners/`; do not edit generated `site/` output. Kit source files are under `episodes/files/fraser-coho-workshop/`, and the downloadable ZIP is `episodes/files/fraser-coho-workshop.zip`. [Entrypoints](docs/entrypoints.md) records the source map, build commands, and checks.
 
-- **One-hour introduction**: end-goal framing, SDP anatomy and example CSVs, a short package demo, one measurement mapping review, and an SDP-to-EML/catalog preview.
-- **Full-day workshop**: hands-on package creation, context capture, mapping review, measurement decomposition, code-list review, term-request planning, EML export, and a credential-free KNB publication dry run, followed by an optional bring-your-own-dataset activity.
-
-## Repository Contents
-
-- `episodes/`: learner-facing workshop sessions.
-- `learners/setup.md`: setup guidance for R/metasalmon, Python/metasalmonpy, and spreadsheet participants.
-- `learners/reference.md`: glossary, decision aids, and core workflow checks.
-- `instructors/instructor-notes.md`: facilitation plans for one-hour and full-day delivery.
-- `profiles/learner-profiles.md`: persona notes for designing and testing the workshop.
-- `docs/entrypoints.md`: short map of the lesson entry points and local checks.
-
-## Related Components
-
-- [Salmon Data Package specification](https://github.com/salmon-data-mobilization/smn-data-pkg)
-- [metasalmon R package](https://github.com/salmon-data-mobilization/metasalmon)
-- [metasalmonpy Python package](https://github.com/salmon-data-mobilization/metasalmonpy)
-- [Salmon Domain Ontology](https://github.com/salmon-data-mobilization/salmon-domain-ontology)
-- [GC DFO Salmon Ontology](https://github.com/dfo-pacific-science/dfo-salmon-ontology)
-
-## Development Status
-
-This lesson is under active development.
-
-- Explore the **Issues** tab to find ways to contribute.  
-- Join our discussions on the **SDM Discord Server**.  
-- Share your feedback to improve and expand the workshop's impact.
-
----
-
-For more information, visit the [Salmon Data Mobilization GitHub Organization](https://github.com/salmon-data-mobilization) or contact us directly.
+The [Salmon Data Package specification](https://github.com/salmon-data-mobilization/smn-data-pkg/blob/main/SPECIFICATION.md), [metasalmon](https://github.com/salmon-data-mobilization/metasalmon), and [metasalmonpy](https://github.com/salmon-data-mobilization/metasalmonpy) own the underlying formats and software contracts.

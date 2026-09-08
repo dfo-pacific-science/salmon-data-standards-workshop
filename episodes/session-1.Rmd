@@ -1,182 +1,122 @@
 ---
-title: "The Salmon Data Integration System"
-teaching: 35
-exercises: 15
+title: "See the Whole Journey: From NuSEDS to Reusable Data"
+teaching: 30
+exercises: 25
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- What parts make up the Salmon Data Integration System?
-- How far can this workflow go, from FAIR publication to shared or organizational semantic stewardship?
-- What is the difference between a dataset, a table, and a flat file?
-- What does a Salmon Data Package add to an ordinary spreadsheet or CSV?
-- When should a team reuse, extend, or federate a controlled vocabulary or ontology?
-- How do reviewed SDP facts become EML catalog metadata?
+- What changes between a source spreadsheet and a reusable published dataset?
+- What will we make at each stage of the workshop?
+- Why do we describe the data ourselves before using packaging software or AI?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Explain the three workshop destinations: FAIR publication, shared-term contribution, and organizational vocabulary or ontology stewardship.
-- Distinguish a dataset from its one or more tables and recognize supported tabular inputs.
-- Explain the roles of the SDP, `metasalmon`, shared semantic resources, and local vocabularies or ontologies.
-- Choose between reusing a shared term, proposing a shared extension, and keeping a local term with an explicit bridge mapping.
-- Separate the Frictionless structure, external-standard alignments, and salmon-specific SDP conventions.
+- Recognize the source table and the intended catalog destination for the same Fraser Coho example.
+- Name each stage's problem and output without needing to run the software.
+- Distinguish data values, descriptions of those values, and links to shared definitions.
+- Explain why the first working diagram and dictionary must precede metasalmon and AI.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Start with the end goal
+![Seven workshop stages, with the opening overview highlighted.](fig/workflow-1.svg)
 
-How far you take this workflow depends on your role, your dataset, and what you want to accomplish. The workshop supports three related destinations; you do not need to reach all three.
+## Start with the destination
 
-1. **Publish FAIR salmon data.** This is the common goal for biologists. The [FAIR Guiding Principles][fair-principles] call for data to be **Findable, Accessible, Interoperable, and Reusable**. Accessible does not necessarily mean openly downloadable; the access path, conditions, and authority should be clear. A reviewed [Salmon Data Package][sdp-specification] keeps the data, metadata, and local context together and lets you link selected fields, code values, units, and methods to definitions already maintained in international standards and community-governed vocabularies or ontologies. From the SDP, you can run a strict publication check, export schema-valid EML 2.2.0, and prepare a KNB/DataONE catalog deposit. A live upload requires credentials and redistribution authority.
-2. **Contribute missing shared terms.** If a concept in your dataset has no suitable existing definition, document the gap and propose a new term for the [Salmon Domain Ontology][sdo] or another appropriate governed vocabulary. The resource's stewards decide whether and how the proposal enters the shared resource.
-3. **Steward organizational terminology.** The advanced destination for data stewards and digital librarians is to create and govern organizational controlled vocabularies or ontologies for local meanings, then map those terms to shared anchors in the Salmon Domain Ontology. This workshop introduces the planning and mapping pattern; a complete organizational authoring process must also define governance, review, publication, and maintenance under local authority. In this role, the Salmon Domain Ontology is an umbrella interoperability layer: it connects organizations without requiring them to give up their local terminology or authority.
+Imagine finding a salmon [dataset](glossary.html#dataset) produced by another team. Can you tell what was estimated, which population and place it concerns, how the estimate was made, and whether it is suitable for your question? A download button alone cannot answer those questions.
 
-The Salmon Data Package is the common foundation for all three destinations. It makes local meaning reviewable before a term is reused, proposed, or mapped. KNB/DataONE publication remains an important concrete destination, but it is one route through this broader data-integration workflow rather than the only finish line.
+The facilitator begins with the [Fraser Coho teaching record](reference.html#teaching-record), then opens the source CSV beside it. The reference page records the endpoint's actual status and evidence. A draft or test record is a demonstration; it is not evidence that this workshop has a verified public deposit. If a verified endpoint is still pending, use the supplied local publication preview and say so explicitly.
 
-An EML file is structured XML, not an arbitrary XML file with a different name. `metasalmon` and `metasalmonpy` map reviewed SDP facts into the EML model and validate the result against EML 2.2.0. A live KNB call creates persistent production objects, so the workshop uses a credential-free dry run unless an authorized publication exercise has been arranged.
+This is a **tour of the result**, not a software exercise. Participants do not send data to metasalmon or AI in this chapter. We will first create our own diagram and dictionary, then review them with another person in Chapters 2–3.
 
-## One shared dataset from start to finish
+### What to look for in the record
 
-Everyone works with the included **NuSEDS Fraser Coho sample**, `nuseds-fraser-coho-sample.csv`. It has 30 rows and 17 columns, including `POP_ID`, `ANALYSIS_YR`, `NATURAL_SPAWNERS_TOTAL`, `ESTIMATE_METHOD`, and `ESTIMATE_CLASSIFICATION`. The selected rows span 1996–2024; this small teaching sample is not a complete Fraser Coho time series.
+Follow four questions rather than every catalog field:
 
-We inspect it here, create its package in Session 2, capture context and seed suggestions in Session 3, review meanings and code lists in Sessions 4–5, and export metadata and preview a catalog deposit in Session 6. The sample stays under `raw_data/`; the package stays at `output/fraser-coho-example-sdp`, with dataset ID `fraser-coho-example` and table ID `escapement`. Spreadsheet learners receive a facilitator-generated copy of that same package.
+1. **What is this?** Find the title, scope, source and contact information.
+2. **Can I use it?** Find the access conditions, licence and important caveats.
+3. **Can I understand it?** Locate the table description, column definitions and method information.
+4. **Can I trace it?** Follow the source and version information back to the packaged table.
 
-You do not need your own data to participate. After the shared workflow, optional Session 7 provides time to start a separate package with your own data or make a transfer plan from the sample.
+These are practical aims of [FAIR](glossary.html#fair): findable, accessible, interoperable and reusable data. Accessibility may involve stated conditions; FAIR does not mean that every dataset must be openly downloadable.
 
-## The problem this workshop solves
+## Meet our one shared example
 
-Salmon data are often understandable to the person or team that collected them, but hard for someone else to reuse. Column names may be short, code values may be local, methods may be buried in reports, and important caveats may live only in people's heads. A word can also mean one thing in a stock-assessment program and something different in a hatchery, habitat, or fisheries context.
+Download and extract the [Fraser Coho workshop kit](files/fraser-coho-workshop.zip). Everyone follows the **173-row, 14-column NuSEDS Fraser Coho 2023–2024 slice** in `raw_data/nuseds-fraser-coho-2023-2024.csv`. Open a copy for viewing in a spreadsheet, or follow the projected table. Keep the source file unchanged.
 
-This workshop starts with a practical rule:
+The slice comes from Fisheries and Oceans Canada's Fraser and BC Interior NuSEDS workbook. The kit preserves its source information, derivation and the current [official DFO dictionary](files/fraser-coho-workshop/raw_data/official-nuseds-dictionary.csv). That dictionary was retrieved on 8 September 2026 and may postdate the workbook used for this slice. It is a selected two-year teaching dataset, not the full NuSEDS database or a complete history of Fraser Coho.
 
-> Package and explain the data first. Link selected fields to shared definitions only after the package is reviewable.
+The table contains 87 distinct `POP_ID` values and **164 distinct population–analysis-year pairs across 173 rows**. Some pairs occur more than once. A row is therefore a source record associated with a population, waterbody and analysis year; **population plus year is not a verified unique key**. Later we will examine what additional context distinguishes the records. Do not delete repeated pairs or sum their estimates during the workshop.
 
-In this workshop, **semantic** simply means "about meaning." A **semantic link** connects a local column or code value to a shared definition.
+Six columns let us practice the main kinds of description:
 
-An **ontology** is a maintained set of concepts and definitions that also records how the concepts relate—for example, that coho salmon is a kind of salmon. A **controlled vocabulary** is a governed list of terms and definitions, while a **code list** records the allowed values for one data column. Most workshop examples reuse existing resources. When local meaning is genuinely different, the system keeps that meaning local and maps it to shared concepts rather than pretending the meanings are identical.
-
-## The system and its components
-
-The [Salmon Data Integration System][salmon-data-integration-system] connects local salmon data and expert knowledge to portable packages, shared meanings, and publication formats. It is a set of cooperating components, not one file format or one ontology:
-
-| Component | Role in the system |
-| --- | --- |
-| Local data and expert context | Supply the observations, methods, code meanings, caveats, and conditional rules that must not be lost. |
-| [Salmon Data Package][sdp-specification] | Keeps the data, dataset/table descriptions, column dictionary, code lists, and machine-readable package descriptor together as a reviewable contract. |
-| [`metasalmon`][metasalmon] in R and [`metasalmonpy`][metasalmonpy] in Python | Create, read, review, validate, and publish SDPs. Both implementations provide language-idiomatic [interactive decomposition chat][metasalmon-chat-decomposition] and [strictly opt-in LLM review][metasalmon-llm-review] to help surface missing context and assess candidate terms; suggestions remain drafts for human review. See the [Python documentation][metasalmonpy-docs] for its calling conventions. |
-| [Salmon Domain Ontology][sdo] and other governed vocabularies | Provide reusable identifiers and definitions for meanings that are shared across programs or organizations. |
-| Local controlled vocabularies, ontologies, and bridge mappings | Preserve program-specific concepts under local authority and connect them conservatively to shared concepts without erasing important differences. |
-| [EML][eml-specification] and catalogs such as [KNB][knb] | Turn reviewed package facts into portable discovery metadata and, when authorized, a catalog deposit. |
-
-A **bounded context** is a program, organization, or workflow in which a set of terms and rules has a stable local meaning. The Salmon Domain Ontology serves as a shared domain model: its concepts provide anchors that bridge mappings can use to translate between bounded contexts. It does not require every team to replace its own terminology.
-
-### Reuse, extend, or federate?
-
-Use a local controlled vocabulary when the main need is to govern a finite list of labels or codes. Use a local ontology when the relationships among local concepts also need to be represented. Then choose the integration path that fits the evidence and authority:
-
-| Situation | Appropriate path |
-| --- | --- |
-| An existing shared concept has the same meaning | Reuse its identifier directly in the SDP. |
-| A concept is stable and likely to be reused across organizations | Propose an extension to the Salmon Domain Ontology or the appropriate governed vocabulary; its steward decides whether and how it enters the shared resource. |
-| A concept is program-specific, policy-specific, uncertain, or not ready for shared governance | Give it a stable identifier in a locally governed vocabulary or ontology, then publish a bridge mapping to the nearest shared concept with an honest relationship strength and provenance. |
-
-The [modules and bridge profiles guide][sdo-bridge-guide] shows the practical pattern: define local terms in a local namespace, map them to shared anchors as exact, close, broader, narrower, or related only when warranted, record why the mapping was made, and test it against real rows. This is how the system supports translation without collapsing two bounded contexts into one.
-
-## Dataset, table, and flat file
-
-These terms describe different levels:
-
-| Term | Meaning | Example |
+| Source column | What we can see | Question that still needs evidence |
 | --- | --- | --- |
-| Dataset | The collection being documented; it can contain one or many related tables. | The 30-row Fraser Coho teaching sample packaged as `fraser-coho-example`. |
-| Table | A rectangular set of rows and columns whose row meaning needs to be documented. | The sample's `escapement` table, with population, analysis year, estimate, and method fields. |
-| Flat file | A file that stores one two-dimensional table, normally with one header row and no nested structure. | `nuseds-fraser-coho-sample.csv`. |
-| Workbook | A container that can hold several sheets/tables; the workbook itself is not one flat file. | An optional own-data `.xlsx` input in Session 7. |
+| `POP_ID` | A population identifier, such as `46200` | What source unit does the identifier denote? |
+| `WATERBODY` | A named waterbody, such as `BONAPARTE RIVER` | How does this named place relate to the population record? |
+| `ANALYSIS_YR` | `2023` or `2024`: the year the estimate is for | Why can contributing surveys extend into the next calendar year? |
+| `SPECIES` | `Coho` throughout this slice | How is the source species label defined? |
+| `NATURAL_ADULT_SPAWNERS` | Numerical estimates and 13 blanks | What does “natural” qualify, and what does a blank mean? |
+| `ESTIMATE_METHOD` | Labels such as `Area Under the Curve` | How does the stated procedure affect interpretation? |
 
-The core workshop uses one CSV table. Optional Session 7 extends the input pattern to learner-owned single tables, multiple CSV tables, or multiple rectangular Excel sheets. The R and Python workflows read each source table into memory and pass either one table or a named collection of tables to `create_sdp()`. The workflow does not directly preserve multidimensional NetCDF, raster, or nested-array structures.
+We will write descriptions for these six fields ourselves. The other eight fields remain in the table and must also be read and reviewed. A focused exercise is not permission to discard context.
 
-## The workshop ladder
+## Values and descriptions do different jobs
 
-| Stage | Main question | Output |
+The first record associates population ID `46200`, `BONAPARTE RIVER`, analysis year `2023`, `Coho`, estimate `758` and method `Resistivity Counter`. Those are **data values**. Explaining what the identifier, estimate and method mean is [metadata](glossary.html#metadata): information that helps someone interpret and reuse those values.
+
+An identifier is a label used to refer to something. It is not the thing itself. Likewise, a waterbody, a biological population, a species category and a Conservation Unit describe different things. The table has no Conservation Unit field. We can discuss that wider context, but we cannot invent a CU assignment from these rows.
+
+One compound name is enough to motivate the next chapters: `NATURAL_ADULT_SPAWNERS`. A [variable](glossary.html#variable) describes the question being represented, while its [property](glossary.html#property) is the characteristic of interest, such as abundance, and its [entity](glossary.html#entity) is the thing the data concerns. “Adult”, “natural”, the place, the year basis, the unit and the method may add different kinds of meaning. We will separate them and record uncertainty instead of treating the column name as a complete definition.
+
+## The journey we will follow
+
+| Chapter | Problem it addresses | What you leave with |
 | --- | --- | --- |
-| Structure | What files, tables, columns, and codes are in this dataset? | Draft Salmon Data Package |
-| Context | What does a reviewer need to know to avoid misuse? | Metadata and README/context note |
-| Meaning | Which fields should link to shared definitions? | Reviewed mappings for measurements and key code lists |
-| Contribution | Which shared definitions are missing, and who should maintain them? | Decision to reuse, request a shared extension, or publish a local bridge mapping |
-| Stewardship | Which meanings should remain under organizational authority, and how should they connect to shared anchors? | Plan for a governed local vocabulary or ontology and documented bridge-mapping approach |
-| Publication | How do reviewed SDP facts become portable catalog metadata? | Valid EML plus a reviewed KNB/DataONE publication plan |
+| 1. See the whole journey | A useful final result is hard to picture | A shared purpose and one reuse question |
+| 2. Draw the dataset | Relationships and row meaning are implicit | A human-created node-and-edge diagram with evidence and questions |
+| 3. Describe and decompose | Short column names hide assumptions | A dictionary, variable decomposition and peer-review record |
+| 4. Build the package | Meaning and data can become separated | An SDP built from the same table and reviewed human descriptions |
+| 5. Compare AI-assisted interpretation | Automated suggestions can seem more certain than their evidence | A comparison with the human baseline and documented decisions |
+| 6. Review shared meanings | Similar labels may represent different concepts | Reviewed mappings, code meanings and unresolved term questions |
+| 7. Validate and share | A valid file alone is not a reusable publication | A checked package and an honest publication handoff |
 
-## What is in a Salmon Data Package?
+**Diagram → dictionary and decomposition → human peer review → metasalmon → AI-assisted comparison.** This order is part of the method. Your first explanation of the dataset must exist before tools propose one for you.
 
-A package is a folder that keeps data and metadata together:
+### A few names you will hear later
 
-```text
-output/fraser-coho-example-sdp/
-  metadata/
-    dataset.csv
-    tables.csv
-    column_dictionary.csv
-    codes.csv                  # required when categorical columns exist
-  data/
-    escapement.csv
-  datapackage.json             # generated; required for complete/published packages
-  README.md or README-review.txt
-```
+A **Salmon Data Package (SDP)** keeps the table, [data dictionary](glossary.html#data-dictionary), code definitions, dataset description and other context together. `metasalmon` in R and `metasalmonpy` in Python help create and inspect that package. We introduce their names here; detailed commands belong in Chapter 4.
 
-The CSV files under `metadata/` are the canonical, human-reviewable core. `codes.csv` is conditional: include it when the package has categorical columns. The generated `datapackage.json` is the Frictionless descriptor used by software; it must agree with the metadata CSVs and data resources.
+The workshop [Glossary](glossary.html) is a reading aid: it explains words used in these lessons. A [controlled vocabulary](glossary.html#controlled-vocabulary) is a maintained set of terms and definitions used to describe data consistently. Reading a glossary entry helps you understand the discussion; choosing a vocabulary term requires checking its maintained definition against your data.
 
-## Where the fields come from
+An [ontology](glossary.html#ontology) also states relationships between concepts. An [IRI](glossary.html#iri) is a stable identifier used to refer to a term. Later, we compare the meaning we have documented with candidate definitions in the Salmon Domain Ontology and other resources. Similar wording does not establish an exact match.
 
-SDP combines several layers; they should not be described as one universal standard:
-
-| Layer | What it contributes |
-| --- | --- |
-| [Frictionless Data Package][frictionless-data-package] and [Table Schema][frictionless-table-schema] | The package/resource structure, table fields, value types, constraints, and machine-readable schemas used to validate each metadata CSV and `datapackage.json`. |
-| Common discovery/catalog concepts | Titles, descriptions, contacts, licences, temporal coverage, keywords, and provenance that can map into [EML][eml-specification], the Government of Canada's [HNAP metadata profile][hnap-guide], or another catalog profile. |
-| [I-ADOPT][iadopt], [SOSA/SSN][sosa-ssn], [SKOS][skos-reference]/[OWL][owl-overview], and [QUDT unit vocabularies][qudt] | External semantic roles for measurement property/entity/constraint/statistical modifier, table- and code-level procedures, reusable concepts, code lists, and units. |
-| [Salmon Data Package profile][sdp-specification] | The exact CSV filenames and columns, joins through `dataset_id`/`table_id`/`column_name`, `column_role`, observation-unit conventions, categorical-code coverage, and salmon publication rules. |
-
-In other words, every metadata CSV is described with a **Frictionless Table Schema**, but not every SDP column name comes from Frictionless itself. SDP defines a custom Frictionless profile and aligns selected fields with other standards where the alignment is warranted.
-
-For the current SDP-to-EML transformation, use `metasalmon`'s canonical [`eml-mapping-template.yml`][metasalmon-eml-mapping] and [`write_eml_from_sdp()` reference][metasalmon-eml-reference] rather than a duplicate field-by-field crosswalk in the workshop. The export combines reviewed dataset, table, column, code, semantic, and mapping-sidecar facts, then validates the resulting EML. Publication intent and authority must still be provided and reviewed; they cannot be inferred from a source spreadsheet.
-
-## R, Python, and spreadsheet participation
-
-The workshop provides R and Python examples for the code-based workflow, with separate spreadsheet subsections where direct metadata review is useful. Use the path that matches your current comfort level; you do not need to run every version of an exercise.
-
-| If you usually work in... | Start with... | How this path participates |
-| --- | --- | --- |
-| R | `metasalmon::create_sdp()` | Create, review, validate, export, and plan or perform authorized publication in R. |
-| Python | `metasalmonpy.create_sdp()` | Build and inspect the same sample package; Session 4 explains the current native-review gap and provides a guided alternative. |
-| Excel or Calc | Open the generated SDP metadata CSVs | Review and edit dataset, table, column, and code descriptions; follow the spreadsheet-specific subsections where they appear. |
+[EML](glossary.html#eml) is a structured format for ecological metadata. Catalogs such as [KNB](glossary.html#knb), part of the DataONE network, use metadata to help people discover and assess data. We will return to the opening record in Chapter 7 and explain how the workshop's artifacts support it.
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-## Challenge 1: What could be misunderstood in the shared sample?
+## Activity: Read the example as a future user
 
-Open or view `nuseds-fraser-coho-sample.csv`, supplied by the facilitator or displayed on screen. Choose one question the column names and values alone do not answer:
+In pairs, inspect the source table and teaching record or local preview. Spend 10 minutes identifying one question you could answer from the table and one you could not answer safely.
 
-- Does a blank `NATURAL_SPAWNERS_TOTAL` mean zero, unavailable, or something else?
-- What does a value such as `RELATIVE ABUNDANCE (TYPE-4)` in `ESTIMATE_CLASSIFICATION` tell a future user about an estimate?
-- How does `ESTIMATE_METHOD` affect what someone can conclude from the spawner estimate?
-- How should `POP_ID`, `POPULATION`, and `FULL_CU_IN` be understood together?
+Then write three short notes:
 
-Write down **one possible misunderstanding and the source evidence you would need to resolve it**. Do not invent a definition from the label. Keep the question for Session 3, when we inspect the bundled source dictionary and record supported context and remaining uncertainty.
+- The field or value that raises your question.
+- The description, relationship or source evidence that would help.
+- The workshop stage where you expect to resolve it.
+
+Share one example. Keep unanswered questions for the diagram and dictionary exercises. An unresolved question is a useful result; an invented answer is not.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
-- The same NuSEDS Fraser Coho sample carries the core workflow from first inspection to the catalog dry run; own-data transfer is optional near the end.
-- The integration system connects local data and expert context to an SDP, review tools, shared or local semantic resources, EML, and catalog publication.
-- The common biologist pathway is FAIR publication through a reviewed SDP; deeper pathways contribute missing shared terms or map organizational vocabularies or ontologies to shared anchors.
-- A dataset can contain multiple tables; a flat file contains one rectangular table.
-- The metadata CSVs are visible review surfaces, not hidden software internals.
-- SDP is a custom Frictionless profile with explicit external-standard alignments and salmon-specific rules.
-- The Salmon Domain Ontology provides shared anchors between bounded contexts; it does not erase locally governed meanings.
-- Reuse shared terms when meanings match, propose shared extensions when reuse is broad and stable, and federate local terms when the local distinction matters.
-- EML export uses reviewed mapping facts that cannot be inferred from the source table alone.
+- The same 173-row, 14-column Fraser Coho slice carries every chapter.
+- A reusable dataset needs understandable values, context, relationships, sources and access conditions.
+- The dataset has 164 distinct population–year pairs; that pair does not uniquely identify every row.
+- We draw and describe the dataset, then peer review our account, before using metasalmon or AI.
+- A catalog preview, a draft record and a verified public deposit have different statuses.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::

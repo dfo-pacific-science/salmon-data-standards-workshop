@@ -1,283 +1,124 @@
 ---
-title: "Create a Draft Salmon Data Package"
-teaching: 55
-exercises: 40
+title: "Draw the Dataset Before Using Tools"
+teaching: 20
+exercises: 35
 ---
 
 :::::::::::::::::::::::::::::::::::::: questions
 
-- What must I set up before running the demo?
-- What will the bundled quickstart data show me?
-- What input structures does `create_sdp()` support?
+- What is a row about, and which things must remain distinct?
+- How can a simple diagram make hidden relationships and assumptions visible?
+- What should we record now so the diagram could support formal ontology work later?
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Confirm the project, `raw_data/`, `scripts/`, and `output/` layout, unless you already completed this during setup.
-- Run the bundled example unchanged to generate and inspect templates.
-- Keep the same Fraser Coho data and package identity through Sessions 2–6.
-- Identify supported single-table, multi-table, and workbook inputs.
+- Draw a node-and-edge model of the Fraser Coho table using plain-language relationships.
+- Distinguish source records, population identifiers, waterbodies, species, years and estimates.
+- Link diagram statements to source fields and mark unsupported relationships as questions.
+- Save an editable diagram and text-based node/edge tables before using packaging or AI tools.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-## Before the quickstart: confirm the project and folders
+![Seven workshop stages, with drawing the dataset highlighted.](fig/workflow-2.svg)
 
-If you already created this project and its folders in **Summary and Setup**, skip this section. Otherwise, work from one project root so every path in the lesson is relative and reproducible.
+## Start with people and the source table
 
-1. R users: in RStudio choose **File > New Project**, then create a new project or open the folder you prepared during setup.
-2. Confirm that the working project is `salmon-data-workshop/`; do not call `setwd()` to jump elsewhere.
-3. Create the input, script, and output folders before calling `create_sdp()`.
+Use the same `raw_data/nuseds-fraser-coho-2023-2024.csv` from Chapter 1. This chapter uses paper, a whiteboard or an ordinary drawing application, plus a spreadsheet or text editor. **Do not load the dataset into metasalmon or an AI service.** First make your own account of what the data is about.
 
-```r
-# Run from the open RStudio Project root.
-dir.create("raw_data", showWarnings = FALSE)
-dir.create("scripts", showWarnings = FALSE)
-dir.create("output", showWarnings = FALSE)
-```
+Work inside the extracted kit:
 
 ```text
-salmon-data-workshop/
-  salmon-data-workshop.Rproj
-  raw_data/                   # unchanged data and context inputs
-  scripts/                    # build_sdp.R or build_sdp.py
-  output/                     # generated package folders
+fraser-coho-workshop/
+  raw_data/       source CSV and supplied source information
+  worksheets/     your diagram tables, dictionary and review record
+  reference/      draft worked examples and scientific-review questions
+  scripts/        used after the human review in Chapter 3
+  output/         used for later generated packages
 ```
 
-Keep the prepared dataset, codebooks, methods, caveats, and other context inputs together under `raw_data/` and do not edit them in place while building a package. R users save the code below as `scripts/build_sdp.R`; Python users use `scripts/build_sdp.py`. Spreadsheet users keep a review log. Session 3 extends that same script.
+The worksheets are editable. Preserve the source files. If working on paper, photograph or scan the finished diagram and keep it in `worksheets/`; also complete the node/edge tables so the relationships can be read without an image.
 
-## One Fraser Coho example throughout the workshop
+## What a simple graph adds
 
-Everyone uses `nuseds-fraser-coho-sample.csv`: the included 30-row, 17-column NuSEDS Fraser Coho practice table, with analysis years ranging from 1996 to 2024. It stays with us through context capture, semantic review, code lists, EML, and the publication preview. Spreadsheet participants inspect a facilitator-generated package from these same rows.
+A **node** names something relevant to the dataset. An **edge** states how one node relates to another. Write a short verb phrase on each arrow, such as “identifies”, “is reported for” or “has result”. An unlabelled line leaves its meaning to the next reader.
 
-Keep the source unchanged. This small sample is not a complete Fraser Coho time series; blank spawner estimates are not zeroes. Do not substitute the separate 173-row `nuseds-fraser-coho-2023-2024.csv` example. [Session 7](session-7.Rmd) is the optional bring-your-own-dataset activity after the shared workflow.
+Give each node a local ID such as `N1`. These IDs connect the diagram to the worksheet. They are not official NuSEDS identifiers or newly minted ontology terms.
 
-## What "draft" means
+| Record | What to write |
+| --- | --- |
+| Node | Local ID, plain label, kind of thing, related source fields, evidence, status and any question |
+| Edge | Start-node ID, relationship phrase, end-node ID, related source fields, evidence, status and any question |
 
-A draft package is allowed to contain blanks, placeholders, and review markers. The first example has one purpose: generate the package structure and starter metadata so you can inspect it. It is not a finished description of the source dataset and it does not export EML yet.
+The supplied [node worksheet](files/fraser-coho-workshop/worksheets/dataset-nodes.csv) and [edge worksheet](files/fraser-coho-workshop/worksheets/dataset-edges.csv) provide these columns. Use “observed in file”, “working interpretation” or “question” to show the kind of support behind a statement.
 
-## Generate or open the prepared quickstart
+## Begin with row meaning
 
-Choose **R**, **Python**, or **Spreadsheet** below. Your selection is synchronized with the other software choices on this page.
+[Row grain](glossary.html#row-grain) describes what one record represents and the context needed to distinguish it from others. Start your drawing with **a source record**, then add the things that the record identifies or describes.
 
-::::::::::::::::::::::::::::::::::::: group-tab
+The source has 173 rows but only 164 distinct `POP_ID`–`ANALYSIS_YR` pairs. For example, `POP_ID` `46170` has two records for `2023`: `NICOLA RIVER (DAM)` and `NICOLA RIVER (DOT)`. Both have a blank adult-spawner estimate and `NO SURVEY THIS YEAR` classification. Their shared population/year values are not evidence that one row should be removed.
 
-### R
+Draw the distinction between:
 
-`metasalmon` includes a small NuSEDS-derived practice table. Generate its templates with semantic searching turned off so the first result is fast and local.
+- the **identifier value** in `POP_ID` and the source population it identifies;
+- the **waterbody name** and the place it refers to;
+- the **species label** and the population/organisms being described;
+- the **analysis-year value** and the biological or reporting basis that gives that year meaning;
+- an **estimate result** and the observation or estimation activity that produced it.
 
-```r
-library(metasalmon)
+Do not assume every row represents exactly one field visit. The source's method and survey-window fields may summarize work; the exact observation/estimation structure remains a question for source review.
 
-# Copy the bundled data and its source dictionary into the project once.
-# On a rerun, verify existing copies instead of replacing source inputs.
-source_files <- c(
-  "nuseds-fraser-coho-sample.csv" = "nuseds-fraser-coho-sample.csv",
-  "nuseds-fraser-coho-source-dictionary.csv" = "column_dictionary.csv"
-)
-for (local_name in names(source_files)) {
-  bundled_path <- system.file(
-    "extdata", source_files[[local_name]], package = "metasalmon"
-  )
-  stopifnot(nzchar(bundled_path))
-  local_path <- file.path("raw_data", local_name)
-  if (file.exists(local_path)) {
-    stopifnot(unname(tools::md5sum(local_path)) ==
-                unname(tools::md5sum(bundled_path)))
-  } else {
-    stopifnot(file.copy(bundled_path, local_path, overwrite = FALSE))
-  }
-}
+### Where does a Conservation Unit fit?
 
-data_path <- file.path("raw_data", "nuseds-fraser-coho-sample.csv")
-fraser_coho <- readr::read_csv(data_path, show_col_types = FALSE)
-stopifnot(nrow(fraser_coho) == 30L, ncol(fraser_coho) == 17L)
+A Conservation Unit, a biological population, a species and a stream are not interchangeable levels of one simple hierarchy. The current [NuSEDS catalog description](https://open.canada.ca/data/en/dataset/c48669a3-045b-400d-b730-48aafe8c5ee6) describes populations by freshwater location and run timing, referenced to stream mouths; those populations can be grouped by CU. This table has no CU column or population-to-CU membership table. You may add a dashed **“CU relationship to investigate”** node beside your graph, but do not assign a CU, draw an asserted membership edge, or label the relationship “is a” without supporting evidence.
 
-# Generate a new package once. overwrite = FALSE protects an existing folder.
-pkg_path <- create_sdp(
-  fraser_coho,
-  path = file.path("output", "fraser-coho-example-sdp"),
-  dataset_id = "fraser-coho-example",
-  table_id = "escapement",
-  seed_semantics = FALSE,
-  check_updates = FALSE,
-  overwrite = FALSE
-)
+Use the same discipline for stream relationships. “This source record names this waterbody” is supported directly by the table. The current official dictionary describes the waterbody or portion that bounds the population on its source estimate document (SEN). “This population occurs only in this waterbody” is a stronger biological claim that the table alone does not establish.
 
-list.files(pkg_path, recursive = TRUE)
-```
+## Expand one estimate into meaningful parts
 
-### Python
+The Salmon Domain Ontology's [metamodel view](https://github.com/salmon-data-mobilization/salmon-domain-ontology/blob/main/ontology/views/README.md) provides a plain-language guide. It is an **optional, non-normative orientation model**; the shared ontology's core modules hold its reusable definitions.
 
-`metasalmonpy` includes the same NuSEDS-derived practice table. Generate its templates with semantic searching turned off so the first result is fast and local.
+For `NATURAL_ADULT_SPAWNERS`, add nodes that help distinguish:
 
-```python
-from importlib.resources import files
-from pathlib import Path
+| Part | Plain-language question |
+| --- | --- |
+| [Entity](glossary.html#entity) | What population or group does the estimate concern? |
+| [Property](glossary.html#property) | What characteristic is represented, such as abundance? |
+| [Variable](glossary.html#variable) | What complete data question is the column answering? |
+| [Observation or estimation activity](glossary.html#observation) | What work produced the result? |
+| [Result](glossary.html#result) and [unit](glossary.html#unit) | What value was reported, and in what units? |
+| [Method](glossary.html#method) | How was the result determined? |
+| [Constraint](glossary.html#constraint) and other context | Which qualifiers change the meaning or scope? |
 
-import pandas as pd
-from metasalmonpy import create_sdp
+Use `758` from the first source record as a labelled **example value**, not as the definition of the variable. Relate `ESTIMATE_METHOD` to the estimation activity. The current official dictionary defines adults as mature fish excluding jacks and the year as the year the estimate is for; surveys may extend into the next calendar year. It does not establish a natural-origin restriction. Keep that qualifier, applicability of current definitions to the source workbook, and any additional biological year-basis claim as review questions. The next chapter makes these distinctions explicit in the dictionary.
 
-# Read packaged resources as bytes so source copies are identical.
-raw_data_dir = Path("raw_data")
-raw_data_dir.mkdir(exist_ok=True)
-source_files = {
-    "nuseds-fraser-coho-sample.csv": "nuseds-fraser-coho-sample.csv",
-    "nuseds-fraser-coho-source-dictionary.csv": "column_dictionary.csv",
-}
-for local_name, bundled_name in source_files.items():
-    source_bytes = files("metasalmonpy.data").joinpath(bundled_name).read_bytes()
-    local_path = raw_data_dir / local_name
-    if local_path.exists():
-        if local_path.read_bytes() != source_bytes:
-            raise ValueError(f"Source copy differs from the pinned package: {local_path}")
-    else:
-        local_path.write_bytes(source_bytes)
+## Keep a route to later formalization
 
-data_path = raw_data_dir / "nuseds-fraser-coho-sample.csv"
-fraser_coho = pd.read_csv(data_path)
-assert fraser_coho.shape == (30, 17)
+We are making a conceptual model, not writing OWL. Clear labels, typed nodes, directed relationships, evidence and uncertainty will help an ontology specialist formalize the model later. A local diagram does not approve new terms or prove equivalence with an existing term.
 
-pkg_path = create_sdp(
-    fraser_coho,
-    path=Path("output") / "fraser-coho-example-sdp",
-    dataset_id="fraser-coho-example",
-    table_id="escapement",
-    seed_semantics=False,
-    check_updates=False,
-    overwrite=False,
-)
-
-for path in sorted(
-    path for path in pkg_path.rglob("*") if path.is_file()
-):
-    print(path.relative_to(pkg_path))
-```
-
-### Spreadsheet
-
-Ask the facilitator for the Fraser Coho draft package generated with the R quickstart above. Put it at `output/fraser-coho-example-sdp/` and put the accompanying `nuseds-fraser-coho-sample.csv` and `nuseds-fraser-coho-source-dictionary.csv` in `raw_data/`. Open its metadata CSVs with Excel or LibreOffice Calc, keeping identifiers and code values as text.
-
-You are reviewing the same 30 rows as the R and Python learners. Keep the data, folder structure, and metadata headers unchanged; write review notes separately until Session 3. You do not need a personal dataset or a blank package for the core walkthrough.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-The copied source dictionary is supporting evidence: its original dataset/table IDs and annotations are not the decisions for this workshop package. Session 3 reviews its descriptions without replacing the generated dictionary.
-
-For the R and Python lanes, `seed_semantics = FALSE` / `seed_semantics=False` is the fast classroom option. It skips live searches for links to shared definitions. Session 3 turns those searches on in R and gives Python learners saved candidate evidence from the same sample. Session 4 reviews that evidence.
-
-## Inspect the package files
-
-Open these files in this order. All three lanes inspect a generated Fraser Coho package.
-
-1. `README-review.txt`
-2. `metadata/column_dictionary.csv`
-3. `metadata/tables.csv`
-4. `metadata/dataset.csv`
-5. `metadata/codes.csv`, when present
-6. `semantic_suggestions.csv`, when present
-
-All three lanes use this package structure. The source CSV is preserved in `raw_data/`; the writer names the packaged table `data/escapement.csv` after its table ID.
-
-```text
-output/fraser-coho-example-sdp/
-  README-review.txt
-  datapackage.json
-  .metasalmon-package          # R writer bookkeeping; Python uses .metasalmonpy-package
-  metadata/
-    dataset.csv
-    tables.csv
-    column_dictionary.csv
-    codes.csv                  # present when categorical columns exist
-  data/
-    escapement.csv              # filename follows the table ID
-```
-
-If semantic seeding is enabled later, the package may also include `semantic_suggestions.csv`, and metadata fields may contain `REVIEW: <iri>` draft values. An **IRI** is a stable web identifier for a shared term. The `REVIEW:` prefix means that the proposed match has not been accepted.
-
-## Transfer later: what other input structures are supported?
-
-The shared walkthrough uses one CSV. Session 7 shows how to adapt it to other inputs. `create_sdp()` does not open an arbitrary source file by itself. First use an appropriate reader to create R data frames; then pass one data frame or a named list of data frames.
-
-| Source | Preparation | `create_sdp()` input |
-| --- | --- | --- |
-| One CSV or flat table | `readr::read_csv()` | One data frame; `table_id` supplies its table name. |
-| Multiple CSVs | Read each CSV separately. | A named list such as `list(escapement = ..., sites = ...)`. |
-| Excel workbook with several sheets | Use `readxl::read_excel()` once per rectangular sheet/table. | A named list, with safe unique table IDs as names. |
-| NetCDF, raster, nested arrays | Not directly supported by this tabular workflow. | Use a format-specific packaging workflow, or a reviewed tabular derivative that does not misrepresent the source. |
-
-The output data resources are CSV. Keep merged headings, presentation-only rows, subtotals, and multiple tables on one sheet out of the rectangular data frames passed to `create_sdp()`.
-
-## Field definitions and accepted values
-
-Use the [SDP field reference][sdp-field-reference] while editing. Four fields that commonly cause confusion are:
-
-| Field | Meaning | Accepted values or rule |
-| --- | --- | --- |
-| `column_role` | What the column does in the table | `identifier`, `attribute`, `temporal`, `categorical`, or `measurement` |
-| `value_type` | The basic type of values in the source column | `integer`, `number`, `string`, `boolean`, `date`, or `datetime` |
-| `required` | Whether every data row must contain a value in this source column | `TRUE`, `FALSE`, or blank; this is different from whether an SDP metadata field itself is required. |
-| `unit_label` / `unit_iri` | A readable unit and its stable identifier | `unit_label` is text; `unit_iri` is required for measurement rows and must be a valid absolute IRI. |
-
-## Review-state validation
-
-Early validation should catch structure problems without requiring all links to shared definitions to be complete. Use the same software lane you selected above.
-
-::::::::::::::::::::::::::::::::::::: group-tab
-
-### R
-
-```r
-review_check <- validate_salmon_datapackage(
-  pkg_path,
-  require_iris = FALSE
-)
-
-review_check$semantic_validation$issues
-review_check$semantic_validation$missing_terms
-```
-
-### Python
-
-```python
-from metasalmonpy import validate_salmon_datapackage
-
-review_check = validate_salmon_datapackage(
-    pkg_path,
-    require_iris=False,
-)
-
-print(review_check["semantic_validation"]["issues"])
-print(review_check["semantic_validation"]["missing_terms"])
-```
-
-### Spreadsheet
-
-Spreadsheet software does not currently run the SDP validator. For this quickstart, compare the Fraser Coho package's folder structure and metadata headers with the [SDP field reference][sdp-field-reference], and keep unresolved fields or term links visibly in review state. This manual review is not evidence that strict validation has passed.
-
-::::::::::::::::::::::::::::::::::::::::::::::::
-
-In the R and Python lanes, `require_iris = FALSE` / `require_iris=False` allows links to shared definitions to remain unfinished during draft review. Warnings about missing measurement links, placeholders, or `REVIEW:` markers can be acceptable in review state. Use strict validation only when the package is publication-ready.
+Keep broad kinds of things separate from examples. A box labelled “waterbody” and an example `BONAPARTE RIVER` should not silently become the same object. Record whether a node is a concept, source record, identifier, example value or unresolved placeholder. The typed distinction is more useful now than formal syntax.
 
 ::::::::::::::::::::::::::::::::::::: challenge
 
-## Challenge 1: Generate and inspect the quickstart templates
+## Activity: Draw, explain and revise
 
-Run the bundled quickstart unchanged, then answer:
+1. **Draw for 15 minutes.** Include the six focus fields, one source record, one example value and the entity/property/variable/activity/result distinction. Label every relationship.
+2. **Explain for 10 minutes.** Your partner traces one row through the drawing. Ask which arrows come directly from the file and which need a definition or other source.
+3. **Revise for 10 minutes.** Correct ambiguous arrows, mark questions, and enter the nodes and edges in `worksheets/dataset-nodes.csv` and `worksheets/dataset-edges.csv`. Save the editable drawing or paper capture with them.
 
-- Where is the data table?
-- Which metadata file describes the dataset, each table, each column, and categorical codes?
-- Which fields still need human review?
-- Which Fraser Coho fields will need source context before you can describe them?
-- Where are the unchanged source and the generated `escapement.csv`?
+Use the [draft working diagram](files/fraser-coho-workshop/reference/dataset-graph-working.svg) only after making your first drawing. It is a comparison aid, not a scientifically approved answer key. Its [node](files/fraser-coho-workshop/reference/dataset-nodes-working.csv) and [edge](files/fraser-coho-workshop/reference/dataset-edges-working.csv) tables expose the underlying statements; `reference/dataset-graph-working.md` in the kit explains its limits.
+
+**Checkpoint:** every arrow has a label; its endpoints exist in the node table; the source-record grain is stated; population, waterbody, species and CU are not collapsed; questions remain visible. Keep the diagram for the formal peer review in Chapter 3.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 ::::::::::::::::::::::::::::::::::::: keypoints
 
-- Confirm the project and folders unless you already prepared them during setup.
-- Keep this Fraser Coho package through Sessions 3–6; optional transfer to your own data comes in Session 7.
-- `create_sdp()` accepts one data frame or a named list of tabular data frames, not arbitrary scientific file structures.
-- The field reference is the source for definitions and allowed values.
+- Draw the dataset before packaging it or asking AI to interpret it.
+- A useful graph makes relationships, row meaning, evidence and uncertainty explicit.
+- Population, waterbody, species and Conservation Unit are distinct; this table does not supply a CU mapping.
+- The observation activity, variable and result value need different nodes.
+- An editable diagram plus text-based node/edge tables supports later reuse and formalization.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
