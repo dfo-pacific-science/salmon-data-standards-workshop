@@ -48,3 +48,13 @@ Before delivery, obtain the scientific review through Brett, resolve that
 validator defect, rehearse the free provider with working access and verify the
 separate public Test Node record anonymously. Then update status from the
 actual evidence. There is no fixed September completion deadline.
+
+## Day 2 reference checks
+
+`day2-reference-checks.json` records the local technical inspection of the distributed vocabulary, model and bridge. The maintainer command is `python scripts/check-semantic-lab.py` from the lesson repository, using the pinned dependencies in the kit's `semantic-lab/scripts/requirements.txt`. The result records checked input hashes. Re-run it after changing these artifacts, regenerate the receipt, then rebuild the kit inventory and ZIP.
+
+The vocabulary check covers the fixed four-concept teaching selection and its source bindings. Model and bridge checks cover selected OWL RL consequences, actual SHACL conditions, and explicit error examples. This is not complete OWL DL verification, a new general-purpose ontology validator, or independent scientific approval. No learner review is simulated by the reference command; learner commands separately require their actual Day 1 preparation.
+
+The Chapter 12 preview receipt is under `semantic-lab/contributions/`. It records the actual pinned R/Python candidate rendering, not a confirmed ontology gap or submitted request. Day 2 does not depend on a live catalog or AI service and does not close the outstanding Day 1 publication and review conditions above.
+
+On 2026-09-08, a disposable, explicitly automated mechanical fixture also exercised the learner vocabulary CLI and both contribution preview CLIs after their preparation gate. The vocabulary passed with four concepts, three definitions and one explicit definition gap. R 4.5.2 / metasalmon 0.5.0 and Python 3.14.3 / metasalmonpy 0.4.0 each rendered two candidate rows and two local request previews. Both refused a second run into existing output without changing its bytes; the source and reference artifacts stayed unchanged. This fixture was not distributed and does not represent a human peer review. The supplied learner worksheets remain uncompleted.
