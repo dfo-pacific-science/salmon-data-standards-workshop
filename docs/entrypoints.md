@@ -10,8 +10,8 @@ This is the canonical source map for the Carpentries/Sandpaper workshop. Edit so
 
 | Source | Responsibility |
 | --- | --- |
-| `config.yaml` | Navigation: seven chapters, setup, glossary, field reference, reference, extended practice, and an advanced extension. |
-| `index.md`, `README.md` | Workshop promise, six-hour sequence, and start links. |
+| `config.yaml` | Navigation: twelve chapters across two days, setup, glossary, field reference, reference, extended practice, and the Day 2 guide. |
+| `index.md`, `README.md` | Three workshop outcomes, two six-hour sequences, standalone 55-minute overview, and start links. |
 | `episodes/session-1.Rmd` | Overview and endpoint tour, 55 minutes. |
 | `episodes/session-2.Rmd` | Human concept graph, 55 minutes. |
 | `episodes/session-3.Rmd` | Human dictionary, decomposition, and peer review, 65 minutes. |
@@ -19,25 +19,34 @@ This is the canonical source map for the Carpentries/Sandpaper workshop. Edit so
 | `episodes/session-5.Rmd` | Mapping and required human–AI comparison, 70 minutes. |
 | `episodes/session-6.Rmd` | Codes and term gaps, 30 minutes. |
 | `episodes/session-7.Rmd` | Validation, EML, and test publication, 45 minutes. |
+| `episodes/session-8.Rmd` | Reuse, local/shared scope and representation decisions, 60 minutes. |
+| `episodes/session-9.Rmd` | SKOS vocabulary construction and stewardship, 75 minutes. |
+| `episodes/session-10.Rmd` | RDF/OWL model and limited reasoning/conformance checks, 90 minutes. |
+| `episodes/session-11.Rmd` | Bridge construction, term types, mapping consequences and evidence, 75 minutes. |
+| `episodes/session-12.Rmd` | Term-request preview, contribution or clarification draft, and review lifecycle, 60 minutes. |
 | `learners/setup.md` | Download, project layout, package pins, and optional live AI setup. |
 | `learners/glossary.md` | Plain-language concepts and stable first-use anchors. |
 | `learners/field-reference.md` | Workshop field guide linked to the canonical SDP specification. |
 | `learners/reference.md` | Paths, checkpoints, software boundaries, and `#teaching-record` status. |
-| `learners/extended-practice.md` | Five optional same-source labs outside the 360-minute route; the Chapter 2–3 human checkpoint remains required. |
-| `learners/advanced.md` | Optional ontology formalization after the six-hour sequence; the canonical page moved from `episodes/bonus-session.Rmd`. |
-| `instructors/instructor-notes.md` | Six-hour facilitation and preparation checks. |
+| `learners/extended-practice.md` | Five optional same-source labs outside the 720-minute route; the Chapter 2–3 human checkpoint remains required. |
+| `learners/advanced.md` | Day 2 prerequisites and artifact guide; retained URL replaces the former short extension. |
+| `instructors/instructor-notes.md` | Two six-hour schedules, overview route, facilitation and preparation checks. |
 | `profiles/learner-profiles.md` | Design needs and success criteria for each audience. |
 | `links.md` | Shared external references and workshop-kit download link. |
 
-The source is `nuseds-fraser-coho-2023-2024.csv`, 173 rows and 14 columns. Project root `fraser-coho-workshop/`, dataset ID `fraser-coho-workshop`, table ID `escapement`, and output `output/fraser-coho-workshop-sdp` are fixed across the seven chapters.
+The source is `nuseds-fraser-coho-2023-2024.csv`, 173 rows and 14 columns. Project root `fraser-coho-workshop/`, dataset ID `fraser-coho-workshop`, table ID `escapement`, and package output `output/fraser-coho-workshop-sdp` are fixed across the twelve chapters. Day 2 adds context artifacts in `semantic-lab/`, not canonical SDP columns or changed source records.
 
 ## Kit and evidence
 
 - `episodes/files/fraser-coho-workshop/`: canonical kit inputs, worksheets, scripts, recorded AI outputs, and `draft-sdp`, `seeded-sdp`, and `reference-sdp` checkpoints.
 - `episodes/files/fraser-coho-workshop.zip`: downloadable archive of that kit, served as `files/fraser-coho-workshop.zip`.
 - `learners/reference.md#teaching-record`: the learner-facing status of the public KNB Test Node rehearsal. Replace pending wording only after verifying the actual record and receipt.
+- `episodes/files/fraser-coho-workshop/semantic-lab/`: Day 2 vocabulary, model, bridge, contribution examples, blank worksheets, source pins and scoped checking scripts. Classroom IRIs use an `example.org` namespace and do not constitute official shared terms or organization-owned releases.
+- `episodes/fig/workflow.mmd`: editable two-day navigation source; `scripts/prepare-workshop-assets.py` exports twelve SVG views that highlight the current chapter.
 
 The reference is a technical draft pending Bruno and Tom's domain review. Do not turn a passing check or test upload into an approval claim. Keep recorded AI output distinguishable from human-authored teaching material; the required comparison must remain available without accounts, keys, or purchased credits.
+
+The SDO conventions, module/bridge guide, metamodel view and term-request template informed Day 2. Coordination and proposed upstream documentation improvements live in the existing [MetaSalmon hub card](https://github.com/salmon-data-mobilization/metasalmon/blob/main/knowledge/workshop-curriculum-and-sdo-guidance-2026-09-08.md); suggestions are drafts, not changes to SDO governance or definitions. Source pins belong with each lab artifact. No new package APIs, ontology definitions or SDP schemas are introduced by the curriculum.
 
 ## Maintainer scripts
 
@@ -47,7 +56,8 @@ The reference is a technical draft pending Bruno and Tom's domain review. Do not
 | `scripts/seed-reference.R` | Generate and retain semantic candidate evidence for the reference workflow. |
 | `scripts/complete-reference.R` | Apply the documented technical reference metadata and export preparation. |
 | `scripts/check-workshop.py` | Check consistency across the source lesson, kit, paths, and identifiers. |
-| `scripts/build-workshop-kit.py` | Assemble the downloadable kit from its canonical source artifacts. |
+| `scripts/check-semantic-lab.py` | Orchestrate supplied reference vocabulary/model/bridge checks. No learner review is performed or claimed. |
+| `scripts/build-workshop-kit.py` | Generate HTML reading companions (including nested Day 2 pages), inventory all distributed bytes and assemble the downloadable kit. |
 | `scripts/verify-test-record.py` | Verify the test catalog record through anonymous, read-only requests; it does not upload or change access. |
 
 Read each script's inputs and options before running it. Keep its technical results separate from pending domain review and the actual test publication receipt.
@@ -72,12 +82,15 @@ From the repository root, run the workshop consistency check and the Sandpaper c
 
 ```bash
 python3 scripts/check-workshop.py
+python3 scripts/check-semantic-lab.py  # requires semantic-lab/scripts/requirements.txt
 Rscript --vanilla -e 'sandpaper::check_lesson()'
 Rscript --vanilla -e 'sandpaper::build_lesson(rebuild = TRUE, preview = FALSE)'
 git diff --check
 ```
 
 The rendered site is `site/docs/`. `check_lesson()` checks lesson structure; inspect the built pages and local links as well. Sandpaper places setup inside `index.html#setup`, renders glossary and reference pages at the site root, and rewrites links to Markdown files as HTML links. Downloadable Markdown references therefore need matching HTML companions or another explicitly supported download route.
+
+The Day 2 reference checks use pinned rdflib 7.1.4, owlrl 7.1.4 and pyshacl 0.30.1 in a separate environment. The learner commands require the actual preparation checkpoint; `check-semantic-lab.py` is explicitly maintainer inspection of shipped drafts. Preserve that distinction in the validation receipt. The script calls the existing teaching checks and does not replace SDO's own parser, profile, consistency or governance checks.
 
 The consistency script checks the lesson/kit contract; it does not replace running the literal R/Python build, validating the generated package and EML, or verifying the actual test catalog record. Technical checks do not supply domain review.
 

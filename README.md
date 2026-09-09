@@ -1,10 +1,12 @@
 # Salmon Data Standards Workshop
 
-This six-hour workshop follows one **NuSEDS Fraser Coho 2023–2024 dataset** from human interpretation to a Salmon Data Package and a KNB Test Node publication exercise. Everyone uses the included `nuseds-fraser-coho-2023-2024.csv`: **173 rows and 14 columns**. No personal dataset is needed.
+This **two-day, 12-hour workshop** follows one NuSEDS Fraser Coho 2023–2024 dataset from human interpretation through data publication and semantic stewardship. Day 1 is a six-hour beginner route to a Salmon Data Package and a KNB Test Node publication exercise. Day 2 is six hours of controlled-vocabulary construction, ontology modelling, bridge review, and shared-term contribution. Everyone uses the included `nuseds-fraser-coho-2023-2024.csv`: **173 rows and 14 columns**. No personal dataset is needed.
 
 Participants first draw how observations, results, populations, methods, and units relate. They write and peer-review a data dictionary before asking software to suggest mappings. They then compare human decisions with recorded AI outputs, document code meanings and gaps, and inspect validation, EML, and a test catalog record. The reference package is a technical draft pending Bruno and Tom's domain review; a passing software check does not supply that review.
 
-## The six-hour sequence
+Day 2 returns to the human model and produces actual draft SKOS, OWL, mapping, and request artifacts. Organization-owned meanings and shared concepts remain distinct; a teaching namespace does not establish authority or a public vocabulary release. The curriculum supports three related outcomes: reusable data publication, contributions to shared terminology, and local terminology connected through explicit bridges.
+
+## Part 1 — beginner route to publication (Day 1)
 
 | Chapter | Activity | Minutes |
 | --- | --- | ---: |
@@ -17,6 +19,19 @@ Participants first draw how observations, results, populations, methods, and uni
 | 7 | Validate, export EML, and inspect test publication | 45 |
 | | **Teaching and activities; add breaks and lunch** | **360** |
 
+## Part 2 — build and connect meanings (Day 2)
+
+| Chapter | Activity | Minutes |
+| --- | --- | ---: |
+| 8 | Choose reuse, local representation, or a shared contribution | 60 |
+| 9 | Build and steward a small SKOS controlled vocabulary | 75 |
+| 10 | Formalize the human graph with RDF and OWL | 90 |
+| 11 | Build and test bridges to shared ontology terms | 75 |
+| 12 | Prepare term requests and plan review and release | 60 |
+| | **Teaching and activities; add breaks and lunch** | **360** |
+
+Both parts total **720 minutes**. Chapter 1 is also a standalone 55-minute overview. Day 2 requires the Day 1 graph, dictionary, and peer review, or an equivalent preparation session on this same dataset; possessing a downloaded checkpoint alone does not meet that prerequisite.
+
 ## Start here
 
 - [Setup](learners/setup.md): download the workshop kit and choose spreadsheet, R, or Python tools.
@@ -25,9 +40,9 @@ Participants first draw how observations, results, populations, methods, and uni
 - [Reference and teaching record](learners/reference.md#teaching-record): checkpoints, software boundaries, and test catalog status.
 - [Instructor notes](instructors/instructor-notes.md): timing, preparation, and review criteria.
 - [Extended practice](learners/extended-practice.md): five optional labs using the same source, after the human graph and dictionary checkpoints.
-- [Advanced extension](learners/advanced.md): optional ontology formalization after the six-hour workshop, using the same human graph.
+- [Day 2 guide](learners/advanced.md): prerequisites, substantive authoring chapters, and draft artifact boundaries.
 
-Extended practice is outside the 360-minute schedule. The labs investigate repeated population–year records, missingness and method context, code sources, a reviewed metadata edit across R and Python, and validation/EML/manifest evidence. They use the included data and local artifacts without requiring live AI or a deposit.
+Extended practice is outside the 720-minute schedule. The labs investigate repeated population–year records, missingness and method context, code sources, a reviewed metadata edit across R and Python, and validation/EML/manifest evidence. They use the included data and local artifacts without requiring live AI or a deposit. The Day 2 authoring files are under `semantic-lab/` in the same kit and remain separate from the canonical SDP metadata.
 
 The project is `fraser-coho-workshop/`. Keep the source at `raw_data/nuseds-fraser-coho-2023-2024.csv`, the build at `scripts/build_sdp.R` or `scripts/build_sdp.py`, and the working package at `output/fraser-coho-workshop-sdp`. Dataset ID `fraser-coho-workshop` and table ID `escapement` remain consistent throughout. The kit contains `draft-sdp`, `seeded-sdp`, and `reference-sdp` checkpoints from the same data.
 

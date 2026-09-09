@@ -6,11 +6,11 @@ title: Instructor Notes
 
 Use the same **173-row, 14-column NuSEDS Fraser Coho 2023–2024 dataset** for the whole workshop. The source is `nuseds-fraser-coho-2023-2024.csv`, the dataset ID is `fraser-coho-workshop`, and the table ID is `escapement`. The measurement is `NATURAL_ADULT_SPAWNERS`. Begin with human interpretation; introduce packaging software only after the graph, dictionary, and peer review.
 
-Show the destination in Chapter 1, then return to the raw data. Participants should understand why definitions, context, and relationships matter before they encounter identifiers or automated suggestions. The kit supplies the dataset for everyone.
+Show the three outcomes in Chapter 1: reusable data publication, shared-term contributions, and local semantic stewardship through vocabularies, ontologies, and bridges. Then return to the raw data. Participants should understand why definitions, context, and relationships matter before they encounter identifiers or automated suggestions. The kit supplies the dataset for everyone.
 
 The supplied reference package is a **technical draft pending Bruno and Tom's domain review**. Label it that way in handouts and demonstrations. Structural validation and a successful test upload are useful technical evidence; neither is an expert ruling about biological meanings.
 
-## Six hours of teaching and activities
+## Day 1 — six-hour beginner route to publication
 
 | Elapsed time | Chapter | Minutes | Learner result |
 | --- | --- | ---: | --- |
@@ -25,7 +25,28 @@ The supplied reference package is a **technical draft pending Bruno and Tom's do
 
 Add breaks and lunch outside these six hours. Preserve the human graph, dictionary, and required AI comparison if discussion runs long; shorten optional live tool demonstrations first. Do not use installation or account creation time as a substitute for the review exercises.
 
-The [extended practice labs](extended-practice.html) are optional follow-up work outside the 360-minute schedule. They investigate repeated population–year records, missingness and method context, code sources, a reviewed metadata edit across R and Python, and validation/EML/manifest evidence using the same included dataset. Require the actual Chapter 2–3 human work and peer review before any lab; do not use supplied reference answers to bypass that checkpoint. Pair across tools where useful and assess the stated output and self-check for each lab. The separate [advanced ontology extension](advanced.html) formalizes a small part of the same human graph.
+The [extended practice labs](extended-practice.html) are optional follow-up work outside the two-day, 720-minute schedule. They investigate repeated population–year records, missingness and method context, code sources, a reviewed metadata edit across R and Python, and validation/EML/manifest evidence using the same included dataset. Require the actual Chapter 2–3 human work and peer review before any lab; do not use supplied reference answers to bypass that checkpoint. Pair across tools where useful and assess the stated output and self-check for each lab.
+
+## Day 2 — six hours of vocabulary, ontology and contribution work
+
+| Elapsed time | Chapter | Minutes | Learner result |
+| --- | --- | ---: | --- |
+| 0:00–1:00 | 8. Choose reuse, local or shared | 60 | Separate evidence, representation and stewardship decisions. |
+| 1:00–2:15 | 9. Build a controlled vocabulary | 75 | Draft a small SKOS scheme and its stewardship record. |
+| 2:15–3:45 | 10. Formalize the graph | 90 | Read and edit a small OWL model and test selected consequences. |
+| 3:45–5:00 | 11. Build bridges | 75 | Assess and express mappings with direction, evidence and limits. |
+| 5:00–6:00 | 12. Prepare contributions | 60 | Produce a request or source-clarification draft and a review plan. |
+| | **Total** | **360** | |
+
+Both days total 12 hours excluding breaks. Day 1 can be delivered independently. For participants joining only Day 2, arrange the same-source human preparation and peer review before the six-hour session; do not consume the authoring time with an unplanned catch-up. No live publication is a prerequisite for Day 2.
+
+Use `semantic-lab/` for the worked examples, worksheets, Turtle and local checks. Keep one facilitator who can run the pinned Python RDF tools, while all participants make the same conceptual and review decisions. Inspecting a supplied result is a valid lane, but record it as inspection. The lesson checks are scoped technical evidence, not complete OWL DL verification or independent scientific approval.
+
+The practical progression is a source value → documented local meaning → representation choice → explicit mapping → contribution decision. Have groups show their files and explain one rejected or deferred claim. A larger artifact is not automatically better. In particular, no new shared term should be invented just to give every group a term request.
+
+## Standalone 55-minute overview
+
+Use Chapter 1 without package creation or AI calls. Allocate 10 minutes to the three outcomes and raw/finished comparison, 10 to the six source columns and their interpretation problems, 15 to the human-preparation and Day 1 workflow, 10 to a preview of Day 2's vocabulary/model/bridge/request files, and 10 to the chapter's pair discussion and recap. This is an awareness session, not completion of either day's hands-on outcomes.
 
 ## Prepare the kit and endpoint tour
 
@@ -35,6 +56,7 @@ The [extended practice labs](extended-practice.html) are optional follow-up work
 4. Open the [Glossary](glossary.html), [Field reference](field-reference.html), and [teaching-record section](reference.html#teaching-record) in the browser. Verify the public Test Node link and its recorded status before using it in the opening tour. If the record is unavailable, show the supplied local artifacts and state the actual status.
 5. Prepare one example where a plausible label or AI explanation requires source evidence. Do not present a synthetic teaching response as though it were a captured provider output; the kit must identify what was recorded, when, and from which model or process.
 6. Retain evidence for creator, contact, licence, provenance, and export decisions. Separate the source dataset's creators from the workshop compiler and the authorized test publisher.
+7. Before Day 2, run the semantic lab checks on a fresh extracted kit. Read the source-pinned vocabulary, model and bridge notes; check that draft mappings remain draft and that missing source definitions remain visible. Review the contribution examples before showing request-generation code. There is no automatic issue submission or vocabulary release.
 
 The test deposit is authorized under Brett's identity and scoped to the KNB Test Node. Learners do not need credentials and must not copy a token from a demonstration. No production deposit is included in this workshop. Update the teaching-record section only from an actual observed outcome and receipt.
 
@@ -65,6 +87,11 @@ A fluent response, retrieval rank, or numerical score is not approval. Keep sour
 | 5 | Each comparison records evidence and a human decision or question; AI output is not silently accepted. |
 | 6 | A stored code has a source-backed description, and any gap is a draft request rather than an unapproved submission. |
 | 7 | Participants distinguish review validation, strict validation, EML validity, domain review, and the actual test upload outcome. |
+| 8 | Representation and ownership decisions have separate reasons; a missing search hit is not treated as proof of a missing term. |
+| 9 | Source codes, concept IRIs, labels and definitions remain distinct; missing definitions and stewards are explicit. |
+| 10 | Learners can explain an inferred statement and why a missing statement is not automatically false. |
+| 11 | Mapping direction, term types, evidence and review status agree; a candidate link is not silently applied. |
+| 12 | The draft has a source, scope, candidate search and a competent reviewer or open reviewer question. Nothing has been submitted automatically. |
 
 ## Common corrections
 

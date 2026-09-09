@@ -14,14 +14,22 @@ exercises: 25
 
 ::::::::::::::::::::::::::::::::::::: objectives
 
-- Recognize the source table and the intended catalog destination for the same Fraser Coho example.
+- Recognize the source table and the publication, shared-contribution, and local-stewardship outcomes for the same Fraser Coho example.
 - Name each stage's problem and output without needing to run the software.
 - Distinguish data values, descriptions of those values, and links to shared definitions.
 - Explain why the first working diagram and dictionary must precede metasalmon and AI.
 
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
-![Seven workshop stages, with the opening overview highlighted.](fig/workflow-1.svg)
+![Two-part workshop workflow: Day 1 through publication and Day 2 through vocabulary, ontology, bridge and contribution work; Chapter 1 highlighted.](fig/workflow-1.svg)
+
+## Two days, three connected outcomes
+
+This workshop supports **reusable data publication**, **contributions to shared terminology**, and **local vocabulary or ontology stewardship connected to shared meanings**. Day 1 is a complete six-hour beginner route through publication; Day 2 adds six hours of semantic authoring and contribution work. This chapter also stands alone as a 55-minute overview. Its tour includes the purpose and artifacts of both days without requiring code or formal syntax.
+
+The same graph and dictionary support all three outcomes. On Day 1 they make source meanings reviewable before software. On Day 2 we use them to decide which terms already exist, create small draft resources where useful, and connect local meanings to the Salmon Domain Ontology without erasing their differences. A catalog record helps people find the dataset; explicit concepts and relationships help them compare and interpret its meanings.
+
+The [Day 2 guide](advanced.html) shows the next artifacts: a [SKOS](glossary.html#skos) controlled vocabulary, a small [OWL](glossary.html#owl) model, a [bridge](glossary.html#bridge), and a [term-request](glossary.html#term-request) or clarification draft. These classroom drafts do not create official shared terms. Briefly preview the files in `semantic-lab/` and return to the source; detailed authoring starts in Chapter 8.
 
 ## Start with the destination
 

@@ -42,6 +42,13 @@ jobs:
         # the independent SDP validator and a live catalog need separate evidence.
         run: python3 scripts/check-workshop.py
 
+      - name: "Check Day 2 semantic teaching artifacts"
+        # Explicit reference inspection, not completion of a learner review.
+        run: |
+          python3 -m venv /tmp/workshop-semantic-checks
+          /tmp/workshop-semantic-checks/bin/python -m pip install -r episodes/files/fraser-coho-workshop/semantic-lab/scripts/requirements.txt
+          /tmp/workshop-semantic-checks/bin/python scripts/check-semantic-lab.py
+
       - name: "Set up R"
         uses: r-lib/actions/setup-r@v2
         with:

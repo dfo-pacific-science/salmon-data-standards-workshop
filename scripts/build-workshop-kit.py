@@ -7,7 +7,9 @@ Only generated HTML, inventory and ZIP files are overwritten.
 import hashlib
 import json
 from pathlib import Path
+import re
 import subprocess
+from urllib.parse import urlsplit
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -16,11 +18,24 @@ ZIP = KIT.with_suffix(".zip")
 generated = [KIT / "README.md", KIT / "raw_data/PROVENANCE.md"]
 for folder in ("reference", "ai", "publication", "validation"):
     generated.extend(sorted((KIT / folder).glob("*.md")))
+generated.extend(sorted((KIT / "semantic-lab").rglob("*.md")))
+generated_sources = {path.resolve() for path in generated}
 for source in generated:
     # These are generated reading views. Markdown/CSV remain the editable source.
-    subprocess.run(["pandoc", str(source), "--standalone", "--from=gfm", "--to=html5",
+    # Markdown authoring links need to reach the generated reading companions.
+    # The downloadable originals remain unchanged; Pandoc transforms this view.
+    markdown = source.read_text()
+    def reading_link(match):
+        original = match.group(0)
+        url = urlsplit(original)
+        if url.scheme or url.netloc:
+            return original
+        target = (source.parent / url.path).resolve()
+        return original[:-3] + ".html" if target in generated_sources else original
+    markdown = re.sub(r'(?<=\]\()[^\s)]+\.md(?=[#)])', reading_link, markdown)
+    subprocess.run(["pandoc", "--standalone", "--from=gfm", "--to=html5",
                     "--metadata", "title=" + source.stem.replace("-", " "),
-                    "--output", str(source.with_suffix(".html"))], check=True)
+                    "--output", str(source.with_suffix(".html"))], input=markdown, text=True, check=True)
 
 
 def included(path):

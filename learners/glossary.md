@@ -84,6 +84,50 @@ A maintained set of terms or codes with documented meanings and identifiers. It 
 
 An explicit model of concepts and their relationships, often including rules about how they may be used together. Our hand-drawn graph makes those relationships discussable before we consider formal ontology terms. [OWL][owl-overview] is one language used to express ontologies.
 
+## SKOS {#skos}
+
+Simple Knowledge Organization System: an RDF vocabulary for representing concept schemes with identifiers, labels, definitions, notes, and relationships. A code in a source table can be associated with a SKOS concept; the code, label, and concept have different roles. [Chapter 9](session-9.html) builds a small scheme. [W3C SKOS Primer][skos-primer].
+
+## OWL {#owl}
+
+Web Ontology Language: a language for logical statements about classes, properties, and individuals. Its statements can imply further facts. A missing value is not automatically false under its open-world interpretation. [Chapter 10](session-10.html) demonstrates selected consequences and their limits. [W3C OWL Primer][owl-primer].
+
+## RDF and Turtle {#rdf}
+
+RDF expresses a graph as subject–predicate–object statements. Turtle is a readable text syntax for writing those statements. Turtle files can describe data, vocabulary concepts, ontology axioms, or mappings; the file extension alone does not establish which kind of claim is inside. [RDF Primer][rdf-primer].
+
+## Class and individual {#class-and-individual}
+
+A class describes a category; an individual is something a statement is about. In the teaching model, a source-record class and the individual representing a particular source row are distinct. A SKOS concept is not automatically an OWL class. SDO requires separate identifiers when both representations are needed; instance-typing a concept as a procedure is a different operation. [SDO conventions][sdo-conventions].
+
+## Namespace {#namespace}
+
+An IRI prefix used to organize identifiers. The classroom uses `https://example.org/fraser-coho-workshop/terms/` for explicitly draft terms. A real organization needs an identifier and maintenance policy for its own namespace; an IRI's appearance does not establish authority or web availability.
+
+## Bridge {#bridge}
+
+A separate set of statements connecting local meanings to shared meanings. Each mapping needs an appropriate relationship, direction, evidence, and review record. A bridge can preserve useful differences rather than replacing local identifiers. [Chapter 11](session-11.html) constructs and assesses one. [SDO bridge guide][sdo-bridge-guide].
+
+## Entailment {#entailment}
+
+A statement that follows logically from specified assertions and rules. Which files and rules were loaded matters. A limited classroom reasoner demonstration does not establish every consequence of a full ontology import closure or independently verify the science. [OWL Primer][owl-primer].
+
+## SHACL {#shacl}
+
+Shapes Constraint Language: a way to test an RDF graph against explicit conditions, such as requiring a value or limiting its count. It addresses conformance of supplied data. OWL domain and range statements instead support logical inferences about types. The workshop runs selected SHACL shapes and bounded OWL RL reasoning; these checks do not establish full SDO conformance or complete OWL DL consistency. [W3C SHACL Recommendation][shacl-reference].
+
+## SSSOM {#sssom}
+
+Simple Standard for Sharing Ontological Mappings: a format for exchanging mappings and their metadata. The mapping predicate determines the relationship being claimed. A mapping table and a Turtle file can express the same proposed relationship; a format change does not strengthen its evidence. [SSSOM specification][sssom-spec].
+
+## Competency question {#competency-question}
+
+A concrete question the model should help answer. For this source, “which record carries this result and analysis year?” is different from “which field survey produced it?” The latter may remain unanswered when source evidence is missing. Use these questions to decide what to model and what to test.
+
+## Term request {#term-request}
+
+A proposal asking a vocabulary or ontology's stewards to review a missing concept or change. It records the supported meaning, existing candidates, evidence, intended scope, and unresolved decisions. A request, local draft, or passing check is not a term's admission into a shared resource. [Chapter 12](session-12.html) prepares a request or source-clarification draft.
+
 ## IRI {#iri}
 
 An Internationalized Resource Identifier names a resource, such as a concept in a vocabulary. Many look like web addresses. In this workshop, an IRI links a local field or code to a term whose definition must fit. A resolving link alone does not prove that fit. See the [RDF primer][rdf-primer].

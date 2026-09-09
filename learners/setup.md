@@ -23,6 +23,7 @@ fraser-coho-workshop/
     build_sdp.py                # Python lane
   output/
     fraser-coho-workshop-sdp/
+  semantic-lab/                 # Day 2: draft vocabularies, model, bridges, requests
 ```
 
 The kit also supplies worksheets, source context, recorded AI outputs, and three package checkpoints: `draft-sdp`, `seeded-sdp`, and `reference-sdp`. Follow its README and each chapter to choose the correct checkpoint. Keep your own exercise answers separate from the supplied reference files. The reference is a technical draft pending Bruno and Tom's domain review.
@@ -92,6 +93,22 @@ For optional live practice, choose one of these routes before the workshop:
 - **Ollama local model:** follow the [Ollama quickstart][ollama-quickstart] to install a local model suitable for your computer. Download it before the workshop. This optional route needs local disk space and compute; the supplied outputs remain the common comparison if setup is incomplete.
 
 Keep API keys in a local credential store or session environment, never in a worksheet, script, shared notebook, screenshot, or repository. Live LLM review requires an explicit `llm_assess = TRUE` / `llm_assess=True`; providing context paths alone must not enable it. Review only the supplied public workshop material with an external provider.
+
+## Day 2 tools and preparation
+
+Day 2 uses the same reviewed human graph and dictionary. Work through [Chapters 8–12](advanced.html) with a plain-text editor and the `semantic-lab/` worksheets. Spreadsheet participants can edit the concept and mapping tables and review the generated Turtle with a partner. R users can use their editor for these files; RDF validation is an additional tool, not a new metasalmon API.
+
+For the optional local code checks, use **Python 3.9 or newer** in a separate environment. Install the pinned RDF parser and limited rule reasoner before the class:
+
+```bash
+python3 -m venv .venv-semantic
+. .venv-semantic/bin/activate
+python -m pip install -r semantic-lab/scripts/requirements.txt
+```
+
+The file pins `rdflib==7.1.4`, `owlrl==7.1.4`, and `pyshacl==0.30.1`. On Windows use `.venv-semantic\Scripts\Activate.ps1`. After installation, the lab checks read local files and make no network requests. They demonstrate selected inference rules and SHACL checks; they do not perform complete OWL DL consistency checking or prove source meanings correct. Run the command documented in Chapter 10 and the [semantic lab guide](files/fraser-coho-workshop/semantic-lab/README.html), or inspect the supplied result with a partner. Keep execution and inspection distinct in your notes.
+
+All Day 2 namespaces and releases remain teaching drafts. No GitHub account, shared-term submission, vocabulary hosting, or new inference service is needed.
 
 ## Before you arrive
 

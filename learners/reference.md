@@ -18,6 +18,8 @@ The entire workshop uses **173 rows and 14 columns** from `nuseds-fraser-coho-20
 
 Start with the human graph and dictionary, then build a package, review mappings and AI suggestions, describe codes and term gaps, and inspect validation, EML, and test publication. The [Glossary](glossary.html) explains the concepts; the [Field reference](field-reference.html) connects them to package fields.
 
+That is **Part 1, Chapters 1–7 (six hours)**. [Part 2, Chapters 8–12](advanced.html) adds six hours to create and review vocabulary, ontology, bridge, and contribution artifacts from the same source. The downloadable `semantic-lab/` directory holds the Day 2 files, separately from canonical SDP metadata and the unchanged publication checkpoints.
+
 ## Glossary {#glossary}
 
 Use the [workshop glossary](glossary.html) for short definitions of the concepts linked throughout the lesson, and the [field reference](field-reference.html) for their package fields.

@@ -63,14 +63,32 @@ for path in [*KIT.glob("reference/*.svg"), *ROOT.glob("episodes/fig/*.svg")]:
     ET.parse(path)
 
 durations = []
-for n in range(1, 8):
+for n in range(1, 13):
     page = (ROOT / f"episodes/session-{n}.Rmd").read_text()
     durations.append(sum(int(re.search(rf"^{key}: (\d+)$", page, re.M)[1]) for key in ("teaching", "exercises")))
     check(f"fig/workflow-{n}.svg" in page, "Missing highlighted workflow")
     check("../glossary.html" not in page and "../reference.html" not in page, "Link escapes deployment root")
     if n < 4:
         check(not re.search(r"```(?:\{r|python)|create_sdp\(", page), "Early chapter contains an ingestion code example")
-check(durations == [55, 55, 65, 40, 70, 30, 45] and sum(durations) == 360, "Teaching route is not six hours")
+check(durations[:7] == [55, 55, 65, 40, 70, 30, 45] and sum(durations[:7]) == 360,
+      "Day 1 beginner route is not six hours")
+check(durations[7:] == [60, 75, 90, 75, 60] and sum(durations[7:]) == 360,
+      "Day 2 semantic authoring route is not six hours")
+check(sum(durations) == 720, "Full teaching route is not twelve hours")
+configured = re.findall(r"^- (session-\d+\.Rmd)$", (ROOT / "config.yaml").read_text(), re.M)
+check(configured == [f"session-{n}.Rmd" for n in range(1, 13)], "Chapter navigation differs from the two-day sequence")
+
+for required in ("README.md", "vocabulary/estimate-methods.ttl", "vocabulary/concepts-working.csv",
+                 "model/model.ttl", "model/instances.ttl", "model/record-shapes.ttl",
+                 "bridge/bridge.ttl", "bridge/mapping-decisions-working.csv",
+                 "worksheets/term-request.md", "contributions/source-clarification-example.md",
+                 "scripts/check_reference.py", "scripts/requirements.txt"):
+    check((KIT / "semantic-lab" / required).is_file(), "Missing Day 2 artifact: " + required)
+day2_receipt = json.loads((KIT / "validation/day2-reference-checks.json").read_text())
+check(day2_receipt["status"] == "pass", "Day 2 reference checks have not passed")
+for item in day2_receipt["checked_files"]:
+    check(hashlib.sha256((KIT / item["path"]).read_bytes()).hexdigest() == item["sha256"],
+          "Stale Day 2 reference evidence: " + item["path"])
 
 reference = KIT / "checkpoints/reference-sdp"
 manifest = json.loads((reference / "publication/test/knb-manifest.json").read_text())
@@ -126,7 +144,7 @@ if args.site:
         deployed_file = deployed_kit / name
         check(deployed_file.is_file() and deployed_file.read_bytes() == (KIT / name).read_bytes(),
               "Rendered kit file is absent or stale: " + name)
-    for n in range(1, 8):
+    for n in range(1, 13):
         deployed_figure = site / f"fig/workflow-{n}.svg"
         check(deployed_figure.is_file() and deployed_figure.read_bytes() == (ROOT / f"episodes/fig/workflow-{n}.svg").read_bytes(),
               f"Rendered workflow-{n}.svg is absent or stale")
@@ -165,5 +183,5 @@ if args.site:
     for warning in sorted(theme_warnings):
         print("WARNING: bundled Varnish theme asset is missing: " + warning)
     check(not errors, "Rendered links failed:\n" + "\n".join(sorted(errors)))
-print("PASS: workshop source, checkpoints, human artifacts, 360-minute route, test plan, ZIP" + (" and rendered links" if args.site else ""))
+print("PASS: workshop source, checkpoints, human artifacts, two 360-minute routes (720 total), test plan, ZIP" + (" and rendered links" if args.site else ""))
 print("Separate acceptance remains pending: scientific review, independent SDP validator fix, free API rehearsal and anonymous live test-catalog verification.")
