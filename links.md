@@ -33,6 +33,10 @@
 [sosa-ssn]: https://www.w3.org/TR/vocab-ssn/
 [skos-reference]: https://www.w3.org/TR/skos-reference/
 [owl-overview]: https://www.w3.org/TR/owl2-overview/
+[skos-primer]: https://www.w3.org/TR/skos-primer/
+[owl-primer]: https://www.w3.org/TR/owl2-primer/
+[shacl-reference]: https://www.w3.org/TR/shacl/
+[sssom-spec]: https://mapping-commons.github.io/sssom/spec/
 [qudt]: https://qudt.org/
 [salmon-data-integration-system]: https://br-johnson.github.io/salmon-data-integration-system/
 [sdo]: https://github.com/salmon-data-mobilization/salmon-domain-ontology

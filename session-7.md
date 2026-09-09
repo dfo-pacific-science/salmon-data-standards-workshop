@@ -179,6 +179,10 @@ These are explanatory steps in this workshop. The learner scripts contain no liv
 
 For a later metadata revision, preserve the previous package and manifest, build a new version in a separate directory, document the change, and review its new plan. Published object bytes and identities are not edited in place.
 
+## Finish Day 1 and carry the model into Day 2
+
+This completes the six-hour beginner route. Keep the human graph, dictionary, review decisions, and unresolved questions. In [Day 2](advanced.html), the same evidence supports a small controlled vocabulary, an OWL model, explicit bridges, and a contribution draft. A working catalog link is not required to study those meanings; keep its actual publication status separate. Begin with [Chapter 8](session-8.html) when ready.
+
 ::::::::::::::::::::::::::::::::::::: challenge
 
 ## Activity: tell the full story of one estimate

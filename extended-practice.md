@@ -2,7 +2,7 @@
 title: Extended Practice With the Fraser Coho Dataset
 ---
 
-These five optional labs are **outside the 360-minute workshop**. Each deepens work on the same 173-row, 14-column `raw_data/nuseds-fraser-coho-2023-2024.csv`; no additional dataset, live AI call, or catalog deposit is needed. Choose a lab after completing its prerequisites. Formal OWL work belongs in the separate [advanced extension](advanced.html).
+These five optional labs are **outside the 720-minute, two-day workshop**. Each deepens work on the same 173-row, 14-column `raw_data/nuseds-fraser-coho-2023-2024.csv`; no additional dataset, live AI call, or catalog deposit is needed. Choose a lab after completing its prerequisites. Vocabulary and ontology authoring now have a full [Day 2 route](advanced.html), Chapters 8–12.
 
 ## Before any lab
 
